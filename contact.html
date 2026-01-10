@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yakaplant | Doğayı Evine Getir</title>
+    <meta name="description"
+        content="Yakaplant ile evinizi canlandırın. Bakım rehberleri, egzotik bitkiler ve daha fazlası.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Icons (Phosphor Icons for a modern look) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html" class="nav-link">Ana Sayfa</a></li>
+                <li><a href="about.html" class="nav-link">Hakkımızda</a></li>
+                <li><a href="care.html" class="nav-link">Bakım Rehberi</a></li>
+                <li><a href="shop.html" class="nav-link">Koleksiyon</a></li>
+                <li><a href="contact.html" class="nav-link active">İletişim</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod">
+                    <i class="ph ph-moon"></i>
+                </button>
+                <button class="mobile-toggle" aria-label="Menüyü Aç" id="mobile-toggle">
+                    <i class="ph ph-list"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <div style="margin-top: 80px;"></div>
+
+
+
+    <!-- Modern Page Header -->
+    <header class="modern-page-header compact">
+        <div class="hero-bg"
+            style="background: url('https://images.unsplash.com/photo-1596003906949-79a947161683?q=80&w=2680&auto=format&fit=crop') center/cover no-repeat; position: absolute; inset: 0; z-index: 1;">
+        </div>
+        <div class="modern-hero-content">
+            <h1 class="modern-hero-title">
+                İLETİ<span class="highlight">ŞİM</span>
+            </h1>
+        </div>
+    </header>
+
+    <!-- Premium Contact Section -->
+    <section id="contact" class="premium-contact-section">
+        <div class="premium-split-layout">
+            <!-- Left Side: Visual -->
+            <div class="premium-visual-col">
+                <img src="/Users/ekrem/.gemini/antigravity/brain/04230646-17ff-43a0-a8a6-f80ac02d571b/contact_hero_bg_1768042458907.png"
+                    alt="Yakaplant Studio Interior">
+                <div class="visual-overlay"></div>
+            </div>
+
+            <!-- Right Side: Content -->
+            <div class="premium-content-col">
+                <div class="premium-wrapper">
+                    <span class="premium-subtitle">BİZE ULAŞIN</span>
+                    <h2 class="premium-title">İletişim</h2>
+                    <p class="premium-desc">Yakaplant olarak geniş üretim ağımızla bitki tedariği sağlıyoruz. Toplu
+                        siparişleriniz, üretim talepleriniz veya bakım rehberimizde yanıtını bulamadığınız sorularınız
+                        için bizimle iletişime geçebilirsiniz.</p>
+
+                    <!-- Minimal Contact List -->
+                    <div class="premium-contact-list">
+                        <a href="https://wa.me/905318433309" target="_blank" class="premium-row">
+                            <i class="ph ph-whatsapp-logo"></i>
+                            <div class="row-info">
+                                <span class="row-label">WhatsApp Hattı</span>
+                                <span class="row-value">+90 531 843 33 09</span>
+                            </div>
+                        </a>
+
+                        <a href="mailto:yakaplant@gmail.com" class="premium-row">
+                            <i class="ph ph-envelope-simple"></i>
+                            <div class="row-info">
+                                <span class="row-label">E-Posta</span>
+                                <span class="row-value">yakaplant@gmail.com</span>
+                            </div>
+                        </a>
+
+                        <a href="https://www.instagram.com/yakaplant" target="_blank" class="premium-row">
+                            <i class="ph ph-instagram-logo"></i>
+                            <div class="row-info">
+                                <span class="row-label">Instagram</span>
+                                <span class="row-value">@yakaplant</span>
+                            </div>
+                        </a>
+
+                        <div class="premium-row static">
+                            <i class="ph ph-map-pin"></i>
+                            <div class="row-info">
+                                <span class="row-label">Stüdyo</span>
+                                <span class="row-value">Türkiye İzmir Bayındır Yakapınar Mahallesi Okul Sokak No 14/3
+                                    35840</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Minimal Form -->
+                    <form class="premium-form" id="contactForm">
+                        <div class="form-row">
+                            <div class="input-group">
+                                <input type="text" id="name" required placeholder="İsim Soyisim">
+                            </div>
+                            <div class="input-group">
+                                <input type="email" id="email" required placeholder="E-Posta">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <textarea id="message" rows="1" required placeholder="Mesajınız..."></textarea>
+                        </div>
+
+                        <button type="submit" class="premium-btn">
+                            GÖNDER <i class="ph ph-arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+                    <p>© 2024 Tüm hakları saklıdır.</p>
+                </div>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/yakaplant" target="_blank" aria-label="Instagram"><i
+                            class="ph ph-instagram-logo"></i></a>
+                    <a href="https://wa.me/905318433309" target="_blank" aria-label="WhatsApp"><i
+                            class="ph ph-whatsapp-logo"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="plant_data.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yakaplant | Doğayı Evine Getir</title>
+    <meta name="description"
+        content="Yakaplant ile evinizi canlandırın. Bakım rehberleri, egzotik bitkiler ve daha fazlası.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Icons (Phosphor Icons for a modern look) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html" class="nav-link">Ana Sayfa</a></li>
+                <li><a href="about.html" class="nav-link">Hakkımızda</a></li>
+                <li><a href="care.html" class="nav-link">Bakım Rehberi</a></li>
+                <li><a href="shop.html" class="nav-link">Koleksiyon</a></li>
+                <li><a href="contact.html" class="nav-link button-primary">İletişim</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod">
+                    <i class="ph ph-moon"></i>
+                </button>
+                <button class="mobile-toggle" aria-label="Menüyü Aç" id="mobile-toggle">
+                    <i class="ph ph-list"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <!-- 1. Modern Hero -->
+    <header class="modern-hero">
+        <div class="hero-bg"
+            style="background: url('assets/hero.png') center/cover no-repeat; position: absolute; inset: 0; z-index: 1;">
+        </div>
+        <div class="modern-hero-content">
+            <h1 class="modern-hero-title">
+                DOĞAYI <span class="highlight">TASARLA</span>
+            </h1>
+
+            <div class="hero-btn-group">
+                <a href="shop.html" class="modern-hero-btn">
+                    Koleksiyonu Keşfet <i class="ph ph-arrow-right"></i>
+                </a>
+                <a href="contact.html" class="hero-contact-btn">İletişime Geç</a>
+
+                <div class="hero-social-row">
+                    <a href="https://wa.me/905318433309" target="_blank" class="hero-social-link" aria-label="WhatsApp">
+                        <i class="ph ph-whatsapp-logo"></i>
+                    </a>
+                    <a href="https://www.instagram.com/yakaplant" target="_blank" class="hero-social-link"
+                        aria-label="Instagram">
+                        <i class="ph ph-instagram-logo"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. Infinite Marquee (Turkish) -->
+    <div class="marquee-strip">
+        <div class="marquee-content">
+            <span>Yakaplant</span>
+            <span>•</span>
+            <span>Sürdürülebilir</span>
+            <span>•</span>
+            <span>Modern</span>
+            <span>•</span>
+            <span>Doğal</span>
+            <span>•</span>
+            <span>Yakaplant</span>
+            <span>•</span>
+            <span>Sürdürülebilir</span>
+            <span>•</span>
+            <span>Modern</span>
+            <span>•</span>
+            <span>Doğal</span>
+            <span>•</span>
+        </div>
+    </div>
+
+    <!-- Scroll Visibility Fix Script -->
+    <script>
+        // Fallback: If elements stay hidden for too long (JS fail), force show them
+        setTimeout(() => {
+            const hiddenElements = document.querySelectorAll('.reveal:not(.active), .modern-hero-title, .hero-btn-group');
+            hiddenElements.forEach(el => {
+                if (getComputedStyle(el).opacity === '0') {
+                    el.style.opacity = '1';
+                    el.style.transform = 'none';
+                }
+            });
+        }, 1000); // 1 second fallback - quick!
+    </script>
+
+    <!-- 3. Bento Grid Discovery -->
+    <section class="bento-section">
+        <div class="container">
+            <div class="bento-header reveal">
+                <h2 class="section-title">Yakaplant Dünyası</h2>
+                <p>Doğanın en estetik halini yaşam alanlarınıza taşıyoruz.</p>
+            </div>
+
+            <div class="bento-grid">
+                <!-- Large Item: Collection -->
+                <a href="shop.html" class="bento-item bento-large reveal">
+                    <img src="/Users/ekrem/.gemini/antigravity/brain/04230646-17ff-43a0-a8a6-f80ac02d571b/collection_card_bg_1768040887454.png"
+                        alt="Koleksiyon">
+                    <!-- Using hero image as placeholder for collection focus -->
+                    <div class="bento-overlay">
+                        <h3>Koleksiyon</h3>
+                        <p>Eviniz için en özel bitkiler.</p>
+                    </div>
+                </a>
+
+                <!-- Tall Item: Care -->
+                <a href="care.html" class="bento-item bento-tall reveal">
+                    <!-- We need a distinct image ideally, creating a colored placeholder block via style if no image available, or reusing asset -->
+                    <img src="/Users/ekrem/.gemini/antigravity/brain/04230646-17ff-43a0-a8a6-f80ac02d571b/care_card_bg_1768040901897.png"
+                        alt="Bakım Rehberi" style="filter: grayscale(20%);">
+                    <div class="bento-overlay">
+                        <h3>Bakım Rehberi</h3>
+                        <p>Uzman ipuçları ile bitkileriniz hep canlı.</p>
+                    </div>
+                </a>
+
+                <!-- Wide Item: About -->
+                <a href="about.html" class="bento-item bento-wide reveal">
+                    <img src="/Users/ekrem/.gemini/antigravity/brain/04230646-17ff-43a0-a8a6-f80ac02d571b/about_card_bg_1768040915320.png"
+                        alt="Hakkımızda">
+                    <div class="bento-overlay">
+                        <h3>Hakkımızda</h3>
+                        <p>Doğayı tasarlama hikayemiz.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+                    <p>© 2024 Tüm hakları saklıdır.</p>
+                </div>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/yakaplant" target="_blank" aria-label="Instagram"><i
+                            class="ph ph-instagram-logo"></i></a>
+                    <a href="https://wa.me/905318433309" target="_blank" aria-label="WhatsApp"><i
+                            class="ph ph-whatsapp-logo"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="plant_data.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

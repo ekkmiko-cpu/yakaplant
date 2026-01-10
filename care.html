@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yakaplant | Doğayı Evine Getir</title>
+    <meta name="description"
+        content="Yakaplant ile evinizi canlandırın. Bakım rehberleri, egzotik bitkiler ve daha fazlası.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Icons (Phosphor Icons for a modern look) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html" class="nav-link">Ana Sayfa</a></li>
+                <li><a href="about.html" class="nav-link">Hakkımızda</a></li>
+                <li><a href="care.html" class="nav-link">Bakım Rehberi</a></li>
+                <li><a href="shop.html" class="nav-link">Koleksiyon</a></li>
+                <li><a href="contact.html" class="nav-link button-primary">İletişim</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod">
+                    <i class="ph ph-moon"></i>
+                </button>
+                <button class="mobile-toggle" aria-label="Menüyü Aç" id="mobile-toggle">
+                    <i class="ph ph-list"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <div style="margin-top: 80px;"></div>
+
+    <!-- Care Guide Section -->
+    <!-- Modern Page Header with Search -->
+    <header class="modern-page-header care-header">
+        <div class="hero-bg"
+            style="background: url('assets/care_hero_banana.png') center/cover no-repeat; position: absolute; inset: 0;">
+        </div>
+        <div class="modern-hero-content" style="position: relative; z-index: 3;">
+            <h1 class="modern-hero-title">
+                BAKIM <span class="highlight">REHBERİ</span>
+            </h1>
+
+            <p class="hero-subtitle">Bakımını merak ettiğin bitkiyi yaz, sorununu öğren.</p>
+
+            <!-- Search Container Moved Here -->
+            <div class="search-container hero-search">
+                <div class="search-input-wrapper">
+                    <i class="ph ph-magnifying-glass search-icon"></i>
+                    <input type="text" id="plant-search" placeholder="Bitki adı ara... (Örn: Monstera)"
+                        autocomplete="off">
+                    <div id="search-dropdown" class="search-dropdown"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Care Guide Results Section -->
+    <section id="care" class="section care-section">
+        <div class="container reveal">
+            <div id="search-result-container" class="search-result-container">
+                <!-- Dynamic Result Card Will Appear Here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Detail Modal (Shared from shop logic) -->
+    <!-- Product Detail Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content new-design">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body">
+                <!-- Left Column: Image -->
+                <div class="modal-image-col">
+                    <img src="" alt="" id="modal-img">
+                </div>
+
+                <!-- Right Column: Info -->
+                <div class="modal-info-col">
+                    <div class="modal-header">
+                        <div class="modal-badges stagger-item">
+                            <span id="badge-difficulty" class="modal-badge"></span>
+                            <span id="badge-pet" class="modal-badge"></span>
+                        </div>
+                        <h2 id="modal-title" class="stagger-item">Ürün Adı</h2>
+                        <p id="modal-scientific" class="scientific-name stagger-item">Scientific Name</p>
+                    </div>
+
+                    <div class="stats-grid stagger-item">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="ph ph-drop"></i></div>
+                            <div class="stat-info">
+                                <span>Sulama</span>
+                                <strong id="stat-water">-</strong>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="ph ph-sun"></i></div>
+                            <div class="stat-info">
+                                <span>Işık</span>
+                                <strong id="stat-light">-</strong>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="ph ph-cloud-rain"></i></div>
+                            <div class="stat-info">
+                                <span>Nem</span>
+                                <strong id="stat-humidity">-</strong>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="ph ph-thermometer"></i></div>
+                            <div class="stat-info">
+                                <span>Sıcaklık</span>
+                                <strong id="stat-temp">-</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-desc-wrapper stagger-item">
+                        <h3>Bitki Hakkında</h3>
+                        <p id="modal-desc" class="modal-desc">Ürün açıklaması burada yer alacak.</p>
+                    </div>
+
+                    <div class="modal-footer stagger-item">
+                        <p class="price" id="modal-price">0 ₺</p>
+                        <a href="contact.html" class="btn btn-primary btn-block">
+                            Sipariş için İletişime Geç <i class="ph ph-whatsapp-logo"></i>
+                        </a>
+                        <!-- Dynamic helper text placeholder -->
+                        <div class="modal-footer-text">
+                            <p id="modal-cta-text" class="modal-help-text"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+                    <p>© 2024 Tüm hakları saklıdır.</p>
+                </div>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/yakaplant" target="_blank" aria-label="Instagram"><i
+                            class="ph ph-instagram-logo"></i></a>
+                    <a href="https://wa.me/905318433309" target="_blank" aria-label="WhatsApp"><i
+                            class="ph ph-whatsapp-logo"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="plant_data.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
