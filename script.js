@@ -229,6 +229,19 @@ const openModal = (plantKey) => {
     const data = plantData[plantKey];
     if (!data) return;
 
+    // Reset UI visibility (in case Doctor Modal hid them)
+    if (modalScientific) modalScientific.style.display = 'block';
+    if (document.querySelector('.modal-badges')) document.querySelector('.modal-badges').style.display = 'flex';
+    if (document.querySelector('.stats-grid')) document.querySelector('.stats-grid').style.display = 'grid';
+    // modalPrice display block removed as per user request to hide prices everywhere
+
+    // Reset Footer CTA
+    const ctaBtn = document.querySelector('.modal-footer .btn');
+    if (ctaBtn) {
+        ctaBtn.innerHTML = `Sipariş için İletişime Geç <i class="ph ph-whatsapp-logo"></i>`;
+        ctaBtn.href = "contact.html";
+    }
+
     modalTitle.textContent = data.title;
     if (modalScientific) modalScientific.textContent = data.scientific;
     modalDesc.innerHTML = data.desc; // Changed to innerHTML for rich text
@@ -268,10 +281,11 @@ const openModal = (plantKey) => {
         }
     }
 
-    if (modalPrice) {
+    // Price hidden globally
+    /* if (modalPrice) {
         modalPrice.textContent = data.price;
         modalPrice.style.display = 'block';
-    }
+    } */
 
     modal.classList.add('show');
     document.body.style.overflow = 'hidden';
@@ -302,14 +316,17 @@ if (modal) {
             closeProductModal();
         }
     });
-
-    // Close on Escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('show')) {
-            closeProductModal();
-        }
-    });
 }
+
+
+
+// Close on Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('show')) {
+        closeProductModal();
+    }
+});
+
 
 // Attach Click Handlers to Products
 // We'll assume the add-btn triggers the details for now, 
@@ -401,8 +418,6 @@ const selectPlant = (key) => {
             <div class="product-info">
                 <h3>${plant.title}</h3>
                 <p class="scientific-name">${plant.scientific}</p>
-                <!-- Hidden price for care view, or show it? User asked for "same as collection" appearance -->
-                 <p class="price">${plant.price}</p>
             </div>
         </div>
     `;
@@ -453,10 +468,13 @@ const openCareModal = (key) => {
     }
 };
 
+
+
+
 // Update selectPlant to use openCareModal
 // We need to re-attach the event listener since we can't redefine const selectPlant easily
 // But wait, the function is called later. The definition above is what's used.
-// We should have defined selectPlant to call openCareModal initially. 
+// We should have defined selectPlant to call openCareModal initially.
 // Since we can't strictly redefine 'const', we will rely on the implementation below to fix the previous block.
 // Actually, let's just make sure the click handler calls the right function.
 // We can't change the already defined 'selectPlant' logic by appending code.
@@ -502,5 +520,84 @@ if (modernHero && modernHeroTitle) {
         modernHeroTitle.style.transform = `translateY(${scrolled * 0.3}px)`;
         // Fade out on scroll
         modernHeroTitle.style.opacity = 1 - (scrolled / 500);
+
     });
 }
+
+// --- New Care Guide Filter Logic ---
+const filterCareResults = (criteria) => {
+    let filtered = [];
+
+    // Normalize data structure access (handle array vs object if needed, currently array)
+    const catalog = typeof plantCatalog !== 'undefined' ? plantCatalog :
+        (typeof plantData !== 'undefined' ? Object.values(plantData) : []);
+
+    switch (criteria) {
+        case 'easy':
+            filtered = catalog.filter(p => p.difficulty === 'Kolay' || p.difficulty === 'Çok Kolay');
+            break;
+        case 'pet':
+            filtered = catalog.filter(p => p.petFriendly === true);
+            break;
+        case 'shade':
+            filtered = catalog.filter(p => p.env && (p.env.includes('Gölge') || p.env.includes('Düşük Işık')));
+            break;
+        case 'succulent':
+            filtered = catalog.filter(p => p.water === 'Az' || p.water === 'Çok az');
+            break;
+    }
+
+    if (filtered.length > 0) {
+        renderSearchResults(filtered);
+    } else {
+        searchResultContainer.innerHTML = `
+            <div class="no-results" style="text-align:center; padding: 2rem;">
+                <i class="ph ph-plant" style="font-size: 3rem; color: #ccc;"></i>
+                <p>Bu kategoride henüz bitki bulunamadı.</p>
+            </div>`;
+    }
+
+    // Smooth scroll to results
+    const resultsSection = document.getElementById('care-results');
+    if (resultsSection) {
+        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+};
+
+// Render function adjustment
+const renderSearchResults = (plants) => {
+    const container = document.getElementById('search-result-container'); // Ensure correct reference
+    if (!container) return;
+
+    container.innerHTML = '';
+    container.style.display = 'grid'; // Grid layout for results
+    container.style.gridTemplateColumns = 'repeat(auto-fit, minmax(280px, 1fr))';
+    container.style.gap = '2rem';
+
+    plants.forEach(plant => {
+        const card = document.createElement('div');
+        card.className = 'product-card reveal'; // Reuse product card style
+        card.style.animation = 'fadeInUp 0.5s ease backwards';
+
+        // Assuming openModal is globally available or defined earlier
+        card.innerHTML = `
+            <div class="product-image">
+                 <img src="${plant.image}" alt="${plant.title}">
+                 <div class="product-overlay">
+                    <button class="add-btn" onclick="openModal('${plant.id}')">
+                        <i class="ph ph-eye"></i> İncele
+                    </button>
+                 </div>
+            </div>
+            <div class="product-info">
+                <h3>${plant.title}</h3>
+                <p class="scientific">${plant.scientific}</p>
+                <div class="product-meta">
+                    <span><i class="ph ph-drop"></i> ${plant.water}</span>
+                    <span><i class="ph ph-sun"></i> ${plant.env ? plant.env.split(' ')[0] : 'Güneş'}</span>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+};

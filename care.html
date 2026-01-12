@@ -30,7 +30,7 @@
             <ul class="nav-links" id="nav-links">
                 <li><a href="index.html" class="nav-link">Ana Sayfa</a></li>
                 <li><a href="about.html" class="nav-link">Hakkımızda</a></li>
-                <li><a href="care.html" class="nav-link">Bakım Rehberi</a></li>
+                <li><a href="care.html" class="nav-link active">Bakım Rehberi</a></li>
                 <li><a href="shop.html" class="nav-link">Koleksiyon</a></li>
                 <li><a href="contact.html" class="nav-link button-primary">İletişim</a></li>
             </ul>
@@ -45,38 +45,33 @@
             </div>
         </div>
     </nav>
-    <div style="margin-top: 80px;"></div>
+    <!-- Simple Spacer for Navbar -->
+    <div style="margin-top: 120px;"></div>
 
-    <!-- Care Guide Section -->
-    <!-- Modern Page Header with Search -->
-    <header class="modern-page-header care-header">
-        <div class="hero-bg"
-            style="background: url('assets/care_hero_banana.png') center/cover no-repeat; position: absolute; inset: 0;">
-        </div>
-        <div class="modern-hero-content" style="position: relative; z-index: 3;">
-            <h1 class="modern-hero-title">
-                BAKIM <span class="highlight">REHBERİ</span>
-            </h1>
+    <!-- Minimal Search Section -->
+    <section class="minimal-search-section">
+        <div class="container">
+            <div class="search-wrapper-centered">
+                <h1 class="minimal-title">Bakım Rehberi</h1>
 
-            <p class="hero-subtitle">Bakımını merak ettiğin bitkiyi yaz, sorununu öğren.</p>
-
-            <!-- Search Container Moved Here -->
-            <div class="search-container hero-search">
-                <div class="search-input-wrapper">
-                    <i class="ph ph-magnifying-glass search-icon"></i>
-                    <input type="text" id="plant-search" placeholder="Bitki adı ara... (Örn: Monstera)"
-                        autocomplete="off">
-                    <div id="search-dropdown" class="search-dropdown"></div>
+                <!-- Search Component -->
+                <div class="modern-search-container">
+                    <div class="search-input-group">
+                        <i class="ph ph-magnifying-glass"></i>
+                        <input type="text" id="plant-search" placeholder="Bitki adı veya problem arayın..."
+                            autocomplete="off">
+                    </div>
+                    <div id="search-dropdown" class="search-dropdown-modern"></div>
                 </div>
             </div>
         </div>
-    </header>
+    </section>
 
-    <!-- Care Guide Results Section -->
-    <section id="care" class="section care-section">
-        <div class="container reveal">
+    <!-- Results Section -->
+    <section id="care-results" class="section care-section">
+        <div class="container">
             <div id="search-result-container" class="search-result-container">
-                <!-- Dynamic Result Card Will Appear Here -->
+                <!-- Empty state handled by JS or initial CSS -->
             </div>
         </div>
     </section>
@@ -140,7 +135,7 @@
                     </div>
 
                     <div class="modal-footer stagger-item">
-                        <p class="price" id="modal-price">0 ₺</p>
+
                         <a href="contact.html" class="btn btn-primary btn-block">
                             Sipariş için İletişime Geç <i class="ph ph-whatsapp-logo"></i>
                         </a>

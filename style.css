@@ -1421,6 +1421,8 @@ body.dark-mode .logo {
     z-index: 2;
 }
 
+
+
 .explore-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1551,6 +1553,30 @@ body.dark-mode .explore-card:hover {
     transform: scale(1.05) translateY(-2px);
     box-shadow: 0 0 40px rgba(216, 243, 220, 0.6);
     background: white;
+}
+
+/* Secondary Hero Button (Contact) */
+.modern-hero-btn.secondary {
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    box-shadow: none;
+    margin-left: 1rem;
+    /* Space between buttons */
+}
+
+.modern-hero-btn.secondary:hover {
+    background: var(--accent);
+    color: var(--primary-dark);
+    box-shadow: 0 0 30px rgba(216, 243, 220, 0.4);
+    transform: scale(1.05) translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .modern-hero-btn.secondary {
+        margin-left: 0;
+        margin-top: 1rem;
+    }
 }
 
 /* 2. Infinite Marquee Strip */
@@ -2458,12 +2484,11 @@ body.dark-mode .form-group.floating label {
 .premium-contact-section {
     background: #fcf9f5;
     /* Warm Cream */
-    min-height: 100vh;
+    min-height: calc(100vh - 80px);
     display: flex;
     flex-direction: column;
-    margin-top: -80px;
-    /* Overlap header space if needed, or adjust based on nav */
-    padding-top: 80px;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .premium-split-layout {
@@ -2566,7 +2591,7 @@ body.dark-mode .form-group.floating label {
     align-items: center;
     gap: 1.5rem;
     text-decoration: none;
-    group-hover: opacity: 1;
+    /* group-hover: opacity: 1; - Removed invalid property */
     transition: transform 0.3s;
 }
 
@@ -2764,23 +2789,15 @@ body.dark-mode .premium-form input:focus {
 }
 
 /* Care Header Background Override for better contrast */
+/* Care Header Background Override for better contrast */
 .modern-page-header.care-header {
     position: relative;
     isolation: isolate;
+    background: transparent;
     /* Create new stacking context */
-}
-
-/* Dark gradient overlay specifically for Care header to ensure text pops against green leaves */
-.modern-page-header.care-header::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%);
-    z-index: 1;
-    pointer-events: none;
+    box-shadow: none;
+    overflow: visible;
+    /* Allow search dropdown to show */
 }
 
 .modern-page-header.care-header .hero-bg {
@@ -2796,10 +2813,73 @@ body.dark-mode .premium-form input:focus {
 
 /* Force highlight text to be white/gold on this specific page because the background is green */
 /* Revert highlight color override (was gold) - let it fallback to default or generic style */
-/* .modern-page-header.care-header h1 .highlight {
-    color: #FFD700;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-} */
+/* Shop Filter Buttons */
+.shop-filters .filter-btn {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 0.8rem 1.8rem;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Bouncy transition */
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.shop-filters .filter-btn:after {
+    /* Slide effect background */
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--primary);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.3s ease;
+    z-index: -1;
+    border-radius: 50px;
+}
+
+.shop-filters .filter-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.shop-filters .filter-btn.active {
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 8px 20px rgba(45, 106, 79, 0.3);
+    transform: scale(1.05);
+}
+
+.shop-filters .filter-btn.active:after {
+    transform: scaleY(1);
+}
+
+body.dark-mode .shop-filters .filter-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+}
+
+body.dark-mode .shop-filters .filter-btn:hover {
+    color: white;
+    border-color: var(--primary);
+}
+
+body.dark-mode .shop-filters .filter-btn.active {
+    color: white;
+}
+
+
 
 .modern-page-header.care-header .hero-subtitle {
     color: rgba(255, 255, 255, 1);
@@ -2867,15 +2947,14 @@ body.dark-mode .premium-form input:focus {
 .care-section {
     position: relative;
     z-index: 2;
-    background: var(--bg-body);
-    border-radius: 30px 30px 0 0;
+    background: transparent;
+    /* Removed white background */
     margin-top: -40px;
     padding-top: 5rem;
-    /* More space for results */
     min-height: 500px;
-    /* Ensure space for results */
 }
 
+/* Ensure dropdown appears correctly over glass */
 /* Ensure dropdown appears correctly over glass */
 .search-dropdown {
     top: 120%;
@@ -2883,45 +2962,330 @@ body.dark-mode .premium-form input:focus {
     background: white;
     color: #333;
     border-radius: 12px;
+}
 
-    /* Filter Buttons */
-    .filter-btn {
-        background: white;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        padding: 0.6rem 1.5rem;
-        border-radius: 50px;
-        font-size: 0.95rem;
-        font-weight: 500;
-        color: var(--text-muted);
-        cursor: pointer;
-        transition: all 0.3s ease;
+/* Filter Buttons within Dropdown */
+.search-dropdown .filter-btn {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.search-dropdown .filter-btn:hover {
+    background: #f8f9fa;
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.search-dropdown .filter-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 4px 10px rgba(45, 106, 79, 0.3);
+}
+
+body.dark-mode .search-dropdown .filter-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+}
+
+body.dark-mode .search-dropdown .filter-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+}
+
+body.dark-mode .search-dropdown .filter-btn.active {
+    background: var(--primary);
+    color: white;
+}
+
+
+
+
+
+/* --- MODERN VISUAL GALLERY HERO --- */
+
+.gallery-hero-section {
+    position: relative;
+    height: 70vh;
+    min-height: 550px;
+    background: #000;
+    overflow: hidden;
+    margin-top: -80px;
+    /* Under navbar */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Gallery Wallpaper Effect */
+.gallery-background {
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    opacity: 0.5;
+    /* Dimmed wallpaper */
+    transform: rotate(-5deg);
+    /* Artistic tilt */
+}
+
+.gallery-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 200px;
+}
+
+.gallery-column img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    object-fit: cover;
+    opacity: 0.8;
+    filter: grayscale(30%);
+}
+
+/* Animations */
+.move-up {
+    animation: scrollUp 40s linear infinite;
+}
+
+.move-down {
+    animation: scrollDown 45s linear infinite;
+}
+
+@keyframes scrollUp {
+    0% {
+        transform: translateY(0);
     }
 
-    .filter-btn:hover {
-        background: #f8f9fa;
-        color: var(--primary);
-        transform: translateY(-2px);
+    100% {
+        transform: translateY(-50%);
+    }
+}
+
+@keyframes scrollDown {
+    0% {
+        transform: translateY(-50%);
     }
 
-    .filter-btn.active {
-        background: var(--primary);
-        color: white;
-        border-color: var(--primary);
-        box-shadow: 0 4px 10px rgba(45, 106, 79, 0.3);
+    100% {
+        transform: translateY(0);
     }
+}
 
-    body.dark-mode .filter-btn {
-        background: rgba(255, 255, 255, 0.05);
-        border-color: rgba(255, 255, 255, 0.1);
-        color: var(--text-muted);
-    }
+/* Strong Overlay for Consistency */
+.gallery-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.85) 100%);
+    backdrop-filter: blur(3px);
+}
 
-    body.dark-mode .filter-btn:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: var(--text-main);
-    }
+.gallery-content {
+    position: relative;
+    z-index: 10;
+    max-width: 700px;
+    width: 100%;
+    padding: 0 20px;
+}
 
-    body.dark-mode .filter-btn.active {
-        background: var(--primary);
-        color: white;
-    }
+.gallery-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    color: white;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    letter-spacing: -1px;
+}
+
+/* Modern Floating Search */
+.modern-search-container {
+    position: relative;
+    max-width: 650px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    padding: 8px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.modern-search-container:hover,
+.modern-search-container:focus-within {
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px) scale(1.01);
+}
+
+.search-input-group {
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    height: 56px;
+}
+
+.search-input-group i {
+    font-size: 1.4rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-right: 1rem;
+}
+
+.search-input-group input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 500;
+    outline: none;
+}
+
+.search-input-group input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Modern Dropdown */
+.search-dropdown-modern {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    width: 100%;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    display: none;
+    /* JS will toggle */
+}
+
+/* Modern Tags */
+.modern-tags {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.modern-tags span {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: all 0.2s;
+}
+
+.modern-tags span:hover {
+    background: white;
+    color: #000;
+    transform: translateY(-2px);
+}
+
+#care-results {
+    padding-top: 4rem;
+    background: #fdfdfd;
+}
+
+/* FIXED: Missing Dropdown Active State */
+.search-dropdown-modern.active {
+    display: block;
+    animation: fadeInUp 0.2s ease forwards;
+    z-index: 100;
+}
+
+.search-result-item {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item:hover {
+    background: #f8f9fa;
+}
+
+.search-result-item img {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+/* Minimal Care Page Styles (Re-applying) */
+.minimal-search-section {
+    padding: 3rem 0 5rem 0;
+    text-align: center;
+    background: var(--bg-body);
+}
+
+.search-wrapper-centered {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+}
+
+.minimal-title {
+    font-size: 3.5rem;
+    color: var(--primary-dark);
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+    letter-spacing: -1px;
+}
+
+/* Adjustments for the search container when in minimal mode */
+.minimal-search-section .modern-search-container {
+    box-shadow: 0 15px 40px rgba(45, 106, 79, 0.08);
+}
+
+.minimal-search-section .search-input-group {
+    background: white;
+    border-radius: 50px;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.minimal-search-section .search-input-group i {
+    font-size: 1.5rem;
+    color: var(--primary);
+}
+
+.minimal-search-section .search-input-group input {
+    color: var(--text-main);
+    /* Ensure text is visible on white background */
+}
