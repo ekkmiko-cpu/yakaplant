@@ -1903,6 +1903,16 @@ body.dark-mode .explore-card:hover {
     overflow: hidden;
 }
 
+/* Correct Hero Overlay Fix */
+.hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6));
+    /* Gradient overlay */
+    z-index: 1;
+}
+
 .modal-image-col img {
     max-width: 100%;
     max-height: 400px;
