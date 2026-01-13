@@ -1653,6 +1653,7 @@ body.dark-mode .explore-card:hover {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(2, 300px);
+    grid-auto-rows: 300px;
     gap: 1.5rem;
     padding: 0 var(--spacing-sm);
 }
