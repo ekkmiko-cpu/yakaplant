@@ -1658,15 +1658,31 @@ body.dark-mode .explore-card:hover {
     padding: 0 var(--spacing-sm);
 }
 
-/* Mobile: Stack items */
+/* Mobile: Stack items & Contrast Fix */
 @media (max-width: 768px) {
     .bento-grid {
         grid-template-columns: 1fr;
         grid-template-rows: auto;
     }
 
+    /* Mobile Hero Contrast Override */
     .modern-hero-title {
-        font-size: 4rem;
+        font-size: 3.5rem;
+        color: var(--primary-dark);
+        /* Dark text for readability */
+        text-shadow: none;
+    }
+
+    .modern-hero-title .highlight {
+        color: var(--primary);
+        /* Darker green highlight instead of mint */
+    }
+
+    /* Add a white wash overlay on mobile to make dark text pop against any image */
+    .hero-bg {
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4)), url('assets/hero.png') !important;
+        background-size: cover !important;
+        background-position: center !important;
     }
 
     .marquee-content {
