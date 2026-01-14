@@ -1513,11 +1513,10 @@ body.dark-mode .explore-card:hover {
     font-weight: 800;
     line-height: 0.9;
     letter-spacing: -3px;
-    color: var(--primary-dark);
-    /* Dark text for contrast against light gradient */
+    color: white;
     text-transform: uppercase;
     margin-bottom: 2rem;
-    text-shadow: none;
+    text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     opacity: 0;
     animation: slideUpFade 1s cubic-bezier(0.2, 1, 0.3, 1) forwards 0.2s;
 }
@@ -1666,24 +1665,8 @@ body.dark-mode .explore-card:hover {
         grid-template-rows: auto;
     }
 
-    /* Mobile Hero Contrast Override */
     .modern-hero-title {
-        font-size: 3.5rem;
-        color: var(--primary-dark);
-        /* Dark text for readability */
-        text-shadow: none;
-    }
-
-    .modern-hero-title .highlight {
-        color: var(--primary);
-        /* Darker green highlight instead of mint */
-    }
-
-    /* Add a white wash overlay on mobile to make dark text pop against any image */
-    .hero-bg {
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4)), url('assets/hero.png') !important;
-        background-size: cover !important;
-        background-position: center !important;
+        font-size: 4rem;
     }
 
     .marquee-content {
