@@ -371,8 +371,19 @@ const searchPlants = (query) => {
 
     return Object.keys(plantData).filter(key => {
         const plant = plantData[key];
-        return normalizeString(plant.title).includes(normalizedQuery) ||
-            normalizeString(plant.scientific).includes(normalizedQuery);
+
+        // Create a large searchable string from all relevant properties
+        const searchableContent = `
+            ${plant.title} 
+            ${plant.scientific} 
+            ${plant.desc} 
+            ${plant.category} 
+            ${plant.difficulty} 
+            ${plant.env} 
+            ${plant.water}
+        `;
+
+        return normalizeString(searchableContent).includes(normalizedQuery);
     });
 };
 
