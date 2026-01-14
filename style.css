@@ -1513,10 +1513,11 @@ body.dark-mode .explore-card:hover {
     font-weight: 800;
     line-height: 0.9;
     letter-spacing: -3px;
-    color: white;
+    color: var(--primary-dark);
+    /* Dark text for contrast against light gradient */
     text-transform: uppercase;
     margin-bottom: 2rem;
-    text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    text-shadow: none;
     opacity: 0;
     animation: slideUpFade 1s cubic-bezier(0.2, 1, 0.3, 1) forwards 0.2s;
 }
