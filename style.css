@@ -841,6 +841,12 @@ body.dark-mode .support-title {
         gap: 1.5rem;
         text-align: center;
     }
+
+    /* Fixed: Dark Mode Mobile Menu Background */
+    body.dark-mode .nav-links {
+        background: #1e1e1e;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
 }
 
 /* Product Slider Styles */
