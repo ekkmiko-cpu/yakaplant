@@ -745,10 +745,20 @@ body.dark-mode .support-title {
 
 /* Logo Styles */
 .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--primary-dark);
-    letter-spacing: -0.5px;
+    text-decoration: none;
+    letter-spacing: -1px;
+}
+
+.logo img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
 }
 
 .logo .dot {
