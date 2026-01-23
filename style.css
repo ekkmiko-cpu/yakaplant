@@ -1412,6 +1412,8 @@ body.dark-mode .logo {
 /* Intelligent Logo Switching for Dark Mode */
 body.dark-mode .logo img {
     content: url('assets/logo-dark.png');
+    mix-blend-mode: lighten;
+    /* Makes dark bg transparent */
 }
 
 .animate-fade-up {
