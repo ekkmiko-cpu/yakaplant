@@ -3272,6 +3272,13 @@ body.dark-mode .search-dropdown .filter-btn.active {
     margin-bottom: 2.5rem;
     font-weight: 300;
     letter-spacing: -1px;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.minimal-title:hover {
+    text-shadow: 0 0 30px rgba(82, 183, 136, 0.6);
+    transform: scale(1.02);
 }
 
 /* Adjustments for the search container when in minimal mode */
