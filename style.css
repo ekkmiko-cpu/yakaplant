@@ -1408,6 +1408,11 @@ body.dark-mode .logo {
     }
 }
 
+/* Intelligent Logo Switching for Dark Mode */
+body.dark-mode .logo img {
+    content: url('assets/logo-dark.png');
+}
+
 .animate-fade-up {
     animation: fadeInUp 0.8s ease-out forwards;
     opacity: 0;
