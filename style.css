@@ -777,8 +777,14 @@ body.dark-mode .support-title {
 }
 
 .footer-brand .logo .dot {
-    color: #bc6c25;
     /* Keep dot brown in footer */
+}
+
+/* Fix for Footer Logo (White on Dark Green) */
+.footer-brand .logo img {
+    content: url('assets/logo-white.png');
+    mix-blend-mode: screen;
+    opacity: 0.9;
 }
 
 .footer-brand p {
