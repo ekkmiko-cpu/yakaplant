@@ -745,20 +745,11 @@ body.dark-mode .support-title {
 
 /* Logo Styles */
 .logo {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--primary-dark);
     text-decoration: none;
     letter-spacing: -1px;
-}
-
-.logo img {
-    height: 40px;
-    width: auto;
-    object-fit: contain;
 }
 
 .logo .dot {
@@ -780,12 +771,7 @@ body.dark-mode .support-title {
     /* Keep dot brown in footer */
 }
 
-/* Fix for Footer Logo (White on Dark Green) */
-.footer-brand .logo img {
-    content: url('assets/logo-white.png');
-    mix-blend-mode: screen;
-    opacity: 0.9;
-}
+/* Removed footer logo override */
 
 .footer-brand p {
     color: rgba(255, 255, 255, 0.6);
@@ -1415,12 +1401,7 @@ body.dark-mode .logo {
     }
 }
 
-/* Intelligent Logo Switching for Dark Mode */
-body.dark-mode .logo img {
-    content: url('assets/logo-dark.png');
-    mix-blend-mode: lighten;
-    /* Makes dark bg transparent */
-}
+/* Intelligent Logo Switching removed */
 
 .animate-fade-up {
     animation: fadeInUp 0.8s ease-out forwards;
