@@ -3270,31 +3270,42 @@ body.dark-mode .search-dropdown .filter-btn.active {
 }
 
 /* Minimal Care Page Styles - Premium Redesign */
-.minimal-search-section {
-    padding: 4rem 0 6rem 0;
-    text-align: center;
+
+/* Full Page Background Wrapper */
+.care-page-wrapper {
     background:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.97) 0%, rgba(248, 250, 252, 0.95) 100%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(248, 250, 252, 0.88) 100%),
         url('assets/care_bg_pattern.png');
-    background-size: cover, 400px;
+    background-size: cover, 350px;
     background-position: center, center;
     background-repeat: no-repeat, repeat;
-    min-height: 60vh;
-    display: flex;
-    align-items: center;
+    background-attachment: fixed;
+    min-height: 100vh;
     position: relative;
 }
 
-.minimal-search-section::before {
+.care-page-wrapper::before {
     content: '';
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(circle at 30% 20%, rgba(82, 183, 136, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 70% 80%, rgba(45, 106, 79, 0.05) 0%, transparent 50%);
+    background: radial-gradient(circle at 30% 20%, rgba(82, 183, 136, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(45, 106, 79, 0.08) 0%, transparent 50%);
     pointer-events: none;
+    z-index: 0;
+}
+
+.minimal-search-section {
+    padding: 4rem 0 3rem 0;
+    text-align: center;
+    background: transparent;
+    min-height: auto;
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 1;
 }
 
 .search-wrapper-centered {
@@ -3380,16 +3391,20 @@ body.dark-mode .search-dropdown .filter-btn.active {
 }
 
 /* Dark Mode Support */
-body.dark-mode .minimal-search-section {
+body.dark-mode .care-page-wrapper {
     background:
-        linear-gradient(135deg, rgba(30, 30, 30, 0.98) 0%, rgba(20, 20, 20, 0.95) 100%),
+        linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(20, 20, 20, 0.92) 100%),
         url('assets/care_bg_pattern.png');
+    background-size: cover, 350px;
+    background-position: center, center;
+    background-repeat: no-repeat, repeat;
+    background-attachment: fixed;
     background-blend-mode: overlay;
 }
 
-body.dark-mode .minimal-search-section::before {
-    background: radial-gradient(circle at 30% 20%, rgba(82, 183, 136, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 70% 80%, rgba(45, 106, 79, 0.08) 0%, transparent 50%);
+body.dark-mode .care-page-wrapper::before {
+    background: radial-gradient(circle at 30% 20%, rgba(82, 183, 136, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(45, 106, 79, 0.1) 0%, transparent 50%);
 }
 
 body.dark-mode .minimal-search-section .search-input-group {
