@@ -164,8 +164,8 @@ h4 {
     top: 0;
     left: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
+    background: #ffffff;
+    /* Solid white to match logo background */
     z-index: 1000;
     padding: 1rem 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -1373,7 +1373,8 @@ body.dark-mode .care-details {
 
 /* Dark Mode Nav Overrides */
 body.dark-mode .navbar {
-    background: rgba(30, 30, 30, 0.9);
+    background: #1e1e1e;
+    /* Solid dark to match logo-dark background */
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
