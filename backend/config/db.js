@@ -32,15 +32,11 @@ async function initDatabase() {
     if (db) return db;
 
     try {
-        // Configure sql.js with the WASM file location
-        // On Vercel, we need to specify the path to the WASM file
-        const sqlConfig = {};
-
-        // Try to find the WASM file in node_modules
-        const wasmPath = path.join(__dirname, '..', 'node_modules', 'sql.js', 'dist', 'sql-wasm.wasm');
-        if (fs.existsSync(wasmPath)) {
-            sqlConfig.locateFile = (file) => wasmPath;
-        }
+        // For Vercel serverless, use the CDN version of the WASM file
+        const sqlConfig = {
+            // Use CDN for WASM file - works reliably on serverless
+            locateFile: (file) => `https://sql.js.org/dist/${file}`
+        };
 
         SQL = await initSqlJs(sqlConfig);
         console.log('sql.js loaded successfully');
