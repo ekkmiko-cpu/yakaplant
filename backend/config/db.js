@@ -32,13 +32,8 @@ async function initDatabase() {
     if (db) return db;
 
     try {
-        // For Vercel serverless, use the CDN version of the WASM file
-        const sqlConfig = {
-            // Use CDN for WASM file - works reliably on serverless
-            locateFile: (file) => `https://sql.js.org/dist/${file}`
-        };
-
-        SQL = await initSqlJs(sqlConfig);
+        // Let sql.js use its default WASM loading mechanism
+        SQL = await initSqlJs();
         console.log('sql.js loaded successfully');
     } catch (err) {
         console.error('Failed to load sql.js:', err);
