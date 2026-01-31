@@ -31,48 +31,147 @@ let SQL = null;
 async function initDatabase() {
     if (db) return db;
 
-    SQL = await initSqlJs();
+    try {
+        SQL = await initSqlJs();
+    } catch (err) {
+        console.error('Failed to load sql.js:', err);
+        throw err;
+    }
 
     // Try to load existing database
+    let needsMigrations = false;
     try {
         if (fs.existsSync(DB_PATH)) {
             const buffer = fs.readFileSync(DB_PATH);
             db = new SQL.Database(buffer);
+            console.log('Loaded existing database from', DB_PATH);
         } else {
             db = new SQL.Database();
-            // Run migrations for new database
-            await runMigrations();
+            needsMigrations = true;
+            console.log('Created new database');
         }
     } catch (err) {
         console.error('Error loading database:', err);
         db = new SQL.Database();
-        // Run migrations for new database
-        await runMigrations();
+        needsMigrations = true;
+    }
+
+    // Run migrations if needed
+    if (needsMigrations) {
+        runMigrationsSync();
     }
 
     return db;
 }
 
 /**
- * Run database migrations
+ * Run database migrations synchronously
  */
-async function runMigrations() {
+function runMigrationsSync() {
     console.log('Running database migrations...');
-    const migrationsDir = path.join(__dirname, '..', 'migrations');
+
+    // Inline migration SQL to avoid file system issues on Vercel
+    const migrationSQL = `
+-- YakaPlant Membership System - Initial Schema
+CREATE TABLE IF NOT EXISTS users (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    surname TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    phone TEXT,
+    city TEXT,
+    role TEXT CHECK(role IN ('customer','landscape_architect','company')) NOT NULL DEFAULT 'customer',
+    company_name TEXT,
+    password_hash TEXT NOT NULL,
+    reset_token TEXT,
+    reset_token_expires INTEGER,
+    created_at INTEGER DEFAULT (strftime('%s','now')),
+    updated_at INTEGER DEFAULT (strftime('%s','now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+
+CREATE TABLE IF NOT EXISTS favorites (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL,
+    product_id TEXT NOT NULL,
+    created_at INTEGER DEFAULT (strftime('%s','now')),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE(user_id, product_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_favorites_user ON favorites(user_id);
+
+CREATE TABLE IF NOT EXISTS quote_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL,
+    project_id INTEGER,
+    request_text TEXT,
+    status TEXT CHECK(status IN ('new','contacted','quoted','closed')) DEFAULT 'new',
+    created_at INTEGER DEFAULT (strftime('%s','now')),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_quotes_user ON quote_requests(user_id);
+CREATE INDEX IF NOT EXISTS idx_quotes_status ON quote_requests(status);
+
+CREATE TABLE IF NOT EXISTS projects (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    notes TEXT,
+    created_at INTEGER DEFAULT (strftime('%s','now')),
+    updated_at INTEGER DEFAULT (strftime('%s','now')),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_projects_user ON projects(user_id);
+
+CREATE TABLE IF NOT EXISTS project_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    project_id INTEGER NOT NULL,
+    product_id TEXT NOT NULL,
+    qty INTEGER DEFAULT 1,
+    notes TEXT,
+    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_project_items_project ON project_items(project_id);
+
+CREATE TABLE IF NOT EXISTS audit_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    event_type TEXT NOT NULL,
+    user_email TEXT,
+    ip_address TEXT,
+    details TEXT,
+    created_at INTEGER DEFAULT (strftime('%s','now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_audit_created ON audit_log(created_at);
+CREATE INDEX IF NOT EXISTS idx_audit_type ON audit_log(event_type);
+
+CREATE TABLE IF NOT EXISTS sessions (
+    sid TEXT PRIMARY KEY,
+    sess TEXT NOT NULL,
+    expired INTEGER NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_sessions_expired ON sessions(expired);
+`;
 
     try {
-        const files = fs.readdirSync(migrationsDir).filter(f => f.endsWith('.sql')).sort();
-
-        for (const file of files) {
-            const sql = fs.readFileSync(path.join(migrationsDir, file), 'utf8');
-            console.log(`Running migration: ${file}`);
-            db.run(sql);
+        // Execute each statement separately
+        const statements = migrationSQL.split(';').filter(s => s.trim());
+        for (const stmt of statements) {
+            if (stmt.trim()) {
+                db.run(stmt + ';');
+            }
         }
-
         saveDatabase();
         console.log('Migrations completed successfully');
     } catch (err) {
         console.error('Migration error:', err);
+        // Don't throw - we want the app to work even if migrations fail
     }
 }
 
