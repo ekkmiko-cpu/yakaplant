@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş Yap | YakaPlant</title>
+    <meta name="description" content="YakaPlant hesabınıza giriş yapın.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Ana Sayfa</a></li>
+                <li><a href="shop.html" class="nav-link">Koleksiyon</a></li>
+                <li><a href="care.html" class="nav-link">Bakım Rehberi</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div style="margin-top: 80px;"></div>
+
+    <!-- Auth Page Container -->
+    <main class="auth-page">
+        <div class="auth-container">
+            <!-- Left: Form -->
+            <div class="auth-form-section">
+                <div class="auth-form-wrapper">
+                    <div class="auth-header">
+                        <h1 class="auth-title">Hoş Geldiniz</h1>
+                        <p class="auth-subtitle">Hesabınıza giriş yapın</p>
+                    </div>
+
+                    <form id="login-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="email">E-posta</label>
+                            <div class="input-with-icon">
+                                <i class="ph ph-envelope"></i>
+                                <input type="email" id="email" name="email" placeholder="ornek@email.com" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Şifre</label>
+                            <div class="input-with-icon">
+                                <i class="ph ph-lock"></i>
+                                <input type="password" id="password" name="password" placeholder="••••••••" required minlength="8">
+                                <button type="button" class="toggle-password" aria-label="Şifreyi göster">
+                                    <i class="ph ph-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" name="remember">
+                                <span class="checkmark"></span>
+                                Beni hatırla
+                            </label>
+                            <a href="forgot-password.html" class="forgot-link">Şifremi unuttum</a>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="ph ph-sign-in"></i>
+                            Giriş Yap
+                        </button>
+                    </form>
+
+                    <div class="auth-footer">
+                        <p>Hesabınız yok mu? <a href="register.html">Üye Olun</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Visual -->
+            <div class="auth-visual-section">
+                <div class="auth-visual-content">
+                    <img src="assets/hero.png" alt="YakaPlant Plants" class="auth-visual-img">
+                    <div class="auth-visual-overlay"></div>
+                    <div class="auth-visual-text">
+                        <h2>Yeşilin Gücünü Keşfedin</h2>
+                        <p>Binlerce bitki arasından seçim yapın, uzman bakım rehberlerimizle yetiştirin.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script>
+        // Redirect if already logged in
+        YakaAuth.redirectIfLoggedIn();
+
+        // Form submission
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const form = e.target;
+            const data = YakaUI.validateForm(form);
+            if (!data) return;
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            YakaUI.setButtonLoading(submitBtn, true);
+
+            try {
+                const result = await YakaAPI.auth.login(data);
+                YakaUI.toast.success('Giriş başarılı! Yönlendiriliyorsunuz...');
+                
+                setTimeout(() => {
+                    window.location.href = YakaAuth.getRedirectUrl();
+                }, 1000);
+
+            } catch (err) {
+                YakaUI.toast.error(err.message);
+                YakaUI.setButtonLoading(submitBtn, false);
+            }
+        });
+
+        // Toggle password visibility
+        document.querySelectorAll('.toggle-password').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const input = btn.parentElement.querySelector('input');
+                const icon = btn.querySelector('i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.className = 'ph ph-eye-slash';
+                } else {
+                    input.type = 'password';
+                    icon.className = 'ph ph-eye';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

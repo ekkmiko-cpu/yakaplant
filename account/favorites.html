@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorilerim | YakaPlant</title>
+    <meta name="description" content="YakaPlant favori bitkileriniz.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../style.css">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+            <ul class="nav-links">
+                <li><a href="../index.html" class="nav-link">Ana Sayfa</a></li>
+                <li><a href="../shop.html" class="nav-link">Koleksiyon</a></li>
+                <li><a href="../care.html" class="nav-link">Bakım Rehberi</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div style="margin-top: 80px;"></div>
+
+    <!-- Account Page -->
+    <main class="account-page">
+        <div class="container">
+            <div class="account-layout">
+                <!-- Sidebar -->
+                <aside class="account-sidebar">
+                    <div class="sidebar-header">
+                        <div class="user-avatar">
+                            <i class="ph ph-user"></i>
+                        </div>
+                        <h3 id="user-name">Yükleniyor...</h3>
+                        <span id="user-role" class="role-badge"></span>
+                    </div>
+
+                    <nav class="sidebar-nav">
+                        <a href="index.html" class="sidebar-link">
+                            <i class="ph ph-user-circle"></i> Profilim
+                        </a>
+                        <a href="favorites.html" class="sidebar-link active">
+                            <i class="ph ph-heart"></i> Favorilerim
+                        </a>
+                        <a href="requests.html" class="sidebar-link">
+                            <i class="ph ph-file-text"></i> Teklif Taleplerim
+                        </a>
+                        <a href="projects.html" class="sidebar-link pro-only" style="display: none;">
+                            <i class="ph ph-folder"></i> Projelerim
+                        </a>
+                        <hr class="sidebar-divider">
+                        <button onclick="YakaAuth.logout()" class="sidebar-link logout-link">
+                            <i class="ph ph-sign-out"></i> Çıkış Yap
+                        </button>
+                    </nav>
+                </aside>
+
+                <!-- Main Content -->
+                <section class="account-content">
+                    <div class="account-header">
+                        <h1>Favorilerim</h1>
+                        <p>Beğendiğiniz bitkileri burada bulabilirsiniz.</p>
+                    </div>
+
+                    <!-- Favorites Grid -->
+                    <div id="favorites-grid" class="favorites-grid">
+                        <!-- Loading State -->
+                        <div class="loading-state">
+                            <i class="ph ph-spinner loading-spin"></i>
+                            <p>Yükleniyor...</p>
+                        </div>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="empty-state" class="empty-state" style="display: none;">
+                        <i class="ph ph-heart-break"></i>
+                        <h3>Henüz favoriniz yok</h3>
+                        <p>Koleksiyonumuzu keşfedip beğendiğiniz bitkileri favorilerinize ekleyin.</p>
+                        <a href="../shop.html" class="btn btn-primary">
+                            <i class="ph ph-plant"></i> Koleksiyonu Keşfet
+                        </a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="../plant_data.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/ui.js"></script>
+    <script>
+        const favoritesGrid = document.getElementById('favorites-grid');
+        const emptyState = document.getElementById('empty-state');
+
+        // Require authentication
+        (async () => {
+            const user = await YakaAuth.requireAuth();
+            if (!user) return;
+
+            // Update sidebar
+            document.getElementById('user-name').textContent = `${user.name} ${user.surname}`;
+            document.getElementById('user-role').textContent = YakaUI.getRoleName(user.role);
+            document.getElementById('user-role').className = `role-badge role-${user.role}`;
+
+            if (YakaAuth.isPro()) {
+                document.querySelectorAll('.pro-only').forEach(el => {
+                    el.style.display = 'flex';
+                });
+            }
+
+            // Load favorites
+            await loadFavorites();
+        })();
+
+        async function loadFavorites() {
+            try {
+                const { favorites } = await YakaAPI.favorites.getAll();
+
+                if (favorites.length === 0) {
+                    favoritesGrid.style.display = 'none';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+
+                // Get plant data for each favorite
+                const cards = favorites.map(fav => {
+                    const plant = plantCatalog.find(p => p.id === fav.product_id);
+                    if (!plant) return '';
+
+                    return `
+                        <div class="favorite-card" data-product-id="${plant.id}">
+                            <div class="favorite-image">
+                                <img src="../${plant.image}" alt="${plant.title}">
+                                <button class="remove-favorite" onclick="removeFavorite('${plant.id}')">
+                                    <i class="ph ph-x"></i>
+                                </button>
+                            </div>
+                            <div class="favorite-info">
+                                <h4>${plant.title}</h4>
+                                <p class="scientific">${plant.scientific}</p>
+                                <div class="favorite-meta">
+                                    <span class="badge badge-${plant.difficulty === 'Kolay' ? 'success' : plant.difficulty === 'Orta' ? 'warning' : 'danger'}">
+                                        ${plant.difficulty}
+                                    </span>
+                                </div>
+                                <div class="favorite-actions">
+                                    <a href="../shop.html#${plant.id}" class="btn btn-sm btn-secondary">
+                                        <i class="ph ph-eye"></i> Detay
+                                    </a>
+                                    <button onclick="requestQuote('${plant.id}')" class="btn btn-sm btn-primary">
+                                        <i class="ph ph-chat-text"></i> Teklif İste
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                favoritesGrid.innerHTML = cards;
+
+            } catch (err) {
+                YakaUI.toast.error('Favoriler yüklenemedi');
+                console.error(err);
+            }
+        }
+
+        async function removeFavorite(productId) {
+            const confirmed = await YakaUI.confirm('Bu bitkiyi favorilerden çıkarmak istiyor musunuz?', {
+                confirmText: 'Çıkar',
+                danger: true
+            });
+
+            if (!confirmed) return;
+
+            try {
+                await YakaAPI.favorites.remove(productId);
+
+                // Remove card from DOM
+                const card = document.querySelector(`[data-product-id="${productId}"]`);
+                if (card) {
+                    card.remove();
+                }
+
+                // Check if empty
+                if (favoritesGrid.children.length === 0) {
+                    favoritesGrid.style.display = 'none';
+                    emptyState.style.display = 'block';
+                }
+
+                YakaUI.toast.success('Favorilerden çıkarıldı');
+
+            } catch (err) {
+                YakaUI.toast.error(err.message);
+            }
+        }
+
+        async function requestQuote(productId) {
+            try {
+                await YakaAPI.quotes.create({
+                    product_ids: [productId],
+                    request_text: 'Favori bitkimle ilgili teklif almak istiyorum.'
+                });
+                YakaUI.toast.success('Teklif talebiniz alındı!');
+            } catch (err) {
+                YakaUI.toast.error(err.message);
+            }
+        }
+    </script>
+
+</body>
+
+</html>

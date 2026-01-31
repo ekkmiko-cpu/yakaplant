@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hesabım | YakaPlant</title>
+    <meta name="description" content="YakaPlant hesap yönetimi.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../style.css">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+            <ul class="nav-links">
+                <li><a href="../index.html" class="nav-link">Ana Sayfa</a></li>
+                <li><a href="../shop.html" class="nav-link">Koleksiyon</a></li>
+                <li><a href="../care.html" class="nav-link">Bakım Rehberi</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div style="margin-top: 80px;"></div>
+
+    <!-- Account Page -->
+    <main class="account-page">
+        <div class="container">
+            <div class="account-layout">
+                <!-- Sidebar -->
+                <aside class="account-sidebar">
+                    <div class="sidebar-header">
+                        <div class="user-avatar">
+                            <i class="ph ph-user"></i>
+                        </div>
+                        <h3 id="user-name">Yükleniyor...</h3>
+                        <span id="user-role" class="role-badge"></span>
+                    </div>
+
+                    <nav class="sidebar-nav">
+                        <a href="index.html" class="sidebar-link active">
+                            <i class="ph ph-user-circle"></i> Profilim
+                        </a>
+                        <a href="favorites.html" class="sidebar-link">
+                            <i class="ph ph-heart"></i> Favorilerim
+                        </a>
+                        <a href="requests.html" class="sidebar-link">
+                            <i class="ph ph-file-text"></i> Teklif Taleplerim
+                        </a>
+                        <a href="projects.html" class="sidebar-link pro-only" style="display: none;">
+                            <i class="ph ph-folder"></i> Projelerim
+                        </a>
+                        <hr class="sidebar-divider">
+                        <button onclick="YakaAuth.logout()" class="sidebar-link logout-link">
+                            <i class="ph ph-sign-out"></i> Çıkış Yap
+                        </button>
+                    </nav>
+                </aside>
+
+                <!-- Main Content -->
+                <section class="account-content">
+                    <div class="account-header">
+                        <h1>Profilim</h1>
+                        <p>Hesap bilgilerinizi görüntüleyin ve düzenleyin.</p>
+                    </div>
+
+                    <!-- Profile Form -->
+                    <form id="profile-form" class="account-form">
+                        <div class="form-section">
+                            <h3><i class="ph ph-user"></i> Kişisel Bilgiler</h3>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="name">Ad</label>
+                                    <input type="text" id="name" name="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="surname">Soyad</label>
+                                    <input type="text" id="surname" name="surname" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">E-posta</label>
+                                <input type="email" id="email" name="email" readonly disabled>
+                                <span class="form-hint">E-posta adresi değiştirilemez</span>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3><i class="ph ph-phone"></i> İletişim Bilgileri</h3>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="phone">Telefon</label>
+                                    <input type="tel" id="phone" name="phone" placeholder="0532 123 45 67">
+                                </div>
+                                <div class="form-group">
+                                    <label for="city">Şehir</label>
+                                    <input type="text" id="city" name="city" placeholder="İstanbul">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section company-section" style="display: none;">
+                            <h3><i class="ph ph-building-office"></i> Şirket Bilgileri</h3>
+
+                            <div class="form-group">
+                                <label for="company_name">Şirket Adı</label>
+                                <input type="text" id="company_name" name="company_name">
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="ph ph-floppy-disk"></i> Değişiklikleri Kaydet
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Account Info -->
+                    <div class="account-info-section">
+                        <h3><i class="ph ph-info"></i> Hesap Bilgileri</h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Hesap Tipi</span>
+                                <span id="account-type" class="info-value">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Üyelik Tarihi</span>
+                                <span id="member-since" class="info-value">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/ui.js"></script>
+    <script>
+        // Require authentication
+        (async () => {
+            const user = await YakaAuth.requireAuth();
+            if (!user) return;
+
+            // Populate user info
+            document.getElementById('user-name').textContent = `${user.name} ${user.surname}`;
+            document.getElementById('user-role').textContent = YakaUI.getRoleName(user.role);
+            document.getElementById('user-role').className = `role-badge role-${user.role}`;
+
+            // Form values
+            document.getElementById('name').value = user.name;
+            document.getElementById('surname').value = user.surname;
+            document.getElementById('email').value = user.email;
+            document.getElementById('phone').value = user.phone || '';
+            document.getElementById('city').value = user.city || '';
+            document.getElementById('company_name').value = user.company_name || '';
+
+            // Account info
+            document.getElementById('account-type').textContent = YakaUI.getRoleName(user.role);
+            document.getElementById('member-since').textContent = YakaUI.formatDate(user.created_at);
+
+            // Show company section for company users
+            if (user.role === 'company') {
+                document.querySelector('.company-section').style.display = 'block';
+            }
+
+            // Show PRO sidebar links
+            if (YakaAuth.isPro()) {
+                document.querySelectorAll('.pro-only').forEach(el => {
+                    el.style.display = 'flex';
+                });
+            }
+        })();
+
+        // Form submission
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const form = e.target;
+            const data = YakaUI.validateForm(form);
+            if (!data) return;
+
+            // Remove readonly fields
+            delete data.email;
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            YakaUI.setButtonLoading(submitBtn, true);
+
+            try {
+                const result = await YakaAPI.user.updateProfile(data);
+                YakaUI.toast.success('Profiliniz güncellendi');
+
+                // Update sidebar name
+                document.getElementById('user-name').textContent = `${result.user.name} ${result.user.surname}`;
+
+            } catch (err) {
+                YakaUI.toast.error(err.message);
+            } finally {
+                YakaUI.setButtonLoading(submitBtn, false);
+            }
+        });
+    </script>
+
+</body>
+
+</html>

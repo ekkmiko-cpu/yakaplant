@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projelerim | YakaPlant</title>
+    <meta name="description" content="YakaPlant proje yönetimi.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../style.css">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+            <ul class="nav-links">
+                <li><a href="../index.html" class="nav-link">Ana Sayfa</a></li>
+                <li><a href="../shop.html" class="nav-link">Koleksiyon</a></li>
+                <li><a href="../care.html" class="nav-link">Bakım Rehberi</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div style="margin-top: 80px;"></div>
+
+    <!-- Account Page -->
+    <main class="account-page">
+        <div class="container">
+            <div class="account-layout">
+                <!-- Sidebar -->
+                <aside class="account-sidebar">
+                    <div class="sidebar-header">
+                        <div class="user-avatar">
+                            <i class="ph ph-user"></i>
+                        </div>
+                        <h3 id="user-name">Yükleniyor...</h3>
+                        <span id="user-role" class="role-badge"></span>
+                    </div>
+
+                    <nav class="sidebar-nav">
+                        <a href="index.html" class="sidebar-link">
+                            <i class="ph ph-user-circle"></i> Profilim
+                        </a>
+                        <a href="favorites.html" class="sidebar-link">
+                            <i class="ph ph-heart"></i> Favorilerim
+                        </a>
+                        <a href="requests.html" class="sidebar-link">
+                            <i class="ph ph-file-text"></i> Teklif Taleplerim
+                        </a>
+                        <a href="projects.html" class="sidebar-link active">
+                            <i class="ph ph-folder"></i> Projelerim
+                        </a>
+                        <hr class="sidebar-divider">
+                        <button onclick="YakaAuth.logout()" class="sidebar-link logout-link">
+                            <i class="ph ph-sign-out"></i> Çıkış Yap
+                        </button>
+                    </nav>
+                </aside>
+
+                <!-- Main Content -->
+                <section class="account-content">
+                    <div class="account-header">
+                        <div class="header-row">
+                            <div>
+                                <h1>Projelerim</h1>
+                                <p>Peyzaj projelerinizi oluşturun ve bitki listelerinizi yönetin.</p>
+                            </div>
+                            <button id="new-project-btn" class="btn btn-primary">
+                                <i class="ph ph-plus"></i> Yeni Proje
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Projects Grid -->
+                    <div id="projects-grid" class="projects-grid">
+                        <!-- Loading State -->
+                        <div class="loading-state">
+                            <i class="ph ph-spinner loading-spin"></i>
+                            <p>Yükleniyor...</p>
+                        </div>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="empty-state" class="empty-state" style="display: none;">
+                        <i class="ph ph-folder-open"></i>
+                        <h3>Henüz projeniz yok</h3>
+                        <p>Peyzaj projeleriniz için bitki listeleri oluşturun ve teklif alın.</p>
+                        <button id="empty-new-project" class="btn btn-primary">
+                            <i class="ph ph-plus"></i> İlk Projeyi Oluştur
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- New Project Modal -->
+    <div id="project-modal" class="modal" style="display: none;">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h3 id="modal-title">Yeni Proje</h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="ph ph-x"></i>
+                </button>
+            </div>
+            <form id="project-form" class="modal-body">
+                <input type="hidden" id="project-id" value="">
+
+                <div class="form-group">
+                    <label for="project-title">Proje Adı *</label>
+                    <input type="text" id="project-title" name="title" required maxlength="200"
+                        placeholder="Örn: Villa Bahçe Projesi">
+                </div>
+
+                <div class="form-group">
+                    <label for="project-notes">Notlar</label>
+                    <textarea id="project-notes" name="notes" rows="4"
+                        placeholder="Proje hakkında notlar..."></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">İptal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ph ph-floppy-disk"></i> Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/ui.js"></script>
+    <script>
+        const projectsGrid = document.getElementById('projects-grid');
+        const emptyState = document.getElementById('empty-state');
+        const modal = document.getElementById('project-modal');
+        const form = document.getElementById('project-form');
+
+        // Require PRO authentication
+        (async () => {
+            const user = await YakaAuth.requireAuth();
+            if (!user) return;
+
+            // Check PRO role
+            if (!YakaAuth.isPro()) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Update sidebar
+            document.getElementById('user-name').textContent = `${user.name} ${user.surname}`;
+            document.getElementById('user-role').textContent = YakaUI.getRoleName(user.role);
+            document.getElementById('user-role').className = `role-badge role-${user.role}`;
+
+            // Load projects
+            await loadProjects();
+        })();
+
+        async function loadProjects() {
+            try {
+                const { projects } = await YakaAPI.projects.getAll();
+
+                if (projects.length === 0) {
+                    projectsGrid.style.display = 'none';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+
+                projectsGrid.style.display = 'grid';
+                emptyState.style.display = 'none';
+
+                const cards = projects.map(project => `
+                    <div class="project-card" data-id="${project.id}">
+                        <div class="project-header">
+                            <h4>${project.title}</h4>
+                            <div class="project-actions">
+                                <button onclick="editProject(${project.id}, '${project.title}', '${project.notes || ''}')" 
+                                    class="btn-icon" title="Düzenle">
+                                    <i class="ph ph-pencil"></i>
+                                </button>
+                                <button onclick="deleteProject(${project.id})" 
+                                    class="btn-icon btn-danger" title="Sil">
+                                    <i class="ph ph-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        ${project.notes ? `<p class="project-notes">${project.notes}</p>` : ''}
+                        <div class="project-meta">
+                            <span><i class="ph ph-plant"></i> ${project.item_count} bitki</span>
+                            <span><i class="ph ph-calendar"></i> ${YakaUI.formatRelativeTime(project.updated_at)}</span>
+                        </div>
+                        <div class="project-footer">
+                            <a href="../shop.html?project=${project.id}" class="btn btn-sm btn-secondary">
+                                <i class="ph ph-plus"></i> Bitki Ekle
+                            </a>
+                            <button onclick="requestProjectQuote(${project.id})" class="btn btn-sm btn-primary">
+                                <i class="ph ph-chat-text"></i> Teklif İste
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+                projectsGrid.innerHTML = cards;
+
+            } catch (err) {
+                YakaUI.toast.error('Projeler yüklenemedi');
+                console.error(err);
+            }
+        }
+
+        // Modal functions
+        function openModal(title = 'Yeni Proje') {
+            document.getElementById('modal-title').textContent = title;
+            modal.style.display = 'flex';
+            document.getElementById('project-title').focus();
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            form.reset();
+            document.getElementById('project-id').value = '';
+        }
+
+        function editProject(id, title, notes) {
+            document.getElementById('project-id').value = id;
+            document.getElementById('project-title').value = title;
+            document.getElementById('project-notes').value = notes;
+            openModal('Projeyi Düzenle');
+        }
+
+        // New project buttons
+        document.getElementById('new-project-btn').addEventListener('click', () => openModal());
+        document.getElementById('empty-new-project').addEventListener('click', () => openModal());
+
+        // Close modal on backdrop click
+        modal.querySelector('.modal-backdrop').addEventListener('click', closeModal);
+
+        // Form submit
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const projectId = document.getElementById('project-id').value;
+            const title = document.getElementById('project-title').value;
+            const notes = document.getElementById('project-notes').value;
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            YakaUI.setButtonLoading(submitBtn, true);
+
+            try {
+                if (projectId) {
+                    await YakaAPI.projects.update(projectId, { title, notes });
+                    YakaUI.toast.success('Proje güncellendi');
+                } else {
+                    await YakaAPI.projects.create({ title, notes });
+                    YakaUI.toast.success('Proje oluşturuldu');
+                }
+
+                closeModal();
+                await loadProjects();
+
+            } catch (err) {
+                YakaUI.toast.error(err.message);
+            } finally {
+                YakaUI.setButtonLoading(submitBtn, false);
+            }
+        });
+
+        async function deleteProject(id) {
+            const confirmed = await YakaUI.confirm('Bu projeyi silmek istiyor musunuz? Bu işlem geri alınamaz.', {
+                confirmText: 'Sil',
+                danger: true
+            });
+
+            if (!confirmed) return;
+
+            try {
+                await YakaAPI.projects.delete(id);
+                YakaUI.toast.success('Proje silindi');
+                await loadProjects();
+            } catch (err) {
+                YakaUI.toast.error(err.message);
+            }
+        }
+
+        async function requestProjectQuote(projectId) {
+            try {
+                await YakaAPI.quotes.create({
+                    project_id: projectId,
+                    request_text: 'Projem için toplu teklif almak istiyorum.'
+                });
+                YakaUI.toast.success('Teklif talebiniz alındı!');
+            } catch (err) {
+                YakaUI.toast.error(err.message);
+            }
+        }
+    </script>
+
+</body>
+
+</html>

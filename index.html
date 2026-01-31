@@ -5,11 +5,11 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9BWZ83ZHPR"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-      gtag('config', 'G-9BWZ83ZHPR');
+        gtag('config', 'G-9BWZ83ZHPR');
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -95,6 +95,8 @@
                 <li><a href="care.html" class="nav-link">Bakım Rehberi</a></li>
                 <li><a href="shop.html" class="nav-link">Koleksiyon</a></li>
                 <li><a href="contact.html" class="nav-link button-primary">İletişim</a></li>
+                <!-- Auth container (populated by auth.js) -->
+                <li id="nav-auth-container"></li>
             </ul>
 
             <div class="nav-actions">
@@ -107,137 +109,143 @@
             </div>
         </div>
     </nav>
-
-    <!-- Hero Section -->
-    <!-- 1. Modern Hero -->
-    <header class="modern-hero">
-        <div class="hero-bg"></div>
-        <div class="modern-hero-content">
-            <h1 class="modern-hero-title">
-                DOĞAYI <span class="highlight">TASARLA</span>
-            </h1>
-
-            <div class="hero-btn-group">
-                <a href="shop.html" class="modern-hero-btn">
-                    Koleksiyonu Keşfet <i class="ph ph-arrow-right"></i>
-                </a>
-                <a href="contact.html" class="modern-hero-btn">
-                    İletişime Geç <i class="ph ph-chat-circle-dots"></i>
-                </a>
-
-                <div class="hero-social-row">
-                    <a href="https://wa.me/905318433309" target="_blank" class="hero-social-link" aria-label="WhatsApp">
-                        <i class="ph ph-whatsapp-logo"></i>
-                    </a>
-                    <a href="https://www.instagram.com/yakaplant" target="_blank" class="hero-social-link"
-                        aria-label="Instagram">
-                        <i class="ph ph-instagram-logo"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- 2. Infinite Marquee (Turkish) -->
-    <div class="marquee-strip">
-        <div class="marquee-content">
-            <span>Yakaplant</span>
-            <span>•</span>
-            <span>Sürdürülebilir</span>
-            <span>•</span>
-            <span>Modern</span>
-            <span>•</span>
-            <span>Doğal</span>
-            <span>•</span>
-            <span>Yakaplant</span>
-            <span>•</span>
-            <span>Sürdürülebilir</span>
-            <span>•</span>
-            <span>Modern</span>
-            <span>•</span>
-            <span>Doğal</span>
-            <span>•</span>
-        </div>
-    </div>
-
-    <!-- Scroll Visibility Fix Script -->
-    <script>
-        // Fallback: If elements stay hidden for too long (JS fail), force show them
-        setTimeout(() => {
-            const hiddenElements = document.querySelectorAll('.reveal:not(.active), .modern-hero-title, .hero-btn-group');
-            hiddenElements.forEach(el => {
-                if (getComputedStyle(el).opacity === '0') {
-                    el.style.opacity = '1';
-                    el.style.transform = 'none';
-                }
-            });
-        }, 1000); // 1 second fallback - quick!
-    </script>
-
-    <!-- 3. Bento Grid Discovery -->
-    <section class="bento-section">
-        <div class="container">
-            <div class="bento-header reveal">
-                <h2 class="section-title">Yakaplant Dünyası</h2>
-                <p>Doğanın en estetik halini yaşam alanlarınıza taşıyoruz.</p>
-            </div>
-
-            <div class="bento-grid">
-                <!-- Large Item: Collection -->
-                <a href="shop.html" class="bento-item bento-large reveal">
-                    <img src="assets/collection_bg.png" alt="Koleksiyon">
-                    <!-- Using hero image as placeholder for collection focus -->
-                    <div class="bento-overlay">
-                        <h3>Koleksiyon</h3>
-                        <p>Bahçeniz ve yaşam alanlarınız için en özel bitkiler.</p>
-                    </div>
-                </a>
-
-                <!-- Tall Item: Care -->
-                <a href="care.html" class="bento-item bento-tall reveal">
-                    <!-- We need a distinct image ideally, creating a colored placeholder block via style if no image available, or reusing asset -->
-                    <img src="assets/care_bg.png" alt="Bakım Rehberi" style="filter: grayscale(20%);">
-                    <div class="bento-overlay">
-                        <h3>Bakım Rehberi</h3>
-                        <p>Uzman ipuçları ile bitkileriniz hep canlı.</p>
-                    </div>
-                </a>
-
-                <!-- Wide Item: About -->
-                <a href="about.html" class="bento-item bento-wide reveal">
-                    <img src="assets/about_bg.png" alt="Hakkımızda">
-                    <div class="bento-overlay">
-                        <h3>Hakkımızda</h3>
-                        <p>Doğayı tasarlama hikayemizi okuyun.</p>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-
-
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <a href="index.html" class="logo">Yaka<span class="highlight">plant</span><span
-                            class="dot">.</span></a>
-                    <p>© 2024 Tüm hakları saklıdır.</p>
-                </div>
-                <div class="social-links">
-                    <a href="https://www.instagram.com/yakaplant" target="_blank" aria-label="Instagram"><i
-                            class="ph ph-instagram-logo"></i></a>
-                    <a href="https://wa.me/905318433309" target="_blank" aria-label="WhatsApp"><i
-                            class="ph ph-whatsapp-logo"></i></a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
+    <!-- ... (rest of file) ... -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
     <script src="plant_data.js"></script>
     <script src="script.js"></script>
+</body>
+
+<!-- Hero Section -->
+<!-- 1. Modern Hero -->
+<header class="modern-hero">
+    <div class="hero-bg"></div>
+    <div class="modern-hero-content">
+        <h1 class="modern-hero-title">
+            DOĞAYI <span class="highlight">TASARLA</span>
+        </h1>
+
+        <div class="hero-btn-group">
+            <a href="shop.html" class="modern-hero-btn">
+                Koleksiyonu Keşfet <i class="ph ph-arrow-right"></i>
+            </a>
+            <a href="contact.html" class="modern-hero-btn">
+                İletişime Geç <i class="ph ph-chat-circle-dots"></i>
+            </a>
+
+            <div class="hero-social-row">
+                <a href="https://wa.me/905318433309" target="_blank" class="hero-social-link" aria-label="WhatsApp">
+                    <i class="ph ph-whatsapp-logo"></i>
+                </a>
+                <a href="https://www.instagram.com/yakaplant" target="_blank" class="hero-social-link"
+                    aria-label="Instagram">
+                    <i class="ph ph-instagram-logo"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- 2. Infinite Marquee (Turkish) -->
+<div class="marquee-strip">
+    <div class="marquee-content">
+        <span>Yakaplant</span>
+        <span>•</span>
+        <span>Sürdürülebilir</span>
+        <span>•</span>
+        <span>Modern</span>
+        <span>•</span>
+        <span>Doğal</span>
+        <span>•</span>
+        <span>Yakaplant</span>
+        <span>•</span>
+        <span>Sürdürülebilir</span>
+        <span>•</span>
+        <span>Modern</span>
+        <span>•</span>
+        <span>Doğal</span>
+        <span>•</span>
+    </div>
+</div>
+
+<!-- Scroll Visibility Fix Script -->
+<script>
+    // Fallback: If elements stay hidden for too long (JS fail), force show them
+    setTimeout(() => {
+        const hiddenElements = document.querySelectorAll('.reveal:not(.active), .modern-hero-title, .hero-btn-group');
+        hiddenElements.forEach(el => {
+            if (getComputedStyle(el).opacity === '0') {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+            }
+        });
+    }, 1000); // 1 second fallback - quick!
+</script>
+
+<!-- 3. Bento Grid Discovery -->
+<section class="bento-section">
+    <div class="container">
+        <div class="bento-header reveal">
+            <h2 class="section-title">Yakaplant Dünyası</h2>
+            <p>Doğanın en estetik halini yaşam alanlarınıza taşıyoruz.</p>
+        </div>
+
+        <div class="bento-grid">
+            <!-- Large Item: Collection -->
+            <a href="shop.html" class="bento-item bento-large reveal">
+                <img src="assets/collection_bg.png" alt="Koleksiyon">
+                <!-- Using hero image as placeholder for collection focus -->
+                <div class="bento-overlay">
+                    <h3>Koleksiyon</h3>
+                    <p>Bahçeniz ve yaşam alanlarınız için en özel bitkiler.</p>
+                </div>
+            </a>
+
+            <!-- Tall Item: Care -->
+            <a href="care.html" class="bento-item bento-tall reveal">
+                <!-- We need a distinct image ideally, creating a colored placeholder block via style if no image available, or reusing asset -->
+                <img src="assets/care_bg.png" alt="Bakım Rehberi" style="filter: grayscale(20%);">
+                <div class="bento-overlay">
+                    <h3>Bakım Rehberi</h3>
+                    <p>Uzman ipuçları ile bitkileriniz hep canlı.</p>
+                </div>
+            </a>
+
+            <!-- Wide Item: About -->
+            <a href="about.html" class="bento-item bento-wide reveal">
+                <img src="assets/about_bg.png" alt="Hakkımızda">
+                <div class="bento-overlay">
+                    <h3>Hakkımızda</h3>
+                    <p>Doğayı tasarlama hikayemizi okuyun.</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+                <p>© 2024 Tüm hakları saklıdır.</p>
+            </div>
+            <div class="social-links">
+                <a href="https://www.instagram.com/yakaplant" target="_blank" aria-label="Instagram"><i
+                        class="ph ph-instagram-logo"></i></a>
+                <a href="https://wa.me/905318433309" target="_blank" aria-label="WhatsApp"><i
+                        class="ph ph-whatsapp-logo"></i></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="plant_data.js"></script>
+<script src="script.js"></script>
 </body>
 
 </html>

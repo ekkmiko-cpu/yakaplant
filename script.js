@@ -147,23 +147,43 @@ const plantData = plantCatalog.reduce((acc, plant) => {
 
 
 // --- RENDER SHOP FUNCTION ---
-const renderShop = (filter = 'all') => {
+const renderShop = async (filter = 'all') => {
     const grid = document.getElementById('product-grid');
     if (!grid) return;
 
-    grid.innerHTML = ''; // Clear current
+    grid.innerHTML = '';
 
     const filtered = filter === 'all'
         ? plantCatalog
         : plantCatalog.filter(p => p.category === filter);
 
+    // Fetch user favorites if logged in
+    let favorites = new Set();
+    const user = typeof YakaAuth !== 'undefined' ? YakaAuth.getUser() : null;
+    if (user) {
+        try {
+            const data = await YakaAPI.favorites.getAll();
+            if (data.favorites) {
+                data.favorites.forEach(f => favorites.add(f.product_id));
+            }
+        } catch (err) {
+            console.error('Failed to fetch favorites', err);
+        }
+    }
+
     filtered.forEach(plant => {
+        const isFav = favorites.has(plant.id);
         const card = document.createElement('div');
         card.className = 'product-card reveal';
         card.innerHTML = `
             <div class="product-image">
                 <img src="${plant.image}" alt="${plant.title}">
-                <button class="add-btn"><i class="ph ph-plus"></i></button>
+                <button class="fav-btn ${isFav ? 'active' : ''}" data-id="${plant.id}" onclick="toggleFavorite(event, '${plant.id}')">
+                    <i class="ph ${isFav ? 'ph-heart-fill' : 'ph-heart'}" style="${isFav ? 'color: #e63946;' : ''}"></i>
+                </button>
+                <div class="add-btn-container">
+                    <button class="add-btn"><i class="ph ph-plus"></i></button>
+                </div>
             </div>
             <div class="product-info">
                 <h3>${plant.title}</h3>
@@ -173,7 +193,15 @@ const renderShop = (filter = 'all') => {
         `;
 
         // Add click listener (delegating to existing openModal logic)
-        card.querySelector('.product-image').addEventListener('click', () => {
+        // Click on image opens modal
+        card.querySelector('.product-image img').addEventListener('click', (e) => {
+            // Ensure we are not clicking a button on top
+            openModal(plant.id);
+        });
+
+        // Add click listener for add button (Quick view)
+        card.querySelector('.add-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
             openModal(plant.id);
         });
 
@@ -182,6 +210,61 @@ const renderShop = (filter = 'all') => {
 
     // Re-trigger scroll observer for new elements
     document.querySelectorAll('.reveal').forEach(el => revealOnScroll.observe(el));
+};
+
+// Global Favorite Toggle Function
+window.toggleFavorite = async (event, productId) => {
+    event.stopPropagation(); // Don't trigger modal
+
+    // Check auth
+    if (typeof YakaAuth === 'undefined' || !YakaAuth.isLoggedIn()) {
+        if (typeof YakaUI !== 'undefined') {
+            YakaUI.toast.info('Favorilere eklemek için giriş yapmalısınız');
+        } else {
+            alert('Favorilere eklemek için giriş yapmalısınız');
+        }
+        return;
+    }
+
+    const btn = event.currentTarget;
+    const icon = btn.querySelector('i');
+    const wasActive = btn.classList.contains('active');
+
+    // Optimistic UI update
+    btn.classList.toggle('active');
+
+    // Update icon class and style immediately
+    if (!wasActive) {
+        icon.className = 'ph ph-heart-fill';
+        icon.style.color = '#e63946';
+    } else {
+        icon.className = 'ph ph-heart';
+        icon.style.color = '';
+    }
+
+    try {
+        if (!wasActive) {
+            // Add
+            await YakaAPI.favorites.add(productId);
+            if (typeof YakaUI !== 'undefined') YakaUI.toast.success('Favorilere eklendi');
+        } else {
+            // Remove
+            await YakaAPI.favorites.remove(productId);
+            if (typeof YakaUI !== 'undefined') YakaUI.toast.success('Favorilerden çıkarıldı');
+        }
+    } catch (err) {
+        console.error('Favorite toggle failed', err);
+        // Revert UI on error
+        btn.classList.toggle('active');
+        if (!wasActive) {
+            icon.className = 'ph ph-heart';
+            icon.style.color = '';
+        } else {
+            icon.className = 'ph ph-heart-fill';
+            icon.style.color = '#e63946';
+        }
+        if (typeof YakaUI !== 'undefined') YakaUI.toast.error('İşlem başarısız');
+    }
 };
 
 // Filter Button Listeners
@@ -226,72 +309,82 @@ const modalPrice = document.getElementById('modal-price');
 
 // Open Modal Function
 const openModal = (plantKey) => {
-    const data = plantData[plantKey];
-    if (!data) return;
+    // Robust element querying - ensuring we find them even if global vars failed
+    const modal_local = document.getElementById('product-modal');
+    const title_el = document.getElementById('modal-title');
+    const scientific_el = document.getElementById('modal-scientific');
+    const desc_el = document.getElementById('modal-desc');
+    const img_el = document.getElementById('modal-img');
+    const water_el = document.getElementById('stat-water');
+    const light_el = document.getElementById('stat-light');
+    const humidity_el = document.getElementById('stat-humidity');
+    const temp_el = document.getElementById('stat-temp');
+    const dif_badge = document.getElementById('badge-difficulty');
+    const pet_badge = document.getElementById('badge-pet');
 
-    // Reset UI visibility (in case Doctor Modal hid them)
-    if (modalScientific) modalScientific.style.display = 'block';
-    if (document.querySelector('.modal-badges')) document.querySelector('.modal-badges').style.display = 'flex';
-    if (document.querySelector('.stats-grid')) document.querySelector('.stats-grid').style.display = 'grid';
-    // modalPrice display block removed as per user request to hide prices everywhere
+    const data = plantData[plantKey];
+    if (!data || !modal_local) return;
+
+    // Reset UI visibility
+    if (scientific_el) scientific_el.style.display = 'block';
+    const badges = modal_local.querySelector('.modal-badges');
+    if (badges) badges.style.display = 'flex';
+    const stats = modal_local.querySelector('.stats-grid');
+    if (stats) stats.style.display = 'grid';
 
     // Reset Footer CTA
-    const ctaBtn = document.querySelector('.modal-footer .btn');
+    const ctaBtn = modal_local.querySelector('.modal-footer .btn');
     if (ctaBtn) {
         ctaBtn.innerHTML = `Sipariş için İletişime Geç <i class="ph ph-whatsapp-logo"></i>`;
         ctaBtn.href = "contact.html";
     }
 
-    modalTitle.textContent = data.title;
-    if (modalScientific) modalScientific.textContent = data.scientific;
-    modalDesc.innerHTML = data.desc; // Changed to innerHTML for rich text
-    modalImg.src = data.image;
-    modalImg.alt = data.title;
+    // Populate Data
+    if (title_el) title_el.textContent = data.title;
+    if (scientific_el) scientific_el.textContent = data.scientific;
+    if (desc_el) desc_el.innerHTML = data.desc;
+    if (img_el) {
+        img_el.src = data.image;
+        img_el.alt = data.title;
+    }
 
     // Update Stats
-    if (statWater) statWater.textContent = data.water;
-    if (statLight) statLight.textContent = data.env;
-    if (statHumidity) statHumidity.textContent = data.humidity;
-    if (statTemp) statTemp.textContent = data.temp;
+    if (water_el) water_el.textContent = data.water;
+    if (light_el) light_el.textContent = data.env;
+    if (humidity_el) humidity_el.textContent = data.humidity;
+    if (temp_el) temp_el.textContent = data.temp;
 
     // Update Difficulty Badge
-    if (badgeDifficulty) {
-        badgeDifficulty.textContent = data.difficulty;
-        badgeDifficulty.className = 'modal-badge badge-difficulty'; // Reset
-        // Add color class
+    if (dif_badge) {
+        dif_badge.textContent = data.difficulty;
+        dif_badge.className = 'modal-badge badge-difficulty';
         if (data.difficulty === 'Kolay' || data.difficulty === 'Çok Kolay') {
-            badgeDifficulty.classList.add('easy');
+            dif_badge.classList.add('easy');
         } else if (data.difficulty === 'Orta') {
-            badgeDifficulty.classList.add('medium');
+            dif_badge.classList.add('medium');
         } else {
-            badgeDifficulty.classList.add('hard');
+            dif_badge.classList.add('hard');
         }
     }
 
     // Update Pet Friendly Badge
-    if (badgePet) {
+    if (pet_badge) {
         if (data.petFriendly) {
-            badgePet.innerHTML = '<i class="ph ph-paw-print"></i> Hayvan Dostu';
-            badgePet.classList.remove('danger');
-            badgePet.classList.add('success');
+            pet_badge.innerHTML = '<i class="ph ph-paw-print"></i> Hayvan Dostu';
+            pet_badge.classList.remove('danger');
+            pet_badge.classList.add('success');
         } else {
-            badgePet.innerHTML = '<i class="ph ph-warning"></i> Toksik Olabilir';
-            badgePet.classList.remove('success');
-            badgePet.classList.add('danger');
+            pet_badge.innerHTML = '<i class="ph ph-warning"></i> Toksik Olabilir';
+            pet_badge.classList.remove('success');
+            pet_badge.classList.add('danger');
         }
     }
 
-    // Price hidden globally
-    /* if (modalPrice) {
-        modalPrice.textContent = data.price;
-        modalPrice.style.display = 'block';
-    } */
-
-    modal.classList.add('show');
+    modal_local.classList.add('show');
     document.body.style.overflow = 'hidden';
 
     // Trigger Animations
-    const staggerItems = modal.querySelectorAll('.stagger-item');
+    const staggerItems = modal_local.querySelectorAll('.stagger-item');
     staggerItems.forEach((item, index) => {
         item.style.animation = 'none';
         item.offsetHeight; /* trigger reflow */
@@ -301,28 +394,33 @@ const openModal = (plantKey) => {
 
 // Close Modal Function
 const closeProductModal = () => {
-    modal.classList.remove('show');
+    const modal_el = document.getElementById('product-modal');
+    if (modal_el) {
+        modal_el.classList.remove('show');
+    }
     document.body.style.overflow = '';
 };
 
-// Event Listeners for Closing
-if (closeModal) {
-    closeModal.addEventListener('click', closeProductModal);
-}
+// Event Listeners for Closing - Attach after DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    const closeBtn = document.querySelector('.close-modal');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeProductModal);
+    }
+});
 
-if (modal) {
-    window.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeProductModal();
-        }
-    });
-}
-
-
+// Click outside modal to close
+window.addEventListener('click', (e) => {
+    const modal_el = document.getElementById('product-modal');
+    if (modal_el && e.target === modal_el) {
+        closeProductModal();
+    }
+});
 
 // Close on Escape key
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('show')) {
+    const modal_el = document.getElementById('product-modal');
+    if (e.key === 'Escape' && modal_el && modal_el.classList.contains('show')) {
         closeProductModal();
     }
 });

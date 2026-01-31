@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Üye Ol | YakaPlant</title>
+    <meta name="description" content="YakaPlant'a üye olun ve bitkilerinizi profesyonelce yetiştirin.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Ana Sayfa</a></li>
+                <li><a href="shop.html" class="nav-link">Koleksiyon</a></li>
+                <li><a href="care.html" class="nav-link">Bakım Rehberi</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div style="margin-top: 80px;"></div>
+
+    <!-- Auth Page Container -->
+    <main class="auth-page">
+        <div class="auth-container register-container">
+            <!-- Left: Form -->
+            <div class="auth-form-section">
+                <div class="auth-form-wrapper">
+                    <div class="auth-header">
+                        <h1 class="auth-title">Üye Olun</h1>
+                        <p class="auth-subtitle">YakaPlant ailesine katılın</p>
+                    </div>
+
+                    <!-- Step Indicator -->
+                    <div class="register-steps">
+                        <div class="step active" data-step="1">
+                            <span class="step-number">1</span>
+                            <span class="step-label">Hesap Tipi</span>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="step" data-step="2">
+                            <span class="step-number">2</span>
+                            <span class="step-label">Bilgileriniz</span>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Role Selection -->
+                    <div id="step-1" class="register-step active">
+                        <p class="step-intro">Sizi en iyi tanımlayan seçeneği belirleyin:</p>
+
+                        <div class="role-cards">
+                            <label class="role-card">
+                                <input type="radio" name="role" value="customer" required>
+                                <div class="role-card-content">
+                                    <i class="ph ph-house"></i>
+                                    <h3>Bireysel Müşteri</h3>
+                                    <p>Evim veya bahçem için bitki arıyorum</p>
+                                </div>
+                            </label>
+
+                            <label class="role-card">
+                                <input type="radio" name="role" value="landscape_architect">
+                                <div class="role-card-content">
+                                    <i class="ph ph-tree-structure"></i>
+                                    <h3>Peyzaj Mimarı</h3>
+                                    <p>Projelerim için bitki araştırması yapıyorum</p>
+                                </div>
+                            </label>
+
+                            <label class="role-card">
+                                <input type="radio" name="role" value="company">
+                                <div class="role-card-content">
+                                    <i class="ph ph-buildings"></i>
+                                    <h3>Firma / Kurumsal</h3>
+                                    <p>Ticari projeler veya toplu alım için ilgileniyorum</p>
+                                </div>
+                            </label>
+                        </div>
+
+                        <button type="button" id="next-step" class="btn btn-primary btn-block" disabled>
+                            Devam Et <i class="ph ph-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Step 2: Profile Info -->
+                    <form id="register-form" class="register-step" style="display: none;">
+                        <input type="hidden" id="selected-role" name="role" value="">
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Ad *</label>
+                                <input type="text" id="name" name="name" required minlength="2" maxlength="50">
+                            </div>
+                            <div class="form-group">
+                                <label for="surname">Soyad *</label>
+                                <input type="text" id="surname" name="surname" required minlength="2" maxlength="50">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">E-posta *</label>
+                            <div class="input-with-icon">
+                                <i class="ph ph-envelope"></i>
+                                <input type="email" id="email" name="email" placeholder="ornek@email.com" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Şifre *</label>
+                            <div class="input-with-icon">
+                                <i class="ph ph-lock"></i>
+                                <input type="password" id="password" name="password"
+                                    placeholder="En az 8 karakter, 1 büyük harf, 1 rakam" required minlength="8"
+                                    pattern="(?=.*[A-Z])(?=.*[0-9]).{8,}">
+                                <button type="button" class="toggle-password" aria-label="Şifreyi göster">
+                                    <i class="ph ph-eye"></i>
+                                </button>
+                            </div>
+                            <span class="form-hint">En az 8 karakter, bir büyük harf ve bir rakam içermeli</span>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone">Telefon</label>
+                                <div class="input-with-icon">
+                                    <i class="ph ph-phone"></i>
+                                    <input type="tel" id="phone" name="phone" placeholder="0532 123 45 67">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="city">Şehir</label>
+                                <input type="text" id="city" name="city" placeholder="İstanbul">
+                            </div>
+                        </div>
+
+                        <!-- Company name (shown only for company role) -->
+                        <div class="form-group company-field" style="display: none;">
+                            <label for="company_name">Şirket Adı</label>
+                            <div class="input-with-icon">
+                                <i class="ph ph-building-office"></i>
+                                <input type="text" id="company_name" name="company_name">
+                            </div>
+                        </div>
+
+                        <label class="checkbox-wrapper terms-checkbox">
+                            <input type="checkbox" name="terms" required>
+                            <span class="checkmark"></span>
+                            <a href="#" target="_blank">Kullanım şartlarını</a> ve <a href="#" target="_blank">gizlilik
+                                politikasını</a> kabul ediyorum
+                        </label>
+
+                        <div class="form-actions">
+                            <button type="button" id="prev-step" class="btn btn-secondary">
+                                <i class="ph ph-arrow-left"></i> Geri
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="ph ph-user-plus"></i> Kayıt Ol
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="auth-footer">
+                        <p>Zaten hesabınız var mı? <a href="login.html">Giriş Yapın</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Visual -->
+            <div class="auth-visual-section">
+                <div class="auth-visual-content">
+                    <img src="assets/care_hero_banana.png" alt="YakaPlant Plants" class="auth-visual-img">
+                    <div class="auth-visual-overlay"></div>
+                    <div class="auth-visual-text">
+                        <h2>Profesyonel Bitki Tedariki</h2>
+                        <p>50+ bitki çeşidi, uzman bakım rehberleri ve proje yönetim araçları.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script>
+        // Redirect if already logged in
+        YakaAuth.redirectIfLoggedIn();
+
+        const step1 = document.getElementById('step-1');
+        const step2 = document.getElementById('register-form');
+        const stepIndicators = document.querySelectorAll('.register-steps .step');
+        const roleCards = document.querySelectorAll('.role-card input');
+        const nextBtn = document.getElementById('next-step');
+        const prevBtn = document.getElementById('prev-step');
+        const companyField = document.querySelector('.company-field');
+        const selectedRoleInput = document.getElementById('selected-role');
+
+        // Enable next button when role selected
+        roleCards.forEach(radio => {
+            radio.addEventListener('change', () => {
+                nextBtn.disabled = false;
+            });
+        });
+
+        // Next step
+        nextBtn.addEventListener('click', () => {
+            const selectedRole = document.querySelector('input[name="role"]:checked');
+            if (!selectedRole) return;
+
+            selectedRoleInput.value = selectedRole.value;
+
+            // Show/hide company field
+            if (selectedRole.value === 'company') {
+                companyField.style.display = 'block';
+            } else {
+                companyField.style.display = 'none';
+            }
+
+            // Switch steps
+            step1.style.display = 'none';
+            step2.style.display = 'block';
+            stepIndicators[0].classList.remove('active');
+            stepIndicators[1].classList.add('active');
+        });
+
+        // Previous step
+        prevBtn.addEventListener('click', () => {
+            step2.style.display = 'none';
+            step1.style.display = 'block';
+            stepIndicators[1].classList.remove('active');
+            stepIndicators[0].classList.add('active');
+        });
+
+        // Form submission
+        step2.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const form = e.target;
+            const data = YakaUI.validateForm(form);
+            if (!data) return;
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            YakaUI.setButtonLoading(submitBtn, true);
+
+            try {
+                const result = await YakaAPI.auth.register(data);
+                YakaUI.toast.success('Kayıt başarılı! Yönlendiriliyorsunuz...');
+
+                setTimeout(() => {
+                    window.location.href = '/account/index.html';
+                }, 1000);
+
+            } catch (err) {
+                YakaUI.toast.error(err.message);
+                if (err.details) {
+                    err.details.forEach(d => YakaUI.toast.warning(d));
+                }
+                YakaUI.setButtonLoading(submitBtn, false);
+            }
+        });
+
+        // Toggle password visibility
+        document.querySelectorAll('.toggle-password').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const input = btn.parentElement.querySelector('input');
+                const icon = btn.querySelector('i');
+
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.className = 'ph ph-eye-slash';
+                } else {
+                    input.type = 'password';
+                    icon.className = 'ph ph-eye';
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

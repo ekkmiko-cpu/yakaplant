@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teklif Taleplerim | YakaPlant</title>
+    <meta name="description" content="YakaPlant teklif talepleriniz.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../style.css">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+            <ul class="nav-links">
+                <li><a href="../index.html" class="nav-link">Ana Sayfa</a></li>
+                <li><a href="../shop.html" class="nav-link">Koleksiyon</a></li>
+                <li><a href="../care.html" class="nav-link">Bakım Rehberi</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div style="margin-top: 80px;"></div>
+
+    <!-- Account Page -->
+    <main class="account-page">
+        <div class="container">
+            <div class="account-layout">
+                <!-- Sidebar -->
+                <aside class="account-sidebar">
+                    <div class="sidebar-header">
+                        <div class="user-avatar">
+                            <i class="ph ph-user"></i>
+                        </div>
+                        <h3 id="user-name">Yükleniyor...</h3>
+                        <span id="user-role" class="role-badge"></span>
+                    </div>
+
+                    <nav class="sidebar-nav">
+                        <a href="index.html" class="sidebar-link">
+                            <i class="ph ph-user-circle"></i> Profilim
+                        </a>
+                        <a href="favorites.html" class="sidebar-link">
+                            <i class="ph ph-heart"></i> Favorilerim
+                        </a>
+                        <a href="requests.html" class="sidebar-link active">
+                            <i class="ph ph-file-text"></i> Teklif Taleplerim
+                        </a>
+                        <a href="projects.html" class="sidebar-link pro-only" style="display: none;">
+                            <i class="ph ph-folder"></i> Projelerim
+                        </a>
+                        <hr class="sidebar-divider">
+                        <button onclick="YakaAuth.logout()" class="sidebar-link logout-link">
+                            <i class="ph ph-sign-out"></i> Çıkış Yap
+                        </button>
+                    </nav>
+                </aside>
+
+                <!-- Main Content -->
+                <section class="account-content">
+                    <div class="account-header">
+                        <h1>Teklif Taleplerim</h1>
+                        <p>Bitki teklif taleplerinizi ve durumlarını takip edin.</p>
+                    </div>
+
+                    <!-- Requests List -->
+                    <div id="requests-list" class="requests-list">
+                        <!-- Loading State -->
+                        <div class="loading-state">
+                            <i class="ph ph-spinner loading-spin"></i>
+                            <p>Yükleniyor...</p>
+                        </div>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="empty-state" class="empty-state" style="display: none;">
+                        <i class="ph ph-file-dashed"></i>
+                        <h3>Henüz teklif talebiniz yok</h3>
+                        <p>Bitki koleksiyonumuzu keşfedip teklif isteyebilirsiniz.</p>
+                        <a href="../shop.html" class="btn btn-primary">
+                            <i class="ph ph-plant"></i> Koleksiyonu Keşfet
+                        </a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/ui.js"></script>
+    <script>
+        const requestsList = document.getElementById('requests-list');
+        const emptyState = document.getElementById('empty-state');
+
+        // Require authentication
+        (async () => {
+            const user = await YakaAuth.requireAuth();
+            if (!user) return;
+
+            // Update sidebar
+            document.getElementById('user-name').textContent = `${user.name} ${user.surname}`;
+            document.getElementById('user-role').textContent = YakaUI.getRoleName(user.role);
+            document.getElementById('user-role').className = `role-badge role-${user.role}`;
+
+            if (YakaAuth.isPro()) {
+                document.querySelectorAll('.pro-only').forEach(el => {
+                    el.style.display = 'flex';
+                });
+            }
+
+            // Load requests
+            await loadRequests();
+        })();
+
+        async function loadRequests() {
+            try {
+                const { quotes } = await YakaAPI.quotes.getAll();
+
+                if (quotes.length === 0) {
+                    requestsList.style.display = 'none';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+
+                const items = quotes.map(quote => {
+                    const status = YakaUI.getQuoteStatus(quote.status);
+
+                    return `
+                        <div class="request-card">
+                            <div class="request-header">
+                                <span class="request-id">#${quote.id}</span>
+                                <span class="status-badge status-${status.color}">${status.name}</span>
+                            </div>
+                            <div class="request-content">
+                                ${quote.project_title ? `
+                                    <div class="request-project">
+                                        <i class="ph ph-folder"></i>
+                                        <span>Proje: ${quote.project_title}</span>
+                                    </div>
+                                ` : ''}
+                                ${quote.request_text ? `
+                                    <p class="request-text">${quote.request_text}</p>
+                                ` : '<p class="request-text text-muted">Açıklama eklenmemiş</p>'}
+                            </div>
+                            <div class="request-footer">
+                                <span class="request-date">
+                                    <i class="ph ph-calendar"></i>
+                                    ${YakaUI.formatRelativeTime(quote.created_at)}
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                requestsList.innerHTML = items;
+
+            } catch (err) {
+                YakaUI.toast.error('Talepler yüklenemedi');
+                console.error(err);
+            }
+        }
+    </script>
+
+</body>
+
+</html>
