@@ -40,13 +40,40 @@ async function initDatabase() {
             db = new SQL.Database(buffer);
         } else {
             db = new SQL.Database();
+            // Run migrations for new database
+            await runMigrations();
         }
     } catch (err) {
         console.error('Error loading database:', err);
         db = new SQL.Database();
+        // Run migrations for new database
+        await runMigrations();
     }
 
     return db;
+}
+
+/**
+ * Run database migrations
+ */
+async function runMigrations() {
+    console.log('Running database migrations...');
+    const migrationsDir = path.join(__dirname, '..', 'migrations');
+
+    try {
+        const files = fs.readdirSync(migrationsDir).filter(f => f.endsWith('.sql')).sort();
+
+        for (const file of files) {
+            const sql = fs.readFileSync(path.join(migrationsDir, file), 'utf8');
+            console.log(`Running migration: ${file}`);
+            db.run(sql);
+        }
+
+        saveDatabase();
+        console.log('Migrations completed successfully');
+    } catch (err) {
+        console.error('Migration error:', err);
+    }
 }
 
 /**
