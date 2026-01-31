@@ -32,6 +32,7 @@ const PORT = process.env.PORT || 3000;
 
 let dbReady = false;
 let dbInitPromise = null;
+let dbError = null;
 
 // Middleware to ensure DB is initialized before any request
 app.use(async (req, res, next) => {
@@ -43,15 +44,25 @@ app.use(async (req, res, next) => {
             console.log('📦 Database ready');
         }).catch(err => {
             console.error('DB init error:', err);
-            throw err;
+            dbError = err;
         });
     }
 
     try {
         await dbInitPromise;
+        if (dbError) {
+            return res.status(500).json({
+                error: 'Veritabanı başlatılamadı',
+                details: dbError.message,
+                stack: process.env.NODE_ENV === 'development' ? dbError.stack : undefined
+            });
+        }
         next();
     } catch (err) {
-        res.status(500).json({ error: 'Veritabanı başlatılamadı' });
+        res.status(500).json({
+            error: 'Veritabanı başlatılamadı',
+            details: err.message
+        });
     }
 });
 
