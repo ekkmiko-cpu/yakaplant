@@ -25,11 +25,22 @@
     <nav class="navbar">
         <div class="container nav-container">
             <a href="index.html" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
-            <ul class="nav-links">
+            <ul class="nav-links" id="nav-links">
                 <li><a href="index.html" class="nav-link">Ana Sayfa</a></li>
                 <li><a href="shop.html" class="nav-link">Koleksiyon</a></li>
                 <li><a href="care.html" class="nav-link">Bakım Rehberi</a></li>
+                <!-- Auth container (populated by auth.js) -->
+                <li id="nav-auth-container"></li>
             </ul>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod">
+                    <i class="ph ph-moon"></i>
+                </button>
+                <button class="mobile-toggle" aria-label="Menüyü Aç" id="mobile-toggle">
+                    <i class="ph ph-list"></i>
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -59,7 +70,8 @@
                             <label for="password">Şifre</label>
                             <div class="input-with-icon">
                                 <i class="ph ph-lock"></i>
-                                <input type="password" id="password" name="password" placeholder="••••••••" required minlength="8">
+                                <input type="password" id="password" name="password" placeholder="••••••••" required
+                                    minlength="8">
                                 <button type="button" class="toggle-password" aria-label="Şifreyi göster">
                                     <i class="ph ph-eye"></i>
                                 </button>
@@ -90,7 +102,7 @@
             <!-- Right: Visual -->
             <div class="auth-visual-section">
                 <div class="auth-visual-content">
-                    <img src="assets/hero.png" alt="YakaPlant Plants" class="auth-visual-img">
+                    <img src="assets/realistic_outdoor_plants.png" alt="YakaPlant Garden" class="auth-visual-img">
                     <div class="auth-visual-overlay"></div>
                     <div class="auth-visual-text">
                         <h2>Yeşilin Gücünü Keşfedin</h2>
@@ -115,7 +127,7 @@
         // Form submission
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const form = e.target;
             const data = YakaUI.validateForm(form);
             if (!data) return;
@@ -126,7 +138,7 @@
             try {
                 const result = await YakaAPI.auth.login(data);
                 YakaUI.toast.success('Giriş başarılı! Yönlendiriliyorsunuz...');
-                
+
                 setTimeout(() => {
                     window.location.href = YakaAuth.getRedirectUrl();
                 }, 1000);
@@ -142,7 +154,7 @@
             btn.addEventListener('click', () => {
                 const input = btn.parentElement.querySelector('input');
                 const icon = btn.querySelector('i');
-                
+
                 if (input.type === 'password') {
                     input.type = 'text';
                     icon.className = 'ph ph-eye-slash';
@@ -155,4 +167,5 @@
     </script>
 
 </body>
+
 </html>

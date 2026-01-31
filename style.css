@@ -1136,12 +1136,30 @@ body.dark-mode .slider-btn:hover {
     margin-bottom: 1.5rem;
 }
 
-/* Mobile Responsive Modal */
 @media (max-width: 768px) {
     .modal-content {
         margin: 10% auto;
         width: 95%;
     }
+
+    /* Mobile Product Grid Optimization */
+    .grid-gallery {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .product-image {
+        height: 180px;
+    }
+
+    .product-info {
+        padding: 1rem;
+    }
+
+    .product-info h3 {
+        font-size: 1rem;
+    }
+
 
     .modal-body {
         grid-template-columns: 1fr;
@@ -3646,7 +3664,7 @@ body.dark-mode .search-dropdown .filter-btn.active {
 .auth-visual-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(45, 106, 79, 0.9), rgba(45, 106, 79, 0.6));
+    background: linear-gradient(to top, rgba(20, 60, 40, 0.9) 0%, rgba(45, 106, 79, 0.3) 60%, rgba(45, 106, 79, 0.1) 100%);
 }
 
 .auth-visual-text {
@@ -4786,4 +4804,44 @@ body.dark-mode .search-dropdown .filter-btn.active {
     .info-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* Dark Mode - Auth Pages */
+body.dark-mode .auth-page {
+    background: #121212;
+}
+
+body.dark-mode .auth-form-wrapper {
+    background: #1e1e1e;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .auth-title {
+    color: white;
+}
+
+body.dark-mode .auth-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+body.dark-mode .input-with-icon input {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+body.dark-mode .input-with-icon i {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+body.dark-mode .form-group label {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+body.dark-mode .checkbox-wrapper {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+body.dark-mode .auth-footer {
+    border-color: rgba(255, 255, 255, 0.1);
 }

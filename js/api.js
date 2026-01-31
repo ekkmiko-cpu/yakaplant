@@ -4,7 +4,7 @@
  * Handles authentication cookies automatically
  */
 
-const API_BASE = 'http://localhost:3000/api';
+const API_BASE = '/api';
 
 /**
  * Generic API request function
