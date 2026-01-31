@@ -27,6 +27,35 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // =====================================================
+// DATABASE INITIALIZATION (for serverless)
+// =====================================================
+
+let dbReady = false;
+let dbInitPromise = null;
+
+// Middleware to ensure DB is initialized before any request
+app.use(async (req, res, next) => {
+    if (dbReady) return next();
+
+    if (!dbInitPromise) {
+        dbInitPromise = initDatabase().then(() => {
+            dbReady = true;
+            console.log('📦 Database ready');
+        }).catch(err => {
+            console.error('DB init error:', err);
+            throw err;
+        });
+    }
+
+    try {
+        await dbInitPromise;
+        next();
+    } catch (err) {
+        res.status(500).json({ error: 'Veritabanı başlatılamadı' });
+    }
+});
+
+// =====================================================
 // SECURITY MIDDLEWARE
 // =====================================================
 
@@ -132,13 +161,14 @@ app.use((err, req, res, next) => {
 });
 
 // =====================================================
-// START SERVER
+// START SERVER (for local development)
 // =====================================================
 
 async function startServer() {
     try {
         // Initialize database
         await initDatabase();
+        dbReady = true;
         console.log('📦 Database initialized');
 
         app.listen(PORT, () => {
@@ -156,9 +186,6 @@ async function startServer() {
 
 if (require.main === module) {
     startServer();
-} else {
-    // For Vercel/Serverless
-    initDatabase().catch(console.error);
 }
 
 module.exports = app;
