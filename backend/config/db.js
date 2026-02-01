@@ -3,17 +3,16 @@
  * Supports Turso (production) and in-memory (local development)
  */
 
-// @libsql/client auto-detects the best transport
-const { createClient } = require('@libsql/client');
+// Use HTTP client for serverless environments (Vercel)
+const { createClient } = require('@libsql/client/http');
 
 // Check if Turso is configured
 let TURSO_URL = process.env.TURSO_DATABASE_URL;
 const TURSO_TOKEN = process.env.TURSO_AUTH_TOKEN;
 
-// Convert libsql:// to https:// for HTTP-based transport in serverless
-if (TURSO_URL && TURSO_URL.startsWith('libsql://')) {
+// Ensure URL uses https:// for HTTP transport
+if (TURSO_URL) {
     TURSO_URL = TURSO_URL.replace('libsql://', 'https://');
-    console.log('🔄 Converted URL to HTTPS for serverless');
 }
 
 let db = null;
