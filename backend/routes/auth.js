@@ -5,7 +5,7 @@
 
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 const { body, validationResult } = require('express-validator');
 const db = require('../config/db');
