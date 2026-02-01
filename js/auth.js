@@ -52,6 +52,13 @@ function isPro() {
 }
 
 /**
+ * Check if user is Admin
+ */
+function isAdmin() {
+    return currentUser && currentUser.role === 'admin';
+}
+
+/**
  * Logout and redirect to home
  */
 async function logout() {
@@ -103,10 +110,12 @@ function getRedirectUrl() {
 /**
  * Update navbar based on auth state
  */
+/**
+ * Update navbar based on auth state
+ */
 async function updateNavbar() {
     const user = await checkAuth();
     const navLinks = document.querySelector('.nav-links');
-    const navActions = document.querySelector('.nav-actions');
 
     if (!navLinks) return;
 
@@ -128,6 +137,13 @@ async function updateNavbar() {
                     <i class="ph ph-caret-down"></i>
                 </button>
                 <div class="nav-dropdown-menu">
+                    ${isAdmin() ? `
+                    <a href="/admin/index.html" class="dropdown-item" style="color:var(--primary); font-weight:600;">
+                        <i class="ph ph-squares-four"></i> Yönetim Paneli
+                    </a>
+                    <hr class="dropdown-divider">
+                    ` : ''}
+                    
                     <a href="/account/index.html" class="dropdown-item">
                         <i class="ph ph-user"></i> Profilim
                     </a>
@@ -182,6 +198,7 @@ window.YakaAuth = {
     getUser,
     isLoggedIn,
     isPro,
+    isAdmin,
     logout,
     requireAuth,
     redirectIfLoggedIn,

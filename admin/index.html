@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yönetim Paneli - YakaPlant</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+        .admin-sidebar {
+            background: var(--surface-1);
+            border-right: 1px solid var(--border);
+            padding: 2rem 1rem;
+        }
+        .admin-content {
+            padding: 2rem;
+            background: var(--surface-2);
+        }
+        .admin-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            color: var(--text-2);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .admin-nav-item:hover, .admin-nav-item.active {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: var(--surface-1);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .stat-info h3 {
+            font-size: 0.875rem;
+            color: var(--text-2);
+            margin-bottom: 0.25rem;
+        }
+        .stat-info .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-1);
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <div style="margin-bottom: 2rem; padding: 0 1rem;">
+                <h2 style="color: var(--primary);">YakaAdmin</h2>
+            </div>
+            <nav class="admin-nav">
+                <a href="index.html" class="admin-nav-item active">
+                    <i class="ph ph-squares-four"></i> Genel Bakış
+                </a>
+                <a href="users.html" class="admin-nav-item">
+                    <i class="ph ph-users"></i> Kullanıcılar
+                </a>
+                <a href="quotes.html" class="admin-nav-item">
+                    <i class="ph ph-file-text"></i> Teklifler
+                </a>
+                <a href="/" class="admin-nav-item" style="margin-top: auto;">
+                    <i class="ph ph-arrow-left"></i> Siteye Dön
+                </a>
+            </nav>
+        </aside>
+
+        <main class="admin-content">
+            <header style="margin-bottom: 2rem;">
+                <h1>Hoş Geldiniz, <span id="admin-name">Admin</span></h1>
+                <p style="color: var(--text-2);">Sistem durum özeti</p>
+            </header>
+
+            <div class="stats-grid" id="stats-container">
+                <!-- Loading stats... -->
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="ph ph-spinner ph-spin"></i></div>
+                    <div class="stat-info"><h3>Yükleniyor...</h3></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        // Setup simple admin script logic
+        // Check admin role
+        async function checkAdmin() {
+            const user = YakaAuth.getUser();
+            if (!user || user.role !== 'admin') {
+                window.location.href = '/';
+                return;
+            }
+            document.getElementById('admin-name').textContent = user.name;
+            loadStats();
+        }
+
+        async function loadStats() {
+            try {
+                const stats = await YakaAPI.fetch('/admin/stats');
+                const container = document.getElementById('stats-container');
+                container.innerHTML = `
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="ph ph-users"></i></div>
+                        <div class="stat-info">
+                            <h3>Toplam Üye</h3>
+                            <div class="value">${stats.users}</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="ph ph-file-text"></i></div>
+                        <div class="stat-info">
+                            <h3>Teklif Talebi</h3>
+                            <div class="value">${stats.quotes}</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="ph ph-heart"></i></div>
+                        <div class="stat-info">
+                            <h3>Favori Ürün</h3>
+                            <div class="value">${stats.favorites}</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="ph ph-folder"></i></div>
+                        <div class="stat-info">
+                            <h3>Projeler</h3>
+                            <div class="value">${stats.projects}</div>
+                        </div>
+                    </div>
+                `;
+            } catch (err) {
+                console.error('Stats error:', err);
+                YakaUI.toast.error('İstatistikler yüklenemedi');
+            }
+        }
+
+        // Run check
+        document.addEventListener('DOMContentLoaded', checkAdmin);
+    </script>
+</body>
+</html>

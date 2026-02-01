@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teklifler - Yönetim Paneli</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        .admin-sidebar {
+            background: var(--surface-1);
+            border-right: 1px solid var(--border);
+            padding: 2rem 1rem;
+        }
+
+        .admin-content {
+            padding: 2rem;
+            background: var(--surface-2);
+        }
+
+        .admin-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            color: var(--text-2);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .admin-nav-item:hover,
+        .admin-nav-item.active {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface-1);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .data-table th {
+            background: var(--surface-2);
+            font-weight: 600;
+            color: var(--text-2);
+        }
+
+        .status-select {
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--surface-1);
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <div style="margin-bottom: 2rem; padding: 0 1rem;">
+                <h2 style="color: var(--primary);">YakaAdmin</h2>
+            </div>
+            <nav class="admin-nav">
+                <a href="index.html" class="admin-nav-item">
+                    <i class="ph ph-squares-four"></i> Genel Bakış
+                </a>
+                <a href="users.html" class="admin-nav-item">
+                    <i class="ph ph-users"></i> Kullanıcılar
+                </a>
+                <a href="quotes.html" class="admin-nav-item active">
+                    <i class="ph ph-file-text"></i> Teklifler
+                </a>
+                <a href="/" class="admin-nav-item" style="margin-top: auto;">
+                    <i class="ph ph-arrow-left"></i> Siteye Dön
+                </a>
+            </nav>
+        </aside>
+
+        <main class="admin-content">
+            <header style="margin-bottom: 2rem;">
+                <h1>Teklif Talepleri</h1>
+                <p style="color: var(--text-2);">Müşterilerden gelen fiyat teklifi istekleri</p>
+            </header>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th style="width: 200px;">Müşteri</th>
+                        <th>Talep Detayı</th>
+                        <th style="width: 150px;">Tarih</th>
+                        <th style="width: 150px;">Durum</th>
+                    </tr>
+                </thead>
+                <tbody id="quotes-table-body">
+                    <tr>
+                        <td colspan="4" style="text-align:center; padding: 2rem;">Yükleniyor...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        async function loadQuotes() {
+            try {
+                // Check auth
+                const user = YakaAuth.getUser();
+                if (!user || user.role !== 'admin') {
+                    window.location.href = '/';
+                    return;
+                }
+
+                const quotes = await YakaAPI.fetch('/admin/quotes');
+                const tbody = document.getElementById('quotes-table-body');
+
+                if (quotes.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Talep bulunamadı</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = quotes.map(q => `
+                    <tr>
+                        <td>
+                            <div style="font-weight:500">${q.user_name} ${q.user_surname}</div>
+                            <div style="font-size:0.875rem; color:var(--text-2)">${q.user_email}</div>
+                        </td>
+                        <td>
+                            <div style="white-space: pre-wrap;">${q.request_text || '-'}</div>
+                            ${q.project_id ? '<div style="margin-top:0.5rem; font-size:0.875rem; color:var(--primary);">Projeden Gelen Talep</div>' : ''}
+                        </td>
+                        <td>${new Date(q.created_at * 1000).toLocaleDateString()}</td>
+                        <td>
+                            <select class="status-select" onchange="updateStatus(${q.id}, this.value)">
+                                <option value="new" ${q.status === 'new' ? 'selected' : ''}>Yeni</option>
+                                <option value="contacted" ${q.status === 'contacted' ? 'selected' : ''}>İletişime Geçildi</option>
+                                <option value="quoted" ${q.status === 'quoted' ? 'selected' : ''}>Teklif Verildi</option>
+                                <option value="closed" ${q.status === 'closed' ? 'selected' : ''}>Kapandı</option>
+                            </select>
+                        </td>
+                    </tr>
+                `).join('');
+
+            } catch (err) {
+                console.error('Quotes load error:', err);
+                YakaUI.toast.error('Teklifler yüklenemedi');
+            }
+        }
+
+        async function updateStatus(id, newStatus) {
+            try {
+                await YakaAPI.fetch(`/admin/quotes/${id}/status`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ status: newStatus })
+                });
+                YakaUI.toast.success('Durum güncellendi');
+            } catch (err) {
+                console.error('Update error:', err);
+                YakaUI.toast.error('Güncelleme başarısız');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadQuotes);
+    </script>
+</body>
+
+</html>

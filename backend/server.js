@@ -146,6 +146,8 @@ app.use('/api/me', userRoutes);
 app.use('/api/favorites', favoriteRoutes);
 app.use('/api/quotes', quoteRoutes);
 app.use('/api/projects', projectRoutes);
+const adminRoutes = require('./routes/admin');
+app.use('/api/admin', adminRoutes);
 
 // =====================================================
 // ERROR HANDLING

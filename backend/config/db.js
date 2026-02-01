@@ -159,6 +159,32 @@ CREATE TABLE IF NOT EXISTS sessions (
 );
 
 CREATE INDEX IF NOT EXISTS idx_sessions_expired ON sessions(expired);
+
+-- Migration 002: Add admin role
+-- We need to recreate the table to update the CHECK constraint
+PRAGMA foreign_keys = OFF;
+
+CREATE TABLE IF NOT EXISTS users_new (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    surname TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    phone TEXT,
+    city TEXT,
+    role TEXT CHECK(role IN ('customer','landscape_architect','company', 'admin')) NOT NULL DEFAULT 'customer',
+    company_name TEXT,
+    password_hash TEXT NOT NULL,
+    reset_token TEXT,
+    reset_token_expires INTEGER,
+    created_at INTEGER DEFAULT (strftime('%s','now')),
+    updated_at INTEGER DEFAULT (strftime('%s','now'))
+);
+
+INSERT INTO users_new SELECT * FROM users;
+DROP TABLE users;
+ALTER TABLE users_new RENAME TO users;
+PRAGMA foreign_keys = ON;
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 `;
 
     try {

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kullanıcılar - Yönetim Paneli</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        .admin-sidebar {
+            background: var(--surface-1);
+            border-right: 1px solid var(--border);
+            padding: 2rem 1rem;
+        }
+
+        .admin-content {
+            padding: 2rem;
+            background: var(--surface-2);
+        }
+
+        .admin-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            color: var(--text-2);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .admin-nav-item:hover,
+        .admin-nav-item.active {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface-1);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table th {
+            background: var(--surface-2);
+            font-weight: 600;
+            color: var(--text-2);
+        }
+
+        .role-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: var(--surface-2);
+            color: var(--text-2);
+        }
+
+        .role-badge.admin {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+
+        .role-badge.company {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .role-badge.landscape_architect {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <div style="margin-bottom: 2rem; padding: 0 1rem;">
+                <h2 style="color: var(--primary);">YakaAdmin</h2>
+            </div>
+            <nav class="admin-nav">
+                <a href="index.html" class="admin-nav-item">
+                    <i class="ph ph-squares-four"></i> Genel Bakış
+                </a>
+                <a href="users.html" class="admin-nav-item active">
+                    <i class="ph ph-users"></i> Kullanıcılar
+                </a>
+                <a href="quotes.html" class="admin-nav-item">
+                    <i class="ph ph-file-text"></i> Teklifler
+                </a>
+                <a href="/" class="admin-nav-item" style="margin-top: auto;">
+                    <i class="ph ph-arrow-left"></i> Siteye Dön
+                </a>
+            </nav>
+        </aside>
+
+        <main class="admin-content">
+            <header style="margin-bottom: 2rem;">
+                <h1>Kullanıcılar</h1>
+                <p style="color: var(--text-2);">Sisteme kayıtlı tüm üyeler</p>
+            </header>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Ad Soyad</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Şirket</th>
+                        <th>Kayıt Tarihi</th>
+                    </tr>
+                </thead>
+                <tbody id="users-table-body">
+                    <tr>
+                        <td colspan="5" style="text-align:center; padding: 2rem;">Yükleniyor...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        async function loadUsers() {
+            try {
+                // Check auth first
+                const user = YakaAuth.getUser();
+                if (!user || user.role !== 'admin') {
+                    window.location.href = '/';
+                    return;
+                }
+
+                const users = await YakaAPI.fetch('/admin/users');
+                const tbody = document.getElementById('users-table-body');
+
+                if (users.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Kayıt bulunamadı</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = users.map(u => `
+                    <tr>
+                        <td>
+                            <div style="font-weight:500">${u.name} ${u.surname}</div>
+                            <div style="font-size:0.875rem; color:var(--text-2)">${u.city || '-'}</div>
+                        </td>
+                        <td>${u.email}</td>
+                        <td><span class="role-badge ${u.role}">${formatRole(u.role)}</span></td>
+                        <td>${u.company_name || '-'}</td>
+                        <td>${new Date(u.created_at * 1000).toLocaleDateString()}</td>
+                    </tr>
+                `).join('');
+
+            } catch (err) {
+                console.error('Users load error:', err);
+                YakaUI.toast.error('Kullanıcı listesi yüklenemedi');
+            }
+        }
+
+        function formatRole(role) {
+            const map = {
+                'admin': 'Yönetici',
+                'customer': 'Müşteri',
+                'landscape_architect': 'Peyzaj Mimarı',
+                'company': 'Firma'
+            };
+            return map[role] || role;
+        }
+
+        document.addEventListener('DOMContentLoaded', loadUsers);
+    </script>
+</body>
+
+</html>
