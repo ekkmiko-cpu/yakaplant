@@ -3,8 +3,8 @@
  * Supports Turso (production) and in-memory (local development)
  */
 
-// Use HTTP client for serverless environments (Vercel)
-const { createClient } = require('@libsql/client/http');
+// Use web client for edge/serverless environments
+const { createClient } = require('@libsql/client/web');
 
 // Check if Turso is configured
 let TURSO_URL = process.env.TURSO_DATABASE_URL;
