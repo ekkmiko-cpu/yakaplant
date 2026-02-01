@@ -12,13 +12,12 @@ const { requireAuth } = require('../middleware/auth');
 // All routes require authentication
 router.use(requireAuth);
 
-// =====================================================
-// GET CURRENT USER (/api/me)
-// =====================================================
-
-router.get('/', (req, res) => {
+/**
+ * GET / - Get current user info
+ */
+router.get('/', async (req, res) => {
     try {
-        const user = db.get(`
+        const user = await db.get(`
             SELECT id, name, surname, email, phone, city, role, company_name, created_at
             FROM users WHERE id = ?
         `, [req.session.userId]);
@@ -35,10 +34,9 @@ router.get('/', (req, res) => {
     }
 });
 
-// =====================================================
-// UPDATE PROFILE (/api/me)
-// =====================================================
-
+/**
+ * PUT / - Update profile
+ */
 const updateValidation = [
     body('name')
         .optional()
@@ -62,7 +60,7 @@ const updateValidation = [
         .isLength({ max: 200 }).withMessage('Şirket adı çok uzun')
 ];
 
-router.put('/', updateValidation, (req, res) => {
+router.put('/', updateValidation, async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -107,10 +105,10 @@ router.put('/', updateValidation, (req, res) => {
         updates.push("updated_at = strftime('%s','now')");
         values.push(userId);
 
-        db.run(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`, values);
+        await db.run(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`, values);
 
         // Get updated user
-        const user = db.get(`
+        const user = await db.get(`
             SELECT id, name, surname, email, phone, city, role, company_name, updated_at
             FROM users WHERE id = ?
         `, [userId]);

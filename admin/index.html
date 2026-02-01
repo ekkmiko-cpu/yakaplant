@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,172 +8,322 @@
     <link rel="stylesheet" href="../style.css">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
-        .admin-layout {
-            display: grid;
-            grid-template-columns: 250px 1fr;
+        :root {
+            --admin-bg: #0f172a;
+            --admin-surface: #1e293b;
+            --admin-border: #334155;
+            --admin-primary: #22c55e;
+            --admin-text: #f1f5f9;
+            --admin-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--admin-bg);
+            color: var(--admin-text);
             min-height: 100vh;
         }
+
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+        }
+
         .admin-sidebar {
-            background: var(--surface-1);
-            border-right: 1px solid var(--border);
-            padding: 2rem 1rem;
+            background: var(--admin-surface);
+            border-right: 1px solid var(--admin-border);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
         }
-        .admin-content {
-            padding: 2rem;
-            background: var(--surface-2);
+
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            padding: 0.5rem;
         }
+
+        .admin-logo i {
+            font-size: 1.75rem;
+            color: var(--admin-primary);
+        }
+
+        .admin-logo span {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
         .admin-nav {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
         }
-        .admin-nav-item {
+
+        .admin-nav a {
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius-md);
-            color: var(--text-2);
+            padding: 0.875rem 1rem;
+            border-radius: 8px;
+            color: var(--admin-muted);
             text-decoration: none;
             transition: all 0.2s;
         }
-        .admin-nav-item:hover, .admin-nav-item.active {
-            background: var(--primary-light);
-            color: var(--primary);
+
+        .admin-nav a:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--admin-text);
         }
+
+        .admin-nav a.active {
+            background: var(--admin-primary);
+            color: white;
+        }
+
+        .admin-nav a i {
+            font-size: 1.25rem;
+        }
+
+        .admin-content {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .admin-header {
+            margin-bottom: 2rem;
+        }
+
+        .admin-header h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-header p {
+            color: var(--admin-muted);
+        }
+
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
+
         .stat-card {
-            background: var(--surface-1);
+            background: var(--admin-surface);
+            border: 1px solid var(--admin-border);
+            border-radius: 12px;
             padding: 1.5rem;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border);
             display: flex;
             align-items: center;
             gap: 1rem;
         }
+
         .stat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            color: var(--primary);
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
         }
+
+        .stat-icon.users {
+            background: #3b82f620;
+            color: #3b82f6;
+        }
+
+        .stat-icon.quotes {
+            background: #f59e0b20;
+            color: #f59e0b;
+        }
+
+        .stat-icon.favorites {
+            background: #ef444420;
+            color: #ef4444;
+        }
+
+        .stat-icon.projects {
+            background: #8b5cf620;
+            color: #8b5cf6;
+        }
+
         .stat-info h3 {
+            color: var(--admin-muted);
             font-size: 0.875rem;
-            color: var(--text-2);
+            font-weight: 500;
             margin-bottom: 0.25rem;
         }
+
         .stat-info .value {
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: 700;
-            color: var(--text-1);
+        }
+
+        .back-link {
+            margin-top: auto;
+            padding-top: 2rem;
+        }
+
+        .back-link a {
+            color: var(--admin-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-link a:hover {
+            color: var(--admin-text);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--admin-muted);
+        }
+
+        .error-message {
+            background: #ef444420;
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
         }
     </style>
 </head>
+
 <body>
     <div class="admin-layout">
         <aside class="admin-sidebar">
-            <div style="margin-bottom: 2rem; padding: 0 1rem;">
-                <h2 style="color: var(--primary);">YakaAdmin</h2>
+            <div class="admin-logo">
+                <i class="ph ph-plant"></i>
+                <span>YakaAdmin</span>
             </div>
+
             <nav class="admin-nav">
-                <a href="index.html" class="admin-nav-item active">
-                    <i class="ph ph-squares-four"></i> Genel Bakış
+                <a href="index.html" class="active">
+                    <i class="ph ph-squares-four"></i>
+                    <span>Genel Bakış</span>
                 </a>
-                <a href="users.html" class="admin-nav-item">
-                    <i class="ph ph-users"></i> Kullanıcılar
+                <a href="users.html">
+                    <i class="ph ph-users"></i>
+                    <span>Kullanıcılar</span>
                 </a>
-                <a href="quotes.html" class="admin-nav-item">
-                    <i class="ph ph-file-text"></i> Teklifler
-                </a>
-                <a href="/" class="admin-nav-item" style="margin-top: auto;">
-                    <i class="ph ph-arrow-left"></i> Siteye Dön
+                <a href="quotes.html">
+                    <i class="ph ph-file-text"></i>
+                    <span>Teklifler</span>
                 </a>
             </nav>
+
+            <div class="back-link">
+                <a href="/">
+                    <i class="ph ph-arrow-left"></i>
+                    <span>Siteye Dön</span>
+                </a>
+            </div>
         </aside>
 
         <main class="admin-content">
-            <header style="margin-bottom: 2rem;">
-                <h1>Hoş Geldiniz, <span id="admin-name">Admin</span></h1>
-                <p style="color: var(--text-2);">Sistem durum özeti</p>
-            </header>
+            <div class="admin-header">
+                <h1>Hoş Geldiniz 👋</h1>
+                <p>Site yönetim paneli</p>
+            </div>
 
-            <div class="stats-grid" id="stats-container">
-                <!-- Loading stats... -->
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="ph ph-spinner ph-spin"></i></div>
-                    <div class="stat-info"><h3>Yükleniyor...</h3></div>
+            <div id="content">
+                <div class="loading">
+                    <i class="ph ph-spinner ph-spin" style="font-size: 2rem;"></i>
+                    <p>Yükleniyor...</p>
                 </div>
             </div>
         </main>
     </div>
 
     <script src="../js/api.js"></script>
-    <script src="../js/auth.js"></script>
     <script>
-        // Setup simple admin script logic
-        // Check admin role
-        async function checkAdmin() {
-            const user = YakaAuth.getUser();
-            if (!user || user.role !== 'admin') {
-                window.location.href = '/';
-                return;
-            }
-            document.getElementById('admin-name').textContent = user.name;
-            loadStats();
-        }
-
-        async function loadStats() {
+        async function init() {
             try {
-                const stats = await YakaAPI.fetch('/admin/stats');
-                const container = document.getElementById('stats-container');
-                container.innerHTML = `
-                    <div class="stat-card">
-                        <div class="stat-icon"><i class="ph ph-users"></i></div>
-                        <div class="stat-info">
-                            <h3>Toplam Üye</h3>
-                            <div class="value">${stats.users}</div>
+                // Check if logged in first
+                const meResponse = await fetch('/api/me', { credentials: 'include' });
+                if (!meResponse.ok) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+
+                const meData = await meResponse.json();
+                if (meData.user?.role !== 'admin') {
+                    document.getElementById('content').innerHTML = `
+                        <div class="error-message">
+                            <strong>Erişim Reddedildi</strong><br>
+                            Bu sayfaya erişim yetkiniz yok.
                         </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon"><i class="ph ph-file-text"></i></div>
-                        <div class="stat-info">
-                            <h3>Teklif Talebi</h3>
-                            <div class="value">${stats.quotes}</div>
+                    `;
+                    return;
+                }
+
+                // Load stats
+                const statsResponse = await fetch('/api/admin/stats', { credentials: 'include' });
+                if (!statsResponse.ok) throw new Error('Stats yüklenemedi');
+
+                const stats = await statsResponse.json();
+
+                document.getElementById('content').innerHTML = `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon users"><i class="ph ph-users"></i></div>
+                            <div class="stat-info">
+                                <h3>Toplam Üye</h3>
+                                <div class="value">${stats.users || 0}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon"><i class="ph ph-heart"></i></div>
-                        <div class="stat-info">
-                            <h3>Favori Ürün</h3>
-                            <div class="value">${stats.favorites}</div>
+                        <div class="stat-card">
+                            <div class="stat-icon quotes"><i class="ph ph-file-text"></i></div>
+                            <div class="stat-info">
+                                <h3>Teklif Talebi</h3>
+                                <div class="value">${stats.quotes || 0}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon"><i class="ph ph-folder"></i></div>
-                        <div class="stat-info">
-                            <h3>Projeler</h3>
-                            <div class="value">${stats.projects}</div>
+                        <div class="stat-card">
+                            <div class="stat-icon favorites"><i class="ph ph-heart"></i></div>
+                            <div class="stat-info">
+                                <h3>Favori</h3>
+                                <div class="value">${stats.favorites || 0}</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon projects"><i class="ph ph-folder"></i></div>
+                            <div class="stat-info">
+                                <h3>Proje</h3>
+                                <div class="value">${stats.projects || 0}</div>
+                            </div>
                         </div>
                     </div>
                 `;
+
             } catch (err) {
-                console.error('Stats error:', err);
-                YakaUI.toast.error('İstatistikler yüklenemedi');
+                console.error('Error:', err);
+                document.getElementById('content').innerHTML = `
+                    <div class="error-message">
+                        <strong>Hata</strong><br>
+                        ${err.message}
+                    </div>
+                `;
             }
         }
 
-        // Run check
-        document.addEventListener('DOMContentLoaded', checkAdmin);
+        init();
     </script>
 </body>
+
 </html>

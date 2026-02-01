@@ -12,20 +12,19 @@ const { requireAuth } = require('../middleware/auth');
 // All routes require authentication
 router.use(requireAuth);
 
-// =====================================================
-// GET USER'S QUOTE REQUESTS
-// =====================================================
-
-router.get('/', (req, res) => {
+/**
+ * GET / - List user's quote requests
+ */
+router.get('/', async (req, res) => {
     try {
-        const quotes = db.all(`
+        const quotes = await db.all(`
             SELECT 
                 qr.id,
                 qr.project_id,
                 qr.request_text,
                 qr.status,
                 qr.created_at,
-                p.title as project_title
+                p.name as project_name
             FROM quote_requests qr
             LEFT JOIN projects p ON qr.project_id = p.id
             WHERE qr.user_id = ?
@@ -40,10 +39,9 @@ router.get('/', (req, res) => {
     }
 });
 
-// =====================================================
-// CREATE QUOTE REQUEST
-// =====================================================
-
+/**
+ * POST / - Create quote request
+ */
 const createValidation = [
     body('request_text')
         .optional()
@@ -57,7 +55,7 @@ const createValidation = [
         .isArray().withMessage('Ürün listesi dizi olmalı')
 ];
 
-router.post('/', createValidation, (req, res) => {
+router.post('/', createValidation, async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -72,7 +70,7 @@ router.post('/', createValidation, (req, res) => {
 
         // If project_id provided, verify ownership
         if (project_id) {
-            const project = db.get(`
+            const project = await db.get(`
                 SELECT id FROM projects WHERE id = ? AND user_id = ?
             `, [project_id, userId]);
 
@@ -87,7 +85,7 @@ router.post('/', createValidation, (req, res) => {
             fullRequestText += `\n\nİlgili Ürünler: ${product_ids.join(', ')}`;
         }
 
-        const result = db.run(`
+        const result = await db.run(`
             INSERT INTO quote_requests (user_id, project_id, request_text, status)
             VALUES (?, ?, ?, 'new')
         `, [userId, project_id || null, fullRequestText.trim() || null]);
@@ -103,22 +101,21 @@ router.post('/', createValidation, (req, res) => {
     }
 });
 
-// =====================================================
-// GET SINGLE QUOTE
-// =====================================================
-
-router.get('/:id', (req, res) => {
+/**
+ * GET /:id - Get single quote
+ */
+router.get('/:id', async (req, res) => {
     try {
         const { id } = req.params;
 
-        const quote = db.get(`
+        const quote = await db.get(`
             SELECT 
                 qr.id,
                 qr.project_id,
                 qr.request_text,
                 qr.status,
                 qr.created_at,
-                p.title as project_title
+                p.name as project_name
             FROM quote_requests qr
             LEFT JOIN projects p ON qr.project_id = p.id
             WHERE qr.id = ? AND qr.user_id = ?

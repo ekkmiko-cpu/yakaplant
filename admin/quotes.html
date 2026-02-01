@@ -8,21 +8,58 @@
     <link rel="stylesheet" href="../style.css">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
+        :root {
+            --admin-bg: #0f172a;
+            --admin-surface: #1e293b;
+            --admin-border: #334155;
+            --admin-primary: #22c55e;
+            --admin-text: #f1f5f9;
+            --admin-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--admin-bg);
+            color: var(--admin-text);
+            min-height: 100vh;
+        }
+
         .admin-layout {
             display: grid;
-            grid-template-columns: 250px 1fr;
+            grid-template-columns: 260px 1fr;
             min-height: 100vh;
         }
 
         .admin-sidebar {
-            background: var(--surface-1);
-            border-right: 1px solid var(--border);
-            padding: 2rem 1rem;
+            background: var(--admin-surface);
+            border-right: 1px solid var(--admin-border);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
         }
 
-        .admin-content {
-            padding: 2rem;
-            background: var(--surface-2);
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            padding: 0.5rem;
+        }
+
+        .admin-logo i {
+            font-size: 1.75rem;
+            color: var(--admin-primary);
+        }
+
+        .admin-logo span {
+            font-size: 1.25rem;
+            font-weight: 700;
         }
 
         .admin-nav {
@@ -31,52 +68,163 @@
             gap: 0.5rem;
         }
 
-        .admin-nav-item {
+        .admin-nav a {
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius-md);
-            color: var(--text-2);
+            padding: 0.875rem 1rem;
+            border-radius: 8px;
+            color: var(--admin-muted);
             text-decoration: none;
             transition: all 0.2s;
         }
 
-        .admin-nav-item:hover,
-        .admin-nav-item.active {
-            background: var(--primary-light);
-            color: var(--primary);
+        .admin-nav a:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--admin-text);
         }
 
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: var(--surface-1);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            border: 1px solid var(--border);
+        .admin-nav a.active {
+            background: var(--admin-primary);
+            color: white;
         }
 
-        .data-table th,
-        .data-table td {
+        .admin-nav a i {
+            font-size: 1.25rem;
+        }
+
+        .admin-content {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .admin-header {
+            margin-bottom: 2rem;
+        }
+
+        .admin-header h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-header p {
+            color: var(--admin-muted);
+        }
+
+        .quote-card {
+            background: var(--admin-surface);
+            border: 1px solid var(--admin-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .quote-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .quote-user strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .quote-user small {
+            color: var(--admin-muted);
+        }
+
+        .quote-date {
+            color: var(--admin-muted);
+            font-size: 0.875rem;
+        }
+
+        .quote-text {
+            background: rgba(0, 0, 0, 0.2);
             padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-            vertical-align: top;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            white-space: pre-wrap;
         }
 
-        .data-table th {
-            background: var(--surface-2);
-            font-weight: 600;
-            color: var(--text-2);
+        .quote-actions {
+            display: flex;
+            gap: 0.5rem;
         }
 
         .status-select {
-            padding: 0.25rem 0.5rem;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
-            background: var(--surface-1);
-            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--admin-border);
+            background: var(--admin-bg);
+            color: var(--admin-text);
+            cursor: pointer;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-badge.new {
+            background: #3b82f620;
+            color: #3b82f6;
+        }
+
+        .status-badge.contacted {
+            background: #f59e0b20;
+            color: #f59e0b;
+        }
+
+        .status-badge.quoted {
+            background: #8b5cf620;
+            color: #8b5cf6;
+        }
+
+        .status-badge.closed {
+            background: #22c55e20;
+            color: #22c55e;
+        }
+
+        .back-link {
+            margin-top: auto;
+            padding-top: 2rem;
+        }
+
+        .back-link a {
+            color: var(--admin-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-link a:hover {
+            color: var(--admin-text);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--admin-muted);
+        }
+
+        .error-message {
+            background: #ef444420;
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--admin-muted);
         }
     </style>
 </head>
@@ -84,111 +232,138 @@
 <body>
     <div class="admin-layout">
         <aside class="admin-sidebar">
-            <div style="margin-bottom: 2rem; padding: 0 1rem;">
-                <h2 style="color: var(--primary);">YakaAdmin</h2>
+            <div class="admin-logo">
+                <i class="ph ph-plant"></i>
+                <span>YakaAdmin</span>
             </div>
+
             <nav class="admin-nav">
-                <a href="index.html" class="admin-nav-item">
-                    <i class="ph ph-squares-four"></i> Genel Bakış
+                <a href="index.html">
+                    <i class="ph ph-squares-four"></i>
+                    <span>Genel Bakış</span>
                 </a>
-                <a href="users.html" class="admin-nav-item">
-                    <i class="ph ph-users"></i> Kullanıcılar
+                <a href="users.html">
+                    <i class="ph ph-users"></i>
+                    <span>Kullanıcılar</span>
                 </a>
-                <a href="quotes.html" class="admin-nav-item active">
-                    <i class="ph ph-file-text"></i> Teklifler
-                </a>
-                <a href="/" class="admin-nav-item" style="margin-top: auto;">
-                    <i class="ph ph-arrow-left"></i> Siteye Dön
+                <a href="quotes.html" class="active">
+                    <i class="ph ph-file-text"></i>
+                    <span>Teklifler</span>
                 </a>
             </nav>
+
+            <div class="back-link">
+                <a href="/"><i class="ph ph-arrow-left"></i><span>Siteye Dön</span></a>
+            </div>
         </aside>
 
         <main class="admin-content">
-            <header style="margin-bottom: 2rem;">
+            <div class="admin-header">
                 <h1>Teklif Talepleri</h1>
-                <p style="color: var(--text-2);">Müşterilerden gelen fiyat teklifi istekleri</p>
-            </header>
+                <p>Müşterilerden gelen fiyat istekleri</p>
+            </div>
 
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th style="width: 200px;">Müşteri</th>
-                        <th>Talep Detayı</th>
-                        <th style="width: 150px;">Tarih</th>
-                        <th style="width: 150px;">Durum</th>
-                    </tr>
-                </thead>
-                <tbody id="quotes-table-body">
-                    <tr>
-                        <td colspan="4" style="text-align:center; padding: 2rem;">Yükleniyor...</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div id="content">
+                <div class="loading">
+                    <i class="ph ph-spinner ph-spin" style="font-size: 2rem;"></i>
+                    <p>Yükleniyor...</p>
+                </div>
+            </div>
         </main>
     </div>
 
-    <script src="../js/api.js"></script>
-    <script src="../js/auth.js"></script>
     <script>
-        async function loadQuotes() {
+        const statusNames = {
+            'new': 'Yeni',
+            'contacted': 'İletişime Geçildi',
+            'quoted': 'Teklif Verildi',
+            'closed': 'Kapandı'
+        };
+
+        async function init() {
             try {
-                // Check auth
-                const user = YakaAuth.getUser();
-                if (!user || user.role !== 'admin') {
-                    window.location.href = '/';
+                const meResponse = await fetch('/api/me', { credentials: 'include' });
+                if (!meResponse.ok) {
+                    window.location.href = '/login.html';
                     return;
                 }
 
-                const quotes = await YakaAPI.fetch('/admin/quotes');
-                const tbody = document.getElementById('quotes-table-body');
-
-                if (quotes.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Talep bulunamadı</td></tr>';
+                const meData = await meResponse.json();
+                if (meData.user?.role !== 'admin') {
+                    document.getElementById('content').innerHTML = `
+                        <div class="error-message">Erişim yetkiniz yok.</div>
+                    `;
                     return;
                 }
 
-                tbody.innerHTML = quotes.map(q => `
-                    <tr>
-                        <td>
-                            <div style="font-weight:500">${q.user_name} ${q.user_surname}</div>
-                            <div style="font-size:0.875rem; color:var(--text-2)">${q.user_email}</div>
-                        </td>
-                        <td>
-                            <div style="white-space: pre-wrap;">${q.request_text || '-'}</div>
-                            ${q.project_id ? '<div style="margin-top:0.5rem; font-size:0.875rem; color:var(--primary);">Projeden Gelen Talep</div>' : ''}
-                        </td>
-                        <td>${new Date(q.created_at * 1000).toLocaleDateString()}</td>
-                        <td>
+                const response = await fetch('/api/admin/quotes', { credentials: 'include' });
+                if (!response.ok) throw new Error('Teklifler yüklenemedi');
+
+                const quotes = await response.json();
+
+                if (!quotes.length) {
+                    document.getElementById('content').innerHTML = `
+                        <div class="empty-state">
+                            <i class="ph ph-file-text" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <p>Henüz teklif talebi yok.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                document.getElementById('content').innerHTML = quotes.map(q => `
+                    <div class="quote-card" data-id="${q.id}">
+                        <div class="quote-header">
+                            <div class="quote-user">
+                                <strong>${q.user_name || 'Bilinmeyen'} ${q.user_surname || ''}</strong>
+                                <small>${q.user_email || '-'}</small>
+                            </div>
+                            <div class="quote-date">
+                                ${q.created_at ? new Date(q.created_at * 1000).toLocaleDateString('tr-TR') : '-'}
+                            </div>
+                        </div>
+                        <div class="quote-text">${q.request_text || 'Detay yok'}</div>
+                        <div class="quote-actions">
                             <select class="status-select" onchange="updateStatus(${q.id}, this.value)">
-                                <option value="new" ${q.status === 'new' ? 'selected' : ''}>Yeni</option>
-                                <option value="contacted" ${q.status === 'contacted' ? 'selected' : ''}>İletişime Geçildi</option>
-                                <option value="quoted" ${q.status === 'quoted' ? 'selected' : ''}>Teklif Verildi</option>
-                                <option value="closed" ${q.status === 'closed' ? 'selected' : ''}>Kapandı</option>
+                                ${Object.entries(statusNames).map(([val, label]) =>
+                    `<option value="${val}" ${q.status === val ? 'selected' : ''}>${label}</option>`
+                ).join('')}
                             </select>
-                        </td>
-                    </tr>
+                            <span class="status-badge ${q.status}">${statusNames[q.status] || q.status}</span>
+                        </div>
+                    </div>
                 `).join('');
 
             } catch (err) {
-                console.error('Quotes load error:', err);
-                YakaUI.toast.error('Teklifler yüklenemedi');
+                console.error('Error:', err);
+                document.getElementById('content').innerHTML = `
+                    <div class="error-message">${err.message}</div>
+                `;
             }
         }
 
-        async function updateStatus(id, newStatus) {
+        async function updateStatus(id, status) {
             try {
-                await YakaAPI.fetch(`/admin/quotes/${id}/status`, {
+                const response = await fetch(`/api/admin/quotes/${id}/status`, {
                     method: 'PUT',
-                    body: JSON.stringify({ status: newStatus })
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ status })
                 });
-                YakaUI.toast.success('Durum güncellendi');
+
+                if (response.ok) {
+                    // Update badge
+                    const card = document.querySelector(`[data-id="${id}"]`);
+                    const badge = card.querySelector('.status-badge');
+                    badge.className = `status-badge ${status}`;
+                    badge.textContent = statusNames[status];
+                }
             } catch (err) {
                 console.error('Update error:', err);
-                YakaUI.toast.error('Güncelleme başarısız');
             }
         }
 
-        document.addEventListener('DOMContentLoaded', loadQuotes);
+        init();
     </script>
 </body>
 

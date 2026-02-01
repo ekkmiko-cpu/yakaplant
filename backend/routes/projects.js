@@ -14,20 +14,18 @@ const { requireAuth, requirePro } = require('../middleware/auth');
 router.use(requireAuth);
 router.use(requirePro);
 
-// =====================================================
-// GET ALL PROJECTS
-// =====================================================
-
-router.get('/', (req, res) => {
+/**
+ * GET / - List user's projects
+ */
+router.get('/', async (req, res) => {
     try {
-        const projects = db.all(`
+        const projects = await db.all(`
             SELECT 
                 p.id,
-                p.title,
-                p.notes,
+                p.name,
+                p.description,
                 p.created_at,
-                p.updated_at,
-                (SELECT COUNT(*) FROM project_items WHERE project_id = p.id) as item_count
+                p.updated_at
             FROM projects p
             WHERE p.user_id = ?
             ORDER BY p.updated_at DESC
@@ -41,22 +39,21 @@ router.get('/', (req, res) => {
     }
 });
 
-// =====================================================
-// CREATE PROJECT
-// =====================================================
-
+/**
+ * POST / - Create project
+ */
 const createValidation = [
-    body('title')
+    body('name')
         .trim()
         .notEmpty().withMessage('Proje adı gerekli')
         .isLength({ max: 200 }).withMessage('Proje adı çok uzun'),
-    body('notes')
+    body('description')
         .optional()
         .trim()
-        .isLength({ max: 5000 }).withMessage('Notlar çok uzun')
+        .isLength({ max: 5000 }).withMessage('Açıklama çok uzun')
 ];
 
-router.post('/', createValidation, (req, res) => {
+router.post('/', createValidation, async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -66,19 +63,19 @@ router.post('/', createValidation, (req, res) => {
             });
         }
 
-        const { title, notes } = req.body;
+        const { name, description } = req.body;
 
-        const result = db.run(`
-            INSERT INTO projects (user_id, title, notes)
+        const result = await db.run(`
+            INSERT INTO projects (user_id, name, description)
             VALUES (?, ?, ?)
-        `, [req.session.userId, title, notes || null]);
+        `, [req.session.userId, name, description || null]);
 
         res.status(201).json({
             message: 'Proje oluşturuldu',
             project: {
                 id: result.lastInsertRowid,
-                title,
-                notes
+                name,
+                description
             }
         });
 
@@ -88,16 +85,15 @@ router.post('/', createValidation, (req, res) => {
     }
 });
 
-// =====================================================
-// GET SINGLE PROJECT WITH ITEMS
-// =====================================================
-
-router.get('/:id', (req, res) => {
+/**
+ * GET /:id - Get single project
+ */
+router.get('/:id', async (req, res) => {
     try {
         const { id } = req.params;
 
-        const project = db.get(`
-            SELECT id, title, notes, created_at, updated_at
+        const project = await db.get(`
+            SELECT id, name, description, design_json, created_at, updated_at
             FROM projects
             WHERE id = ? AND user_id = ?
         `, [id, req.session.userId]);
@@ -106,19 +102,7 @@ router.get('/:id', (req, res) => {
             return res.status(404).json({ error: 'Proje bulunamadı' });
         }
 
-        // Get items
-        const items = db.all(`
-            SELECT id, product_id, qty, notes
-            FROM project_items
-            WHERE project_id = ?
-        `, [id]);
-
-        res.json({
-            project: {
-                ...project,
-                items
-            }
-        });
+        res.json({ project });
 
     } catch (err) {
         console.error('Get project error:', err);
@@ -126,11 +110,10 @@ router.get('/:id', (req, res) => {
     }
 });
 
-// =====================================================
-// UPDATE PROJECT
-// =====================================================
-
-router.put('/:id', createValidation, (req, res) => {
+/**
+ * PUT /:id - Update project
+ */
+router.put('/:id', createValidation, async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -141,10 +124,10 @@ router.put('/:id', createValidation, (req, res) => {
         }
 
         const { id } = req.params;
-        const { title, notes } = req.body;
+        const { name, description } = req.body;
 
         // Verify ownership
-        const existing = db.get(`
+        const existing = await db.get(`
             SELECT id FROM projects WHERE id = ? AND user_id = ?
         `, [id, req.session.userId]);
 
@@ -152,11 +135,11 @@ router.put('/:id', createValidation, (req, res) => {
             return res.status(404).json({ error: 'Proje bulunamadı' });
         }
 
-        db.run(`
+        await db.run(`
             UPDATE projects 
-            SET title = ?, notes = ?, updated_at = strftime('%s','now')
+            SET name = ?, description = ?, updated_at = strftime('%s','now')
             WHERE id = ?
-        `, [title, notes || null, id]);
+        `, [name, description || null, id]);
 
         res.json({ message: 'Proje güncellendi' });
 
@@ -166,111 +149,22 @@ router.put('/:id', createValidation, (req, res) => {
     }
 });
 
-// =====================================================
-// DELETE PROJECT
-// =====================================================
-
-router.delete('/:id', (req, res) => {
+/**
+ * DELETE /:id - Delete project
+ */
+router.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params;
 
-        const result = db.run(`
+        await db.run(`
             DELETE FROM projects WHERE id = ? AND user_id = ?
         `, [id, req.session.userId]);
-
-        if (result.changes === 0) {
-            return res.status(404).json({ error: 'Proje bulunamadı' });
-        }
 
         res.json({ message: 'Proje silindi' });
 
     } catch (err) {
         console.error('Delete project error:', err);
         res.status(500).json({ error: 'Proje silinemedi' });
-    }
-});
-
-// =====================================================
-// ADD ITEM TO PROJECT
-// =====================================================
-
-router.post('/:id/items', [
-    body('product_id').notEmpty().withMessage('Ürün ID gerekli'),
-    body('qty').optional().isInt({ min: 1 }).withMessage('Adet en az 1 olmalı'),
-    body('notes').optional().trim().isLength({ max: 500 })
-], (req, res) => {
-    try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({
-                error: 'Doğrulama hatası',
-                details: errors.array().map(e => e.msg)
-            });
-        }
-
-        const { id } = req.params;
-        const { product_id, qty, notes } = req.body;
-
-        // Verify project ownership
-        const project = db.get(`
-            SELECT id FROM projects WHERE id = ? AND user_id = ?
-        `, [id, req.session.userId]);
-
-        if (!project) {
-            return res.status(404).json({ error: 'Proje bulunamadı' });
-        }
-
-        const result = db.run(`
-            INSERT INTO project_items (project_id, product_id, qty, notes)
-            VALUES (?, ?, ?, ?)
-        `, [id, product_id, qty || 1, notes || null]);
-
-        // Update project timestamp
-        db.run(`
-            UPDATE projects SET updated_at = strftime('%s','now') WHERE id = ?
-        `, [id]);
-
-        res.status(201).json({
-            message: 'Ürün projeye eklendi',
-            item_id: result.lastInsertRowid
-        });
-
-    } catch (err) {
-        console.error('Add item error:', err);
-        res.status(500).json({ error: 'Ürün eklenemedi' });
-    }
-});
-
-// =====================================================
-// REMOVE ITEM FROM PROJECT
-// =====================================================
-
-router.delete('/:id/items/:itemId', (req, res) => {
-    try {
-        const { id, itemId } = req.params;
-
-        // Verify project ownership
-        const project = db.get(`
-            SELECT id FROM projects WHERE id = ? AND user_id = ?
-        `, [id, req.session.userId]);
-
-        if (!project) {
-            return res.status(404).json({ error: 'Proje bulunamadı' });
-        }
-
-        const result = db.run(`
-            DELETE FROM project_items WHERE id = ? AND project_id = ?
-        `, [itemId, id]);
-
-        if (result.changes === 0) {
-            return res.status(404).json({ error: 'Ürün bulunamadı' });
-        }
-
-        res.json({ message: 'Ürün projeden çıkarıldı' });
-
-    } catch (err) {
-        console.error('Remove item error:', err);
-        res.status(500).json({ error: 'Ürün çıkarılamadı' });
     }
 });
 

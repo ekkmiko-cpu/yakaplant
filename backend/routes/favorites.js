@@ -11,13 +11,12 @@ const { requireAuth } = require('../middleware/auth');
 // All routes require authentication
 router.use(requireAuth);
 
-// =====================================================
-// GET FAVORITES
-// =====================================================
-
-router.get('/', (req, res) => {
+/**
+ * GET / - List user's favorites
+ */
+router.get('/', async (req, res) => {
     try {
-        const favorites = db.all(`
+        const favorites = await db.all(`
             SELECT product_id, created_at
             FROM favorites
             WHERE user_id = ?
@@ -32,11 +31,10 @@ router.get('/', (req, res) => {
     }
 });
 
-// =====================================================
-// ADD TO FAVORITES
-// =====================================================
-
-router.post('/', (req, res) => {
+/**
+ * POST / - Add to favorites
+ */
+router.post('/', async (req, res) => {
     try {
         const { product_id } = req.body;
 
@@ -45,7 +43,7 @@ router.post('/', (req, res) => {
         }
 
         // Check if already exists
-        const existing = db.get(`
+        const existing = await db.get(`
             SELECT id FROM favorites WHERE user_id = ? AND product_id = ?
         `, [req.session.userId, product_id]);
 
@@ -53,7 +51,7 @@ router.post('/', (req, res) => {
             return res.json({ message: 'Ürün zaten favorilerde' });
         }
 
-        db.run(`
+        await db.run(`
             INSERT INTO favorites (user_id, product_id)
             VALUES (?, ?)
         `, [req.session.userId, product_id]);
@@ -69,22 +67,17 @@ router.post('/', (req, res) => {
     }
 });
 
-// =====================================================
-// REMOVE FROM FAVORITES
-// =====================================================
-
-router.delete('/:productId', (req, res) => {
+/**
+ * DELETE /:productId - Remove from favorites
+ */
+router.delete('/:productId', async (req, res) => {
     try {
         const { productId } = req.params;
 
-        const result = db.run(`
+        await db.run(`
             DELETE FROM favorites
             WHERE user_id = ? AND product_id = ?
         `, [req.session.userId, productId]);
-
-        if (result.changes === 0) {
-            return res.status(404).json({ error: 'Favori bulunamadı' });
-        }
 
         res.json({ message: 'Favorilerden çıkarıldı' });
 
@@ -94,15 +87,14 @@ router.delete('/:productId', (req, res) => {
     }
 });
 
-// =====================================================
-// CHECK IF FAVORITE (for UI toggle)
-// =====================================================
-
-router.get('/check/:productId', (req, res) => {
+/**
+ * GET /check/:productId - Check if favorite
+ */
+router.get('/check/:productId', async (req, res) => {
     try {
         const { productId } = req.params;
 
-        const favorite = db.get(`
+        const favorite = await db.get(`
             SELECT id FROM favorites
             WHERE user_id = ? AND product_id = ?
         `, [req.session.userId, productId]);
