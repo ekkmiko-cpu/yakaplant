@@ -1,142 +1,152 @@
 /**
- * Database Configuration
- * Supports Turso (production) and in-memory (local development)
+ * SQLite Database Configuration
+ * Uses sql.js for pure JavaScript SQLite (no native compilation needed)
  */
 
-// Use web client for edge/serverless environments
-const { createClient } = require('@libsql/client/web');
+const initSqlJs = require('sql.js');
+const path = require('path');
+const fs = require('fs');
 
-// Check if Turso is configured
-let TURSO_URL = process.env.TURSO_DATABASE_URL;
-const TURSO_TOKEN = process.env.TURSO_AUTH_TOKEN;
+// Database file location
+const isVercel = process.env.VERCEL === '1';
+const DB_PATH = isVercel
+    ? path.join('/tmp', 'yakaplant.db')
+    : path.join(__dirname, '..', 'data', 'yakaplant.db');
 
-// Ensure URL uses https:// for HTTP transport
-if (TURSO_URL) {
-    TURSO_URL = TURSO_URL.replace('libsql://', 'https://');
+// Ensure data directory exists (only if not using /tmp which always exists)
+if (!isVercel) {
+    const dataDir = path.dirname(DB_PATH);
+    if (!fs.existsSync(dataDir)) {
+        fs.mkdirSync(dataDir, { recursive: true });
+    }
 }
 
 let db = null;
+let SQL = null;
 
 /**
  * Initialize database connection
+ * Must be called before using db
  */
 async function initDatabase() {
     if (db) return db;
 
-    console.log('🔍 Database config check:', {
-        hasUrl: !!TURSO_URL,
-        hasToken: !!TURSO_TOKEN,
-        urlPrefix: TURSO_URL ? TURSO_URL.substring(0, 30) + '...' : 'none'
-    });
+    try {
+        // Let sql.js use its default WASM loading mechanism
+        SQL = await initSqlJs();
+        console.log('sql.js loaded successfully');
+    } catch (err) {
+        console.error('Failed to load sql.js:', err);
+        throw err;
+    }
 
-    if (TURSO_URL && TURSO_TOKEN) {
-        // Use Turso for production
-        console.log('🔗 Connecting to Turso database...');
-        try {
-            db = createClient({
-                url: TURSO_URL,
-                authToken: TURSO_TOKEN
-            });
-
-            // Run migrations
-            await runMigrations(db);
-            console.log('✅ Turso database connected');
-        } catch (err) {
-            console.error('❌ Turso connection failed:', err);
-            throw err;
+    // Try to load existing database
+    let needsMigrations = false;
+    try {
+        if (fs.existsSync(DB_PATH)) {
+            const buffer = fs.readFileSync(DB_PATH);
+            db = new SQL.Database(buffer);
+            console.log('Loaded existing database from', DB_PATH);
+        } else {
+            db = new SQL.Database();
+            needsMigrations = true;
+            console.log('Created new database');
         }
-    } else {
-        // Fallback to in-memory for local dev
-        console.log('⚠️ No Turso config found, using in-memory database');
-        db = createClient({
-            url: 'file::memory:'
-        });
-        await runMigrations(db);
+    } catch (err) {
+        console.error('Error loading database:', err);
+        db = new SQL.Database();
+        needsMigrations = true;
+    }
+
+    // Run migrations if needed
+    if (needsMigrations) {
+        runMigrationsSync();
     }
 
     return db;
 }
 
 /**
- * Run database migrations
+ * Run database migrations synchronously
  */
-async function runMigrations(client) {
-    console.log('📦 Running migrations...');
+function runMigrationsSync() {
+    console.log('Running database migrations...');
 
-    const migrations = `
-        -- Users table
-        CREATE TABLE IF NOT EXISTS users (
-            id TEXT PRIMARY KEY,
-            name TEXT NOT NULL,
-            surname TEXT NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            phone TEXT,
-            city TEXT,
-            role TEXT CHECK(role IN ('customer','landscape_architect','company','admin')) NOT NULL DEFAULT 'customer',
-            company_name TEXT,
-            password_hash TEXT NOT NULL,
-            reset_token TEXT,
-            reset_token_expires INTEGER,
-            created_at INTEGER DEFAULT (strftime('%s','now')),
-            updated_at INTEGER DEFAULT (strftime('%s','now'))
-        );
+    const migrationSQL = `
+-- YakaPlant Membership System - Initial Schema
+CREATE TABLE IF NOT EXISTS users (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    surname TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    phone TEXT,
+    city TEXT,
+    role TEXT CHECK(role IN ('customer','landscape_architect','company','admin')) NOT NULL DEFAULT 'customer',
+    company_name TEXT,
+    password_hash TEXT NOT NULL,
+    reset_token TEXT,
+    reset_token_expires INTEGER,
+    created_at INTEGER DEFAULT (strftime('%s','now')),
+    updated_at INTEGER DEFAULT (strftime('%s','now'))
+);
 
-        -- Favorites table
-        CREATE TABLE IF NOT EXISTS favorites (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-            product_id TEXT NOT NULL,
-            created_at INTEGER DEFAULT (strftime('%s','now')),
-            UNIQUE(user_id, product_id)
-        );
+CREATE TABLE IF NOT EXISTS favorites (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    product_id TEXT NOT NULL,
+    created_at INTEGER DEFAULT (strftime('%s','now')),
+    UNIQUE(user_id, product_id)
+);
 
-        -- Quote requests table
-        CREATE TABLE IF NOT EXISTS quote_requests (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-            project_id INTEGER REFERENCES projects(id),
-            request_text TEXT,
-            status TEXT DEFAULT 'new',
-            admin_notes TEXT,
-            created_at INTEGER DEFAULT (strftime('%s','now')),
-            updated_at INTEGER DEFAULT (strftime('%s','now'))
-        );
+CREATE TABLE IF NOT EXISTS quote_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    project_id INTEGER,
+    request_text TEXT,
+    status TEXT DEFAULT 'new',
+    admin_notes TEXT,
+    created_at INTEGER DEFAULT (strftime('%s','now')),
+    updated_at INTEGER DEFAULT (strftime('%s','now'))
+);
 
-        -- Projects table
-        CREATE TABLE IF NOT EXISTS projects (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-            name TEXT NOT NULL,
-            description TEXT,
-            design_json TEXT,
-            thumbnail_url TEXT,
-            is_public INTEGER DEFAULT 0,
-            created_at INTEGER DEFAULT (strftime('%s','now')),
-            updated_at INTEGER DEFAULT (strftime('%s','now'))
-        );
+CREATE TABLE IF NOT EXISTS projects (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    description TEXT,
+    design_json TEXT,
+    thumbnail_url TEXT,
+    is_public INTEGER DEFAULT 0,
+    created_at INTEGER DEFAULT (strftime('%s','now')),
+    updated_at INTEGER DEFAULT (strftime('%s','now'))
+);
 
-        -- Indexes
-        CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
-        CREATE INDEX IF NOT EXISTS idx_favorites_user ON favorites(user_id);
-        CREATE INDEX IF NOT EXISTS idx_quotes_user ON quote_requests(user_id);
-    `;
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_favorites_user ON favorites(user_id);
+CREATE INDEX IF NOT EXISTS idx_quotes_user ON quote_requests(user_id);
+`;
 
-    // Execute each statement separately
-    const statements = migrations.split(';').filter(s => s.trim());
-    for (const stmt of statements) {
-        if (stmt.trim()) {
-            try {
-                await client.execute(stmt);
-            } catch (err) {
-                // Ignore "already exists" errors
-                if (!err.message.includes('already exists')) {
-                    console.error('Migration error:', err.message);
-                }
-            }
-        }
+    try {
+        db.run(migrationSQL);
+        console.log('Migrations complete');
+        saveDatabase();
+    } catch (err) {
+        console.error('Migration error:', err);
     }
+}
 
-    console.log('✅ Migrations complete');
+/**
+ * Save database to disk (persistence between requests in non-Vercel)
+ */
+function saveDatabase() {
+    if (!db) return;
+    try {
+        const data = db.export();
+        const buffer = Buffer.from(data);
+        fs.writeFileSync(DB_PATH, buffer);
+    } catch (err) {
+        console.error('Save database error:', err);
+    }
 }
 
 /**
@@ -144,7 +154,14 @@ async function runMigrations(client) {
  */
 function all(sql, params = []) {
     if (!db) throw new Error('Database not initialized');
-    return db.execute({ sql, args: params }).then(r => r.rows);
+    const stmt = db.prepare(sql);
+    stmt.bind(params);
+    const results = [];
+    while (stmt.step()) {
+        results.push(stmt.getAsObject());
+    }
+    stmt.free();
+    return results;
 }
 
 /**
@@ -152,7 +169,14 @@ function all(sql, params = []) {
  */
 function get(sql, params = []) {
     if (!db) throw new Error('Database not initialized');
-    return db.execute({ sql, args: params }).then(r => r.rows[0] || null);
+    const stmt = db.prepare(sql);
+    stmt.bind(params);
+    let result = null;
+    if (stmt.step()) {
+        result = stmt.getAsObject();
+    }
+    stmt.free();
+    return result;
 }
 
 /**
@@ -160,14 +184,17 @@ function get(sql, params = []) {
  */
 function run(sql, params = []) {
     if (!db) throw new Error('Database not initialized');
-    return db.execute({ sql, args: params });
+    db.run(sql, params);
+    saveDatabase();
+    return { lastInsertRowid: db.exec("SELECT last_insert_rowid()")[0]?.values[0]?.[0] };
 }
 
 /**
  * Close database connection
  */
 function close() {
-    if (db && typeof db.close === 'function') {
+    if (db) {
+        saveDatabase();
         db.close();
     }
     db = null;

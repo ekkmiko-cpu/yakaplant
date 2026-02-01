@@ -26,19 +26,6 @@ const { rateLimiter } = require('./middleware/rateLimiter');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Debug endpoint (before any middleware that might fail)
-app.get('/api/debug-env', (req, res) => {
-    const tursoUrl = process.env.TURSO_DATABASE_URL;
-    const tursoToken = process.env.TURSO_AUTH_TOKEN;
-    res.json({
-        hasTursoUrl: !!tursoUrl,
-        hasTursoToken: !!tursoToken,
-        tursoUrlStart: tursoUrl ? tursoUrl.substring(0, 40) : 'not set',
-        nodeEnv: process.env.NODE_ENV,
-        vercel: process.env.VERCEL
-    });
-});
-
 // =====================================================
 // DATABASE INITIALIZATION (for serverless)
 // =====================================================

@@ -17,18 +17,13 @@ router.use(requirePro);
 /**
  * GET / - List user's projects
  */
-router.get('/', async (req, res) => {
+router.get('/', (req, res) => {
     try {
-        const projects = await db.all(`
-            SELECT 
-                p.id,
-                p.name,
-                p.description,
-                p.created_at,
-                p.updated_at
-            FROM projects p
-            WHERE p.user_id = ?
-            ORDER BY p.updated_at DESC
+        const projects = db.all(`
+            SELECT id, name, description, created_at, updated_at
+            FROM projects
+            WHERE user_id = ?
+            ORDER BY updated_at DESC
         `, [req.session.userId]);
 
         res.json({ projects });
@@ -53,7 +48,7 @@ const createValidation = [
         .isLength({ max: 5000 }).withMessage('Açıklama çok uzun')
 ];
 
-router.post('/', createValidation, async (req, res) => {
+router.post('/', createValidation, (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -65,7 +60,7 @@ router.post('/', createValidation, async (req, res) => {
 
         const { name, description } = req.body;
 
-        const result = await db.run(`
+        const result = db.run(`
             INSERT INTO projects (user_id, name, description)
             VALUES (?, ?, ?)
         `, [req.session.userId, name, description || null]);
@@ -88,11 +83,11 @@ router.post('/', createValidation, async (req, res) => {
 /**
  * GET /:id - Get single project
  */
-router.get('/:id', async (req, res) => {
+router.get('/:id', (req, res) => {
     try {
         const { id } = req.params;
 
-        const project = await db.get(`
+        const project = db.get(`
             SELECT id, name, description, design_json, created_at, updated_at
             FROM projects
             WHERE id = ? AND user_id = ?
@@ -113,7 +108,7 @@ router.get('/:id', async (req, res) => {
 /**
  * PUT /:id - Update project
  */
-router.put('/:id', createValidation, async (req, res) => {
+router.put('/:id', createValidation, (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -127,7 +122,7 @@ router.put('/:id', createValidation, async (req, res) => {
         const { name, description } = req.body;
 
         // Verify ownership
-        const existing = await db.get(`
+        const existing = db.get(`
             SELECT id FROM projects WHERE id = ? AND user_id = ?
         `, [id, req.session.userId]);
 
@@ -135,7 +130,7 @@ router.put('/:id', createValidation, async (req, res) => {
             return res.status(404).json({ error: 'Proje bulunamadı' });
         }
 
-        await db.run(`
+        db.run(`
             UPDATE projects 
             SET name = ?, description = ?, updated_at = strftime('%s','now')
             WHERE id = ?
@@ -152,11 +147,11 @@ router.put('/:id', createValidation, async (req, res) => {
 /**
  * DELETE /:id - Delete project
  */
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', (req, res) => {
     try {
         const { id } = req.params;
 
-        await db.run(`
+        db.run(`
             DELETE FROM projects WHERE id = ? AND user_id = ?
         `, [id, req.session.userId]);
 

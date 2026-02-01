@@ -79,7 +79,7 @@ router.post('/register', registerValidation, async (req, res) => {
         const { name, surname, email, password, role, phone, city, company_name } = req.body;
 
         // Check if email already exists
-        const existingUser = await db.get('SELECT id FROM users WHERE email = ?', [email]);
+        const existingUser = db.get('SELECT id FROM users WHERE email = ?', [email]);
         if (existingUser) {
             return res.status(409).json({
                 error: 'Bu e-posta adresi zaten kayıtlı'
@@ -87,7 +87,7 @@ router.post('/register', registerValidation, async (req, res) => {
         }
 
         // Check if this is the first user
-        const countResult = await db.get("SELECT COUNT(*) as count FROM users");
+        const countResult = db.get("SELECT COUNT(*) as count FROM users");
         const userCount = countResult?.count || 0;
         const finalRole = userCount === 0 ? 'admin' : role;
 
@@ -96,7 +96,7 @@ router.post('/register', registerValidation, async (req, res) => {
 
         // Create user
         const userId = uuidv4();
-        await db.run(`
+        db.run(`
             INSERT INTO users (id, name, surname, email, password_hash, role, phone, city, company_name)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `, [userId, name, surname, email, passwordHash, finalRole, phone || null, city || null, company_name || null]);
@@ -144,7 +144,7 @@ router.post('/login', loginValidation, async (req, res) => {
         const { email, password } = req.body;
 
         // Find user
-        const user = await db.get(`
+        const user = db.get(`
             SELECT id, name, surname, email, password_hash, role 
             FROM users WHERE email = ?
         `, [email]);
@@ -220,7 +220,7 @@ router.post('/logout', (req, res) => {
 
 router.post('/forgot-password', [
     body('email').trim().isEmail().withMessage('Geçerli bir e-posta girin').normalizeEmail()
-], async (req, res) => {
+], (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -232,7 +232,7 @@ router.post('/forgot-password', [
         const { email } = req.body;
 
         // Find user
-        const user = await db.get('SELECT id FROM users WHERE email = ?', [email]);
+        const user = db.get('SELECT id FROM users WHERE email = ?', [email]);
 
         // Always return success (don't reveal if email exists)
         if (!user) {
@@ -247,20 +247,19 @@ router.post('/forgot-password', [
         const expiresAt = Math.floor(Date.now() / 1000) + (60 * 60); // 1 hour
 
         // Save token
-        await db.run(`
-            UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE id = ?
+        db.run(`
+            UPDATE users 
+            SET reset_token = ?, reset_token_expires = ?
+            WHERE id = ?
         `, [resetToken, expiresAt, user.id]);
 
-        logAuditEvent('PASSWORD_RESET_REQUEST', email, req.ip, 'Reset token created');
+        logAuditEvent('PASSWORD_RESET_REQUEST', email, req.ip, 'Reset token generated');
 
-        // TODO: Send email with reset link
-        // For MVP, just log the token
-        console.log(`\n🔑 Password Reset Token for ${email}: ${resetToken}\n`);
+        // Note: In production, you would send an email here
+        console.log(`Password reset link: /reset-password?token=${resetToken}`);
 
         res.json({
-            message: 'Eğer bu e-posta kayıtlıysa, şifre sıfırlama bağlantısı gönderildi',
-            // Only in development:
-            ...(process.env.NODE_ENV === 'development' && { debug_token: resetToken })
+            message: 'Eğer bu e-posta kayıtlıysa, şifre sıfırlama bağlantısı gönderildi'
         });
 
     } catch (err) {
@@ -293,14 +292,14 @@ router.post('/reset-password', [
         const now = Math.floor(Date.now() / 1000);
 
         // Find user with valid token
-        const user = await db.get(`
+        const user = db.get(`
             SELECT id, email FROM users 
             WHERE reset_token = ? AND reset_token_expires > ?
         `, [token, now]);
 
         if (!user) {
             return res.status(400).json({
-                error: 'Geçersiz veya süresi dolmuş sıfırlama bağlantısı'
+                error: 'Geçersiz veya süresi dolmuş bağlantı'
             });
         }
 
@@ -308,15 +307,15 @@ router.post('/reset-password', [
         const passwordHash = await bcrypt.hash(password, BCRYPT_ROUNDS);
 
         // Update password and clear token
-        await db.run(`
+        db.run(`
             UPDATE users 
             SET password_hash = ?, reset_token = NULL, reset_token_expires = NULL, updated_at = strftime('%s','now')
             WHERE id = ?
         `, [passwordHash, user.id]);
 
-        logAuditEvent('PASSWORD_RESET_SUCCESS', user.email, req.ip, 'Password changed via reset');
+        logAuditEvent('PASSWORD_RESET_SUCCESS', user.email, req.ip, 'Password updated');
 
-        res.json({ message: 'Şifreniz başarıyla güncellendi. Giriş yapabilirsiniz.' });
+        res.json({ message: 'Şifreniz başarıyla güncellendi' });
 
     } catch (err) {
         console.error('Reset password error:', err);

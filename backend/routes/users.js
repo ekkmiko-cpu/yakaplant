@@ -15,9 +15,9 @@ router.use(requireAuth);
 /**
  * GET / - Get current user info
  */
-router.get('/', async (req, res) => {
+router.get('/', (req, res) => {
     try {
-        const user = await db.get(`
+        const user = db.get(`
             SELECT id, name, surname, email, phone, city, role, company_name, created_at
             FROM users WHERE id = ?
         `, [req.session.userId]);
@@ -60,7 +60,7 @@ const updateValidation = [
         .isLength({ max: 200 }).withMessage('Şirket adı çok uzun')
 ];
 
-router.put('/', updateValidation, async (req, res) => {
+router.put('/', updateValidation, (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -105,10 +105,10 @@ router.put('/', updateValidation, async (req, res) => {
         updates.push("updated_at = strftime('%s','now')");
         values.push(userId);
 
-        await db.run(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`, values);
+        db.run(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`, values);
 
         // Get updated user
-        const user = await db.get(`
+        const user = db.get(`
             SELECT id, name, surname, email, phone, city, role, company_name, updated_at
             FROM users WHERE id = ?
         `, [userId]);

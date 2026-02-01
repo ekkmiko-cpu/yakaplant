@@ -14,9 +14,9 @@ router.use(requireAuth);
 /**
  * GET / - List user's favorites
  */
-router.get('/', async (req, res) => {
+router.get('/', (req, res) => {
     try {
-        const favorites = await db.all(`
+        const favorites = db.all(`
             SELECT product_id, created_at
             FROM favorites
             WHERE user_id = ?
@@ -34,7 +34,7 @@ router.get('/', async (req, res) => {
 /**
  * POST / - Add to favorites
  */
-router.post('/', async (req, res) => {
+router.post('/', (req, res) => {
     try {
         const { product_id } = req.body;
 
@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
         }
 
         // Check if already exists
-        const existing = await db.get(`
+        const existing = db.get(`
             SELECT id FROM favorites WHERE user_id = ? AND product_id = ?
         `, [req.session.userId, product_id]);
 
@@ -51,7 +51,7 @@ router.post('/', async (req, res) => {
             return res.json({ message: 'Ürün zaten favorilerde' });
         }
 
-        await db.run(`
+        db.run(`
             INSERT INTO favorites (user_id, product_id)
             VALUES (?, ?)
         `, [req.session.userId, product_id]);
@@ -70,11 +70,11 @@ router.post('/', async (req, res) => {
 /**
  * DELETE /:productId - Remove from favorites
  */
-router.delete('/:productId', async (req, res) => {
+router.delete('/:productId', (req, res) => {
     try {
         const { productId } = req.params;
 
-        await db.run(`
+        db.run(`
             DELETE FROM favorites
             WHERE user_id = ? AND product_id = ?
         `, [req.session.userId, productId]);
@@ -90,11 +90,11 @@ router.delete('/:productId', async (req, res) => {
 /**
  * GET /check/:productId - Check if favorite
  */
-router.get('/check/:productId', async (req, res) => {
+router.get('/check/:productId', (req, res) => {
     try {
         const { productId } = req.params;
 
-        const favorite = await db.get(`
+        const favorite = db.get(`
             SELECT id FROM favorites
             WHERE user_id = ? AND product_id = ?
         `, [req.session.userId, productId]);

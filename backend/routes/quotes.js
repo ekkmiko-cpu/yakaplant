@@ -15,9 +15,9 @@ router.use(requireAuth);
 /**
  * GET / - List user's quote requests
  */
-router.get('/', async (req, res) => {
+router.get('/', (req, res) => {
     try {
-        const quotes = await db.all(`
+        const quotes = db.all(`
             SELECT 
                 qr.id,
                 qr.project_id,
@@ -55,7 +55,7 @@ const createValidation = [
         .isArray().withMessage('Ürün listesi dizi olmalı')
 ];
 
-router.post('/', createValidation, async (req, res) => {
+router.post('/', createValidation, (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -70,7 +70,7 @@ router.post('/', createValidation, async (req, res) => {
 
         // If project_id provided, verify ownership
         if (project_id) {
-            const project = await db.get(`
+            const project = db.get(`
                 SELECT id FROM projects WHERE id = ? AND user_id = ?
             `, [project_id, userId]);
 
@@ -85,7 +85,7 @@ router.post('/', createValidation, async (req, res) => {
             fullRequestText += `\n\nİlgili Ürünler: ${product_ids.join(', ')}`;
         }
 
-        const result = await db.run(`
+        const result = db.run(`
             INSERT INTO quote_requests (user_id, project_id, request_text, status)
             VALUES (?, ?, ?, 'new')
         `, [userId, project_id || null, fullRequestText.trim() || null]);
@@ -104,11 +104,11 @@ router.post('/', createValidation, async (req, res) => {
 /**
  * GET /:id - Get single quote
  */
-router.get('/:id', async (req, res) => {
+router.get('/:id', (req, res) => {
     try {
         const { id } = req.params;
 
-        const quote = await db.get(`
+        const quote = db.get(`
             SELECT 
                 qr.id,
                 qr.project_id,
