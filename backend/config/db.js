@@ -1,9 +1,10 @@
 /**
  * Database Configuration
- * Supports Turso (production) and sql.js (local development)
+ * Supports Turso (production) and in-memory (local development)
  */
 
-const { createClient } = require('@libsql/client');
+// Use web client for serverless environments
+const { createClient } = require('@libsql/client/web');
 
 // Check if Turso is configured
 const TURSO_URL = process.env.TURSO_DATABASE_URL;
@@ -17,22 +18,33 @@ let db = null;
 async function initDatabase() {
     if (db) return db;
 
+    console.log('🔍 Database config check:', {
+        hasUrl: !!TURSO_URL,
+        hasToken: !!TURSO_TOKEN,
+        urlPrefix: TURSO_URL ? TURSO_URL.substring(0, 30) + '...' : 'none'
+    });
+
     if (TURSO_URL && TURSO_TOKEN) {
         // Use Turso for production
         console.log('🔗 Connecting to Turso database...');
-        db = createClient({
-            url: TURSO_URL,
-            authToken: TURSO_TOKEN
-        });
+        try {
+            db = createClient({
+                url: TURSO_URL,
+                authToken: TURSO_TOKEN
+            });
 
-        // Run migrations
-        await runMigrations(db);
-        console.log('✅ Turso database connected');
+            // Run migrations
+            await runMigrations(db);
+            console.log('✅ Turso database connected');
+        } catch (err) {
+            console.error('❌ Turso connection failed:', err);
+            throw err;
+        }
     } else {
         // Fallback to in-memory for local dev
         console.log('⚠️ No Turso config found, using in-memory database');
         db = createClient({
-            url: ':memory:'
+            url: 'file::memory:'
         });
         await runMigrations(db);
     }
@@ -96,13 +108,6 @@ async function runMigrations(client) {
             is_public INTEGER DEFAULT 0,
             created_at INTEGER DEFAULT (strftime('%s','now')),
             updated_at INTEGER DEFAULT (strftime('%s','now'))
-        );
-
-        -- Sessions table
-        CREATE TABLE IF NOT EXISTS sessions (
-            sid TEXT PRIMARY KEY,
-            sess TEXT NOT NULL,
-            expired INTEGER NOT NULL
         );
 
         -- Indexes
