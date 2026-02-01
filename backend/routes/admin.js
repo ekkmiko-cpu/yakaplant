@@ -4,7 +4,7 @@ const db = require('../config/db');
 
 // Middleware: Check if user is admin
 function isAdmin(req, res, next) {
-    if (!req.session.user || req.session.user.role !== 'admin') {
+    if (req.session.userRole !== 'admin') {
         return res.status(403).json({ error: 'Bu işlem için yetkiniz yok' });
     }
     next();
