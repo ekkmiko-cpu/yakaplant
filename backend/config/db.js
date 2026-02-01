@@ -1,203 +1,259 @@
 /**
- * SQLite Database Configuration
- * Uses sql.js for pure JavaScript SQLite (no native compilation needed)
+ * Simple Database Configuration
+ * Uses a simple in-memory store with JSON persistence to /tmp
+ * This is a fallback solution for Vercel serverless environment
  */
 
-const initSqlJs = require('sql.js');
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
 
 // Database file location
-const isVercel = process.env.VERCEL === '1';
-const DB_PATH = isVercel
-    ? path.join('/tmp', 'yakaplant.db')
-    : path.join(__dirname, '..', 'data', 'yakaplant.db');
+const DB_PATH = '/tmp/yakaplant-data.json';
 
-// Ensure data directory exists (only if not using /tmp which always exists)
-if (!isVercel) {
-    const dataDir = path.dirname(DB_PATH);
-    if (!fs.existsSync(dataDir)) {
-        fs.mkdirSync(dataDir, { recursive: true });
-    }
-}
+// In-memory database structure
+let data = {
+    users: [],
+    favorites: [],
+    quote_requests: [],
+    projects: []
+};
 
-let db = null;
-let SQL = null;
+let initialized = false;
 
 /**
- * Initialize database connection
- * Must be called before using db
+ * Initialize database
  */
 async function initDatabase() {
-    if (db) return db;
+    if (initialized) return;
 
-    try {
-        // Let sql.js use its default WASM loading mechanism
-        SQL = await initSqlJs();
-        console.log('sql.js loaded successfully');
-    } catch (err) {
-        console.error('Failed to load sql.js:', err);
-        throw err;
-    }
-
-    // Try to load existing database
-    let needsMigrations = false;
     try {
         if (fs.existsSync(DB_PATH)) {
-            const buffer = fs.readFileSync(DB_PATH);
-            db = new SQL.Database(buffer);
-            console.log('Loaded existing database from', DB_PATH);
+            const content = fs.readFileSync(DB_PATH, 'utf-8');
+            data = JSON.parse(content);
+            console.log('✅ Loaded existing data from', DB_PATH);
         } else {
-            db = new SQL.Database();
-            needsMigrations = true;
-            console.log('Created new database');
+            console.log('📦 Created new database');
+            saveDatabase();
         }
     } catch (err) {
-        console.error('Error loading database:', err);
-        db = new SQL.Database();
-        needsMigrations = true;
+        console.error('DB load error:', err);
+        data = { users: [], favorites: [], quote_requests: [], projects: [] };
     }
 
-    // Run migrations if needed
-    if (needsMigrations) {
-        runMigrationsSync();
-    }
-
-    return db;
+    initialized = true;
+    return data;
 }
 
 /**
- * Run database migrations synchronously
- */
-function runMigrationsSync() {
-    console.log('Running database migrations...');
-
-    const migrationSQL = `
--- YakaPlant Membership System - Initial Schema
-CREATE TABLE IF NOT EXISTS users (
-    id TEXT PRIMARY KEY,
-    name TEXT NOT NULL,
-    surname TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    phone TEXT,
-    city TEXT,
-    role TEXT CHECK(role IN ('customer','landscape_architect','company','admin')) NOT NULL DEFAULT 'customer',
-    company_name TEXT,
-    password_hash TEXT NOT NULL,
-    reset_token TEXT,
-    reset_token_expires INTEGER,
-    created_at INTEGER DEFAULT (strftime('%s','now')),
-    updated_at INTEGER DEFAULT (strftime('%s','now'))
-);
-
-CREATE TABLE IF NOT EXISTS favorites (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    product_id TEXT NOT NULL,
-    created_at INTEGER DEFAULT (strftime('%s','now')),
-    UNIQUE(user_id, product_id)
-);
-
-CREATE TABLE IF NOT EXISTS quote_requests (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    project_id INTEGER,
-    request_text TEXT,
-    status TEXT DEFAULT 'new',
-    admin_notes TEXT,
-    created_at INTEGER DEFAULT (strftime('%s','now')),
-    updated_at INTEGER DEFAULT (strftime('%s','now'))
-);
-
-CREATE TABLE IF NOT EXISTS projects (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    name TEXT NOT NULL,
-    description TEXT,
-    design_json TEXT,
-    thumbnail_url TEXT,
-    is_public INTEGER DEFAULT 0,
-    created_at INTEGER DEFAULT (strftime('%s','now')),
-    updated_at INTEGER DEFAULT (strftime('%s','now'))
-);
-
-CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
-CREATE INDEX IF NOT EXISTS idx_favorites_user ON favorites(user_id);
-CREATE INDEX IF NOT EXISTS idx_quotes_user ON quote_requests(user_id);
-`;
-
-    try {
-        db.run(migrationSQL);
-        console.log('Migrations complete');
-        saveDatabase();
-    } catch (err) {
-        console.error('Migration error:', err);
-    }
-}
-
-/**
- * Save database to disk (persistence between requests in non-Vercel)
+ * Save database to disk
  */
 function saveDatabase() {
-    if (!db) return;
     try {
-        const data = db.export();
-        const buffer = Buffer.from(data);
-        fs.writeFileSync(DB_PATH, buffer);
+        fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
     } catch (err) {
-        console.error('Save database error:', err);
+        console.error('Save error:', err);
     }
 }
 
 /**
- * Execute a query and return all rows
+ * Auto-increment ID helper
+ */
+function getNextId(table) {
+    if (!data[table] || data[table].length === 0) return 1;
+    return Math.max(...data[table].map(r => r.id || 0)) + 1;
+}
+
+/**
+ * Query: Get all matching rows
  */
 function all(sql, params = []) {
-    if (!db) throw new Error('Database not initialized');
-    const stmt = db.prepare(sql);
-    stmt.bind(params);
-    const results = [];
-    while (stmt.step()) {
-        results.push(stmt.getAsObject());
+    // Parse simple SELECT queries
+    const selectMatch = sql.match(/SELECT\s+.+\s+FROM\s+(\w+)/i);
+    if (!selectMatch) return [];
+
+    const table = selectMatch[1];
+    let results = data[table] || [];
+
+    // Handle WHERE user_id = ?
+    const whereUserMatch = sql.match(/WHERE\s+.*(user_id\s*=\s*\?)/i);
+    if (whereUserMatch && params.length > 0) {
+        const userId = params[0];
+        results = results.filter(r => r.user_id === userId);
     }
-    stmt.free();
+
+    // Handle WHERE email = ?
+    const whereEmailMatch = sql.match(/WHERE\s+.*email\s*=\s*\?/i);
+    if (whereEmailMatch && params.length > 0) {
+        const email = params[0];
+        results = results.filter(r => r.email === email);
+    }
+
+    // Handle WHERE id = ? (and user_id = ?)
+    const whereIdMatch = sql.match(/WHERE\s+.*id\s*=\s*\?/i);
+    if (whereIdMatch && params.length > 0) {
+        const id = params[0];
+        results = results.filter(r => r.id == id || r.id === id);
+        if (params.length > 1) {
+            const userId = params[1];
+            results = results.filter(r => r.user_id === userId);
+        }
+    }
+
+    // Handle ORDER BY ... DESC
+    if (sql.match(/ORDER\s+BY\s+.+\s+DESC/i)) {
+        results = [...results].reverse();
+    }
+
+    // Handle JOIN for quotes
+    if (sql.match(/LEFT\s+JOIN\s+users/i) && table === 'quote_requests') {
+        results = results.map(q => {
+            const user = data.users.find(u => u.id === q.user_id) || {};
+            return {
+                ...q,
+                user_name: user.name,
+                user_surname: user.surname,
+                user_email: user.email
+            };
+        });
+    }
+
     return results;
 }
 
 /**
- * Execute a query and return first row
+ * Query: Get first matching row
  */
 function get(sql, params = []) {
-    if (!db) throw new Error('Database not initialized');
-    const stmt = db.prepare(sql);
-    stmt.bind(params);
-    let result = null;
-    if (stmt.step()) {
-        result = stmt.getAsObject();
+    // Handle COUNT(*)
+    if (sql.match(/COUNT\s*\(\s*\*\s*\)/i)) {
+        const tableMatch = sql.match(/FROM\s+(\w+)/i);
+        if (tableMatch) {
+            const table = tableMatch[1];
+            return { count: (data[table] || []).length };
+        }
+        return { count: 0 };
     }
-    stmt.free();
-    return result;
+
+    const results = all(sql, params);
+    return results[0] || null;
 }
 
 /**
- * Execute a query (INSERT, UPDATE, DELETE)
+ * Query: Execute INSERT, UPDATE, DELETE
  */
 function run(sql, params = []) {
-    if (!db) throw new Error('Database not initialized');
-    db.run(sql, params);
-    saveDatabase();
-    return { lastInsertRowid: db.exec("SELECT last_insert_rowid()")[0]?.values[0]?.[0] };
+    const upperSql = sql.trim().toUpperCase();
+
+    // INSERT
+    if (upperSql.startsWith('INSERT')) {
+        const tableMatch = sql.match(/INSERT\s+INTO\s+(\w+)/i);
+        if (!tableMatch) return { lastInsertRowid: null };
+
+        const table = tableMatch[1];
+        if (!data[table]) data[table] = [];
+
+        // Parse columns from SQL
+        const colMatch = sql.match(/\(([^)]+)\)\s*VALUES/i);
+        if (!colMatch) return { lastInsertRowid: null };
+
+        const columns = colMatch[1].split(',').map(c => c.trim());
+        const row = {};
+
+        // Use auto-increment ID for non-UUID tables
+        if (table !== 'users') {
+            row.id = getNextId(table);
+        }
+
+        columns.forEach((col, i) => {
+            if (params[i] !== undefined) {
+                row[col] = params[i];
+            }
+        });
+
+        // Add timestamp if not present
+        if (!row.created_at) {
+            row.created_at = Math.floor(Date.now() / 1000);
+        }
+
+        data[table].push(row);
+        saveDatabase();
+
+        return { lastInsertRowid: row.id };
+    }
+
+    // UPDATE
+    if (upperSql.startsWith('UPDATE')) {
+        const tableMatch = sql.match(/UPDATE\s+(\w+)/i);
+        if (!tableMatch) return { changes: 0 };
+
+        const table = tableMatch[1];
+        let changes = 0;
+
+        // Find WHERE id = ?
+        const whereIdIdx = params.length - 1;
+        const id = params[whereIdIdx];
+
+        data[table] = data[table].map(row => {
+            if (row.id == id || row.id === id) {
+                changes++;
+                // Parse SET clauses
+                const setMatch = sql.match(/SET\s+(.+)\s+WHERE/i);
+                if (setMatch) {
+                    const setParts = setMatch[1].split(',');
+                    let paramIdx = 0;
+                    setParts.forEach(part => {
+                        const colMatch = part.match(/(\w+)\s*=/);
+                        if (colMatch && !part.includes('strftime')) {
+                            const col = colMatch[1].trim();
+                            if (params[paramIdx] !== undefined) {
+                                row[col] = params[paramIdx];
+                            }
+                            paramIdx++;
+                        }
+                    });
+                }
+                row.updated_at = Math.floor(Date.now() / 1000);
+                return row;
+            }
+            return row;
+        });
+
+        saveDatabase();
+        return { changes };
+    }
+
+    // DELETE
+    if (upperSql.startsWith('DELETE')) {
+        const tableMatch = sql.match(/DELETE\s+FROM\s+(\w+)/i);
+        if (!tableMatch) return { changes: 0 };
+
+        const table = tableMatch[1];
+        const before = data[table].length;
+
+        // Simple WHERE handling
+        if (params.length >= 2) {
+            const [primary, secondary] = params;
+            data[table] = data[table].filter(row => {
+                return !(row.id == primary || row.user_id === primary) ||
+                    !(row.product_id === secondary || row.user_id === secondary);
+            });
+        } else if (params.length === 1) {
+            const id = params[0];
+            data[table] = data[table].filter(row => row.id != id && row.id !== id);
+        }
+
+        saveDatabase();
+        return { changes: before - data[table].length };
+    }
+
+    return { changes: 0 };
 }
 
 /**
- * Close database connection
+ * Close database (no-op for JSON)
  */
 function close() {
-    if (db) {
-        saveDatabase();
-        db.close();
-    }
-    db = null;
+    saveDatabase();
 }
 
 module.exports = {
