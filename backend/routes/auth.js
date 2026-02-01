@@ -86,6 +86,10 @@ router.post('/register', registerValidation, async (req, res) => {
             });
         }
 
+        // Check if this is the first user
+        const userCount = db.get("SELECT COUNT(*) as count FROM users").count;
+        const finalRole = userCount === 0 ? 'admin' : role;
+
         // Hash password
         const passwordHash = await bcrypt.hash(password, BCRYPT_ROUNDS);
 
@@ -94,15 +98,15 @@ router.post('/register', registerValidation, async (req, res) => {
         db.run(`
             INSERT INTO users (id, name, surname, email, password_hash, role, phone, city, company_name)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `, [userId, name, surname, email, passwordHash, role, phone || null, city || null, company_name || null]);
+        `, [userId, name, surname, email, passwordHash, finalRole, phone || null, city || null, company_name || null]);
 
         // Set session
         req.session.userId = userId;
-        req.session.userRole = role;
+        req.session.userRole = finalRole;
         req.session.userEmail = email;
 
         // Log success
-        logAuditEvent('REGISTER_SUCCESS', email, req.ip, `New user registered as ${role}`);
+        logAuditEvent('REGISTER_SUCCESS', email, req.ip, `New user registered as ${finalRole}`);
 
         res.status(201).json({
             message: 'Kayıt başarılı',
@@ -111,7 +115,7 @@ router.post('/register', registerValidation, async (req, res) => {
                 name,
                 surname,
                 email,
-                role
+                role: finalRole
             }
         });
 
