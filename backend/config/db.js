@@ -3,8 +3,8 @@
  * Supports Turso (production) and in-memory (local development)
  */
 
-// Use web client for serverless environments
-const { createClient } = require('@libsql/client/web');
+// @libsql/client auto-detects the best transport
+const { createClient } = require('@libsql/client');
 
 // Check if Turso is configured
 const TURSO_URL = process.env.TURSO_DATABASE_URL;
