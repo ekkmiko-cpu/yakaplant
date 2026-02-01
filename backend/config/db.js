@@ -7,8 +7,14 @@
 const { createClient } = require('@libsql/client');
 
 // Check if Turso is configured
-const TURSO_URL = process.env.TURSO_DATABASE_URL;
+let TURSO_URL = process.env.TURSO_DATABASE_URL;
 const TURSO_TOKEN = process.env.TURSO_AUTH_TOKEN;
+
+// Convert libsql:// to https:// for HTTP-based transport in serverless
+if (TURSO_URL && TURSO_URL.startsWith('libsql://')) {
+    TURSO_URL = TURSO_URL.replace('libsql://', 'https://');
+    console.log('🔄 Converted URL to HTTPS for serverless');
+}
 
 let db = null;
 
