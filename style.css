@@ -4852,3 +4852,33 @@ body.dark-mode .checkbox-wrapper {
 body.dark-mode .auth-footer {
     border-color: rgba(255, 255, 255, 0.1);
 }
+
+/* Dark Mode - Care Guide */
+body.dark-mode .care-section {
+    background-color: var(--bg-body);
+}
+
+body.dark-mode .minimal-search-section {
+    background-color: var(--bg-body);
+}
+
+body.dark-mode .minimal-title {
+    color: var(--text-light);
+}
+
+body.dark-mode .search-dropdown-modern {
+    background: #1e1e1e;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .search-result-item {
+    border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .search-result-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .search-result-item div[style*="color: var(--primary-dark)"] {
+    color: var(--text-light) !important;
+}
