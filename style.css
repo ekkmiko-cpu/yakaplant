@@ -4899,3 +4899,119 @@ body.dark-mode .search-result-item div[style*="color: var(--primary-dark)"] {
 body.dark-mode .stat-info strong {
     color: white !important;
 }
+
+/* =============================================================================
+   LEGAL PAGES (Terms, Privacy)
+   ============================================================================= */
+
+.legal-page {
+    padding: 3rem 0;
+    min-height: calc(100vh - 200px);
+}
+
+.legal-content {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 16px;
+    padding: 3rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.legal-content h1 {
+    font-size: 2.5rem;
+    color: var(--primary-dark);
+    margin-bottom: 0.5rem;
+}
+
+.legal-date {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.legal-section {
+    margin-bottom: 2rem;
+}
+
+.legal-section h2 {
+    font-size: 1.4rem;
+    color: var(--primary-dark);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent);
+}
+
+.legal-section h3 {
+    font-size: 1.1rem;
+    color: var(--primary);
+    margin: 1.5rem 0 0.75rem;
+}
+
+.legal-section p {
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.legal-section ul {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.legal-section li {
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 0.5rem;
+}
+
+.legal-section a {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+.legal-footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+
+/* Dark Mode */
+body.dark-mode .legal-content {
+    background: #1e1e1e;
+}
+
+body.dark-mode .legal-content h1,
+body.dark-mode .legal-section h2 {
+    color: white;
+}
+
+body.dark-mode .legal-section h3 {
+    color: var(--accent);
+}
+
+body.dark-mode .legal-date {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .legal-section h2 {
+    border-color: var(--primary);
+}
+
+body.dark-mode .legal-footer {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+    .legal-content {
+        padding: 1.5rem;
+        margin: 0 1rem;
+    }
+
+    .legal-content h1 {
+        font-size: 1.8rem;
+    }
+}
