@@ -4854,8 +4854,13 @@ body.dark-mode .auth-footer {
 }
 
 /* Dark Mode - Care Guide */
-body.dark-mode .care-section {
-    background-color: var(--bg-body);
+body.dark-mode .care-section,
+body.dark-mode #care-results {
+    background-color: var(--bg-body) !important;
+}
+
+body.dark-mode .care-section .container {
+    background-color: transparent;
 }
 
 body.dark-mode .minimal-search-section {
