@@ -349,11 +349,47 @@ const openModal = (plantKey) => {
         img_el.alt = data.title;
     }
 
-    // Update Stats
-    if (water_el) water_el.textContent = data.water;
-    if (light_el) light_el.textContent = data.env;
-    if (humidity_el) humidity_el.textContent = data.humidity;
-    if (temp_el) temp_el.textContent = data.temp;
+    // Helper functions to convert values to informative sentences
+    const waterToSentence = (water) => {
+        const waterMap = {
+            'Az': 'Toprağı kurudukça sulayın, su biriktirmeyin.',
+            'Çok az': 'Nadiren sulayın, kuraklığa dayanır.',
+            'Orta': 'Haftada 1-2 kez toprak nemini kontrol edin.',
+            'Düzenli': 'Toprağı sürekli nemli tutun ama su birikmesine izin vermeyin.',
+            'Bol': 'Bol su sever, toprağın kurumasına izin vermeyin.'
+        };
+        return waterMap[water] || water;
+    };
+
+    const lightToSentence = (env) => {
+        if (!env) return 'Işık ihtiyacı belirtilmemiş.';
+        if (env.includes('Tam güneş')) return 'Doğrudan güneş ışığı alan bir yer tercih edin.';
+        if (env.includes('Yarı gölge') || env.includes('yarı gölge')) return 'Dolaylı ışık veya yarı gölge alanlarda mutlu olur.';
+        if (env.includes('Gölge') || env.includes('gölge')) return 'Gölgeli veya düşük ışıklı alanları tercih eder.';
+        if (env.includes('Güneş')) return 'Bol ışık alan bir konumda yetiştirin.';
+        if (env.includes('Aydınlık')) return 'Parlak, dolaylı ışık alan ortamlarda en iyi gelişir.';
+        return env;
+    };
+
+    const humidityToSentence = (humidity) => {
+        const humidityMap = {
+            'Normal': 'Standart ev ortamı nemi yeterlidir.',
+            'Düşük': 'Kuru ortamlara toleranslıdır, ekstra nem gerekmez.',
+            'Yüksek': 'Nemli ortamları sever, yaprakları düzenli nemlendirin.'
+        };
+        return humidityMap[humidity] || humidity;
+    };
+
+    const tempToSentence = (temp) => {
+        if (!temp) return 'Sıcaklık bilgisi belirtilmemiş.';
+        return `İdeal sıcaklık aralığı ${temp} arasındadır.`;
+    };
+
+    // Update Stats with informative sentences
+    if (water_el) water_el.textContent = waterToSentence(data.water);
+    if (light_el) light_el.textContent = lightToSentence(data.env);
+    if (humidity_el) humidity_el.textContent = humidityToSentence(data.humidity);
+    if (temp_el) temp_el.textContent = tempToSentence(data.temp);
 
     // Update Difficulty Badge
     if (dif_badge) {
