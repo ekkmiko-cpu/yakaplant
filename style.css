@@ -67,6 +67,7 @@ body.dark-mode {
 
 html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 
 body {
@@ -886,6 +887,12 @@ body.dark-mode .support-title {
     .hero-bg {
         width: 100%;
         opacity: 0.3;
+        transform: none !important;
+        /* Disable scale on mobile to prevent overflow */
+    }
+
+    .modern-hero .hero-bg {
+        transform: none !important;
     }
 
     .contact-container {
