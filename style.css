@@ -45,6 +45,7 @@
 
 /* Dark Mode Variables */
 body.dark-mode {
+    color-scheme: dark;
     --bg-body: #121212;
     --bg-white: #1e1e1e;
     --bg-glass: rgba(30, 30, 30, 0.8);
@@ -4811,8 +4812,14 @@ body.dark-mode .auth-page {
     background: #121212;
 }
 
-body.dark-mode .auth-form-wrapper {
+body.dark-mode .auth-container,
+body.dark-mode .auth-card {
     background: #1e1e1e;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .auth-form-wrapper {
+    background: transparent;
     border-color: rgba(255, 255, 255, 0.1);
 }
 
