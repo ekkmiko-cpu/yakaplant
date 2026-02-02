@@ -1054,3 +1054,107 @@ const plantCatalog = [
         temp: '18-24°C'
     }
 ];
+
+// Add new outdoor plants
+plantCatalog.push(
+    {
+        id: 'cennet-bambusu',
+        category: 'cali',
+        title: 'Cennet Bambusu',
+        scientific: 'Nandina domestica',
+        desc: `<p><strong>Dört Mevsim Renk</strong><br>
+        Bambuya benzeyen zarif gövdesi ve mevsimlere göre renk değiştiren yapraklarıyla bilinir. İlkbaharda yeni yapraklar kırmızımsı, yazın yeşil, sonbahar ve kışın ise ateş kırmızısına döner. Kışın salkım halinde kırmızı meyveler verir.</p>
+        <p><strong>Peyzajda Kullanımı:</strong><br>
+        Japon bahçeleri, kaya bahçeleri veya bina girişlerinde saksı bitkisi olarak çok popülerdir. Çit olarak da kullanılabilir.</p>
+        <p><strong>Bakım İpuçları:</strong><br>
+        Güneşli veya yarı gölge alanlara uyum sağlar. Kuraklığa ve soğuğa dayanıklıdır. Budama gerektirmez, doğal formu çok estetiktir.</p>`,
+        env: 'Güneş / Yarı gölge',
+        water: 'Az',
+        price: 'Bize Ulaşın',
+        image: 'assets/products/nandina-1.png',
+        difficulty: 'Kolay',
+        humidity: 'Normal',
+        petFriendly: false,
+        temp: '-10-35°C'
+    },
+    {
+        id: 'sikas',
+        category: 'agac',
+        title: 'Sikas',
+        scientific: 'Cycas revoluta',
+        desc: `<p><strong>Yaşayan Fosil</strong><br>
+        Dinozorlar çağından beri varlığını sürdüren, palmiye benzeri egzotik ve heykelsi bir bitkidir. Çok yavaş büyür ve çok uzun ömürlüdür. Sert, koyu yeşil yaprakları rozet şeklinde açılır.</p>
+        <p><strong>Peyzajda Kullanımı:</strong><br>
+        Bahçenin en değerli köşesinde soliter (tek başına) vurgu bitkisi olarak veya prestijli mekanların girişlerinde saksıda kullanılır.</p>
+        <p><strong>Bakım İpuçları:</strong><br>
+        Tam güneşi ve sıcağı sever. Toprağı kurudukça su verilmelidir, aşırı sudan hoşlanmaz. Drenajı iyi toprak şarttır.</p>`,
+        env: 'Tam güneş',
+        water: 'Az',
+        price: 'Bize Ulaşın',
+        image: 'assets/products/sikas-1.png',
+        difficulty: 'Orta',
+        humidity: 'Normal',
+        petFriendly: false,
+        temp: '5-40°C'
+    },
+    {
+        id: 'yildiz-yasemin',
+        category: 'cali',
+        title: 'Yıldız Yasemin',
+        scientific: 'Trachelospermum jasminoides',
+        desc: `<p><strong>Kokulu Beyaz Yıldızlar</strong><br>
+        İlkbahar sonu ve yaz aylarında açan, pervane şeklindeki beyaz çiçekleriyle etrafa büyüleyici bir koku yayar. Parlak, koyu yeşil yaprakları her dem yeşildir ve kışın bronzlaşabilir.</p>
+        <p><strong>Peyzajda Kullanımı:</strong><br>
+        Duvarları, çitleri veya çardakları sarmak için ideal bir sarmaşıktır. Yer örtücü olarak da kullanılabilir.</p>
+        <p><strong>Bakım İpuçları:</strong><br>
+        Güneşi veya yarı gölgeyi sever. İlk yıllarda düzenli sulama ister, köklendikten sonra kuraklığa dayanır. Budama ile kontrol altında tutulabilir.</p>`,
+        env: 'Güneş / Yarı gölge',
+        water: 'Orta',
+        price: 'Bize Ulaşın',
+        image: 'assets/products/yildiz-yasemin-1.png',
+        difficulty: 'Kolay',
+        humidity: 'Normal',
+        petFriendly: false,
+        temp: '-5-35°C'
+    },
+    {
+        id: 'sefkat-cicegi',
+        category: 'sus-bitkisi', // Yeni kategori gerekebilir veya cali/yer kullanilabilir
+        title: 'Şefkat Çiçeği',
+        scientific: 'Agapanthus africanus',
+        desc: `<p><strong>Mavi Küreler</strong><br>
+        Uzun sapların üzerinde havai fişek gibi patlayan mavi veya mor çiçek toplarıyla yaz bahçelerine renk katar. Kurdele şeklindeki yaprakları her dem yeşildir.</p>
+        <p><strong>Peyzajda Kullanımı:</strong><br>
+        Yol kenarlarında bordür bitkisi olarak, havuz çevrelerinde veya saksılarda grup halinde harika görünür. Modern peyzajın vazgeçilmezidir.</p>
+        <p><strong>Bakım İpuçları:</strong><br>
+        Bol güneşi sever. Köklendikten sonra susuzluğa ve sıcağa çok dayanıklıdır. Köklerinin sıkışık olmasını sever (saksıda daha iyi çiçek açar).</p>`,
+        env: 'Tam güneş',
+        water: 'Az',
+        price: 'Bize Ulaşın',
+        image: 'assets/products/agapanthus-1.png',
+        difficulty: 'Kolay',
+        humidity: 'Normal',
+        petFriendly: false,
+        temp: '0-35°C'
+    },
+    {
+        id: 'gavura',
+        category: 'sus-bitkisi',
+        title: 'Gavura',
+        scientific: 'Gaura lindheimeri',
+        desc: `<p><strong>Dans Eden Kelebekler</strong><br>
+        İncecik dallar üzerinde açan beyaz veya pembe çiçekleri, rüzgarda uçuşan kelebeklere benzer. Çok uzun süre (ilkbahardan sonbahara kadar) çiçekli kalmasıyla bilinir.</p>
+        <p><strong>Peyzajda Kullanımı:</strong><br>
+        Doğal görünümlü "yabani" bahçelerde, güllerin arasında dolgu bitkisi olarak veya saksılarda hareket katmak için kullanılır.</p>
+        <p><strong>Bakım İpuçları:</strong><br>
+        Tam güneş ve süzek (iyi drene olan) toprak ister. Kuraklığa ve sıcağa son derece dayanıklıdır. Kış sonunda sert budanmalıdır.</p>`,
+        env: 'Tam güneş',
+        water: 'Az',
+        price: 'Bize Ulaşın',
+        image: 'assets/products/gavura-1.png',
+        difficulty: 'Kolay',
+        humidity: 'Düşük',
+        petFriendly: true,
+        temp: '-10-35°C'
+    }
+);
