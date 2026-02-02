@@ -4894,3 +4894,8 @@ body.dark-mode .search-result-item:hover {
 body.dark-mode .search-result-item div[style*="color: var(--primary-dark)"] {
     color: var(--text-light) !important;
 }
+
+/* Dark Mode - Product Modal Stats */
+body.dark-mode .stat-info strong {
+    color: white !important;
+}
