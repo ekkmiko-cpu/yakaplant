@@ -125,10 +125,11 @@ document.querySelectorAll('.slider-container').forEach(container => {
 // We expect plantCatalog to be available globally.
 
 // Map for lookup
-const plantData = plantCatalog.reduce((acc, plant) => {
+// Map for lookup
+const plantData = (typeof plantCatalog !== 'undefined') ? plantCatalog.reduce((acc, plant) => {
     acc[plant.id] = plant;
     return acc;
-}, {});
+}, {}) : {};
 
 // ... Render functions ...
 
