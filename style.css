@@ -166,10 +166,8 @@ h4 {
     top: 0;
     left: 0;
     width: 100%;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 100%);
-    /* Gradient for softer transition */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: #ffffff;
+    /* Solid white to match logo background */
     z-index: 1000;
     padding: 1rem 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -917,24 +915,6 @@ body.dark-mode .support-title {
     body.dark-mode .nav-links {
         background: #1e1e1e;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    /* Fix: Light mode mobile navbar - use darker blur over hero */
-    .navbar {
-        background: linear-gradient(to bottom, rgba(30, 30, 30, 0.7) 0%, rgba(30, 30, 30, 0.5) 100%);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .navbar .logo,
-    .navbar .theme-toggle,
-    .navbar .mobile-toggle {
-        color: white;
-    }
-
-    .navbar .logo .highlight {
-        color: var(--accent);
     }
 }
 
@@ -2031,8 +2011,8 @@ body.dark-mode .explore-card:hover {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.45));
-    /* Lighter gradient overlay */
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6));
+    /* Gradient overlay */
     z-index: 1;
 }
 
