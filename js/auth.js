@@ -1,15 +1,15 @@
 /**
- * YakaPlant Auth Module
+ * YakaPlant Auth Module (Supabase Version)
  * Manages authentication state across pages
  */
 
 // Current user state (cached)
 let currentUser = null;
+let currentProfile = null;
 let authChecked = false;
 
 /**
  * Check if user is logged in
- * Fetches /api/me to verify session
  * @returns {Promise<object|null>} User object or null
  */
 async function checkAuth() {
@@ -18,12 +18,32 @@ async function checkAuth() {
     }
 
     try {
-        const data = await window.YakaAPI.user.getMe();
-        currentUser = data.user;
+        const { data: { user }, error } = await window.YakaSupabase.auth.getUser();
+
+        if (error || !user) {
+            currentUser = null;
+            currentProfile = null;
+            authChecked = true;
+            return null;
+        }
+
+        currentUser = user;
+
+        // Fetch profile data
+        const { data: profile } = await window.YakaSupabase
+            .from('profiles')
+            .select('*')
+            .eq('id', user.id)
+            .single();
+
+        currentProfile = profile;
         authChecked = true;
-        return currentUser;
+
+        return { ...user, profile };
     } catch (err) {
+        console.error('Auth check error:', err);
         currentUser = null;
+        currentProfile = null;
         authChecked = true;
         return null;
     }
@@ -31,10 +51,16 @@ async function checkAuth() {
 
 /**
  * Get current user (from cache)
- * Call checkAuth first to ensure fresh data
  */
 function getUser() {
     return currentUser;
+}
+
+/**
+ * Get current user profile
+ */
+function getProfile() {
+    return currentProfile;
 }
 
 /**
@@ -48,14 +74,92 @@ function isLoggedIn() {
  * Check if user has PRO role
  */
 function isPro() {
-    return currentUser && ['landscape_architect', 'company'].includes(currentUser.role);
+    return currentProfile && ['landscape_architect', 'company'].includes(currentProfile.role);
 }
 
 /**
  * Check if user is Admin
  */
 function isAdmin() {
-    return currentUser && currentUser.role === 'admin';
+    return currentProfile && currentProfile.role === 'admin';
+}
+
+/**
+ * Register new user
+ * @param {object} userData - { email, password, name, surname, phone?, city?, role?, company_name? }
+ */
+async function register(userData) {
+    const { email, password, name, surname, phone, city, role, company_name } = userData;
+
+    // Sign up with Supabase Auth
+    const { data: authData, error: authError } = await window.YakaSupabase.auth.signUp({
+        email,
+        password,
+        options: {
+            data: {
+                name,
+                surname
+            }
+        }
+    });
+
+    if (authError) {
+        throw new Error(authError.message);
+    }
+
+    if (!authData.user) {
+        throw new Error('Kayıt işlemi başarısız oldu');
+    }
+
+    // Create profile
+    const { error: profileError } = await window.YakaSupabase
+        .from('profiles')
+        .insert({
+            id: authData.user.id,
+            name,
+            surname,
+            phone: phone || null,
+            city: city || null,
+            role: role || 'customer',
+            company_name: company_name || null
+        });
+
+    if (profileError) {
+        console.error('Profile creation error:', profileError);
+        // Don't throw - user is created, profile can be fixed later
+    }
+
+    return authData;
+}
+
+/**
+ * Login user
+ * @param {object} credentials - { email, password }
+ */
+async function login(credentials) {
+    const { email, password } = credentials;
+
+    const { data, error } = await window.YakaSupabase.auth.signInWithPassword({
+        email,
+        password
+    });
+
+    if (error) {
+        // Translate common errors
+        if (error.message.includes('Invalid login credentials')) {
+            throw new Error('E-posta veya şifre hatalı');
+        }
+        if (error.message.includes('Email not confirmed')) {
+            throw new Error('Lütfen e-posta adresinizi doğrulayın');
+        }
+        throw new Error(error.message);
+    }
+
+    currentUser = data.user;
+    authChecked = false; // Force re-fetch profile
+    await checkAuth();
+
+    return data;
 }
 
 /**
@@ -63,23 +167,22 @@ function isAdmin() {
  */
 async function logout() {
     try {
-        await window.YakaAPI.auth.logout();
+        await window.YakaSupabase.auth.signOut();
     } catch (err) {
         console.error('Logout error:', err);
     }
     currentUser = null;
+    currentProfile = null;
     authChecked = false;
     window.location.href = '/index.html';
 }
 
 /**
  * Redirect to login if not authenticated
- * Use on protected pages
  */
 async function requireAuth() {
     const user = await checkAuth();
     if (!user) {
-        // Save current URL for redirect after login
         sessionStorage.setItem('redirectAfterLogin', window.location.href);
         window.location.href = '/login.html';
         return null;
@@ -89,7 +192,6 @@ async function requireAuth() {
 
 /**
  * Redirect to account if already logged in
- * Use on login/register pages
  */
 async function redirectIfLoggedIn() {
     const user = await checkAuth();
@@ -110,16 +212,12 @@ function getRedirectUrl() {
 /**
  * Update navbar based on auth state
  */
-/**
- * Update navbar based on auth state
- */
 async function updateNavbar() {
     const user = await checkAuth();
     const navLinks = document.querySelector('.nav-links');
 
     if (!navLinks) return;
 
-    // Find or create auth container
     let authContainer = document.getElementById('nav-auth-container');
     if (!authContainer) {
         authContainer = document.createElement('li');
@@ -127,13 +225,12 @@ async function updateNavbar() {
         navLinks.appendChild(authContainer);
     }
 
-    if (user) {
-        // Logged in: Show account dropdown
+    if (user && currentProfile) {
         authContainer.innerHTML = `
             <div class="nav-dropdown">
                 <button class="nav-link nav-dropdown-trigger">
                     <i class="ph ph-user-circle"></i>
-                    <span>${user.name}</span>
+                    <span>${currentProfile.name || user.email}</span>
                     <i class="ph ph-caret-down"></i>
                 </button>
                 <div class="nav-dropdown-menu">
@@ -166,7 +263,6 @@ async function updateNavbar() {
             </div>
         `;
 
-        // Add dropdown toggle logic
         const trigger = authContainer.querySelector('.nav-dropdown-trigger');
         const menu = authContainer.querySelector('.nav-dropdown-menu');
 
@@ -175,7 +271,6 @@ async function updateNavbar() {
             menu.classList.toggle('show');
         });
 
-        // Close on outside click
         document.addEventListener('click', (e) => {
             if (!authContainer.contains(e.target)) {
                 menu.classList.remove('show');
@@ -183,7 +278,6 @@ async function updateNavbar() {
         });
 
     } else {
-        // Not logged in: Show login/register buttons
         authContainer.innerHTML = `
             <a href="/login.html" class="nav-link auth-link">
                 <i class="ph ph-sign-in"></i> Giriş Yap
@@ -192,21 +286,63 @@ async function updateNavbar() {
     }
 }
 
+/**
+ * Reset password request
+ * @param {string} email
+ */
+async function forgotPassword(email) {
+    const { error } = await window.YakaSupabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password.html`
+    });
+
+    if (error) {
+        throw new Error(error.message);
+    }
+}
+
+/**
+ * Update password
+ * @param {string} newPassword
+ */
+async function updatePassword(newPassword) {
+    const { error } = await window.YakaSupabase.auth.updateUser({
+        password: newPassword
+    });
+
+    if (error) {
+        throw new Error(error.message);
+    }
+}
+
 // Export
 window.YakaAuth = {
     checkAuth,
     getUser,
+    getProfile,
     isLoggedIn,
     isPro,
     isAdmin,
+    register,
+    login,
     logout,
     requireAuth,
     redirectIfLoggedIn,
     getRedirectUrl,
-    updateNavbar
+    updateNavbar,
+    forgotPassword,
+    updatePassword
 };
 
 // Auto-update navbar on page load
 document.addEventListener('DOMContentLoaded', () => {
     window.YakaAuth.updateNavbar();
+});
+
+// Listen for auth state changes
+window.YakaSupabase?.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_OUT') {
+        currentUser = null;
+        currentProfile = null;
+        authChecked = false;
+    }
 });

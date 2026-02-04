@@ -153,34 +153,40 @@
     <div id="toast-container"></div>
 
     <!-- Scripts -->
-    <script src="../js/api.js"></script>
-    <script src="../js/auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase.js"></script>
     <script src="../js/ui.js"></script>
+    <script src="../js/auth.js"></script>
     <script>
         // Require authentication
         (async () => {
             const user = await YakaAuth.requireAuth();
             if (!user) return;
 
+            const profile = YakaAuth.getProfile();
+            if (!profile) return;
+
             // Populate user info
-            document.getElementById('user-name').textContent = `${user.name} ${user.surname}`;
-            document.getElementById('user-role').textContent = YakaUI.getRoleName(user.role);
-            document.getElementById('user-role').className = `role-badge role-${user.role}`;
+            document.getElementById('user-name').textContent = `${profile.name || ''} ${profile.surname || ''}`;
+            document.getElementById('user-role').textContent = YakaUI.getRoleName(profile.role);
+            document.getElementById('user-role').className = `role-badge role-${profile.role}`;
 
             // Form values
-            document.getElementById('name').value = user.name;
-            document.getElementById('surname').value = user.surname;
-            document.getElementById('email').value = user.email;
-            document.getElementById('phone').value = user.phone || '';
-            document.getElementById('city').value = user.city || '';
-            document.getElementById('company_name').value = user.company_name || '';
+            document.getElementById('name').value = profile.name || '';
+            document.getElementById('surname').value = profile.surname || '';
+            document.getElementById('email').value = user.email || '';
+            document.getElementById('phone').value = profile.phone || '';
+            document.getElementById('city').value = profile.city || '';
+            document.getElementById('company_name').value = profile.company_name || '';
 
             // Account info
-            document.getElementById('account-type').textContent = YakaUI.getRoleName(user.role);
-            document.getElementById('member-since').textContent = YakaUI.formatDate(user.created_at);
+            document.getElementById('account-type').textContent = YakaUI.getRoleName(profile.role);
+            document.getElementById('member-since').textContent = profile.created_at
+                ? new Date(profile.created_at).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' })
+                : '-';
 
             // Show company section for company users
-            if (user.role === 'company') {
+            if (profile.role === 'company') {
                 document.querySelector('.company-section').style.display = 'block';
             }
 
@@ -207,11 +213,18 @@
             YakaUI.setButtonLoading(submitBtn, true);
 
             try {
-                const result = await YakaAPI.user.updateProfile(data);
+                const user = YakaAuth.getUser();
+                const { error } = await window.YakaSupabase
+                    .from('profiles')
+                    .update(data)
+                    .eq('id', user.id);
+
+                if (error) throw new Error(error.message);
+
                 YakaUI.toast.success('Profiliniz güncellendi');
 
                 // Update sidebar name
-                document.getElementById('user-name').textContent = `${result.user.name} ${result.user.surname}`;
+                document.getElementById('user-name').textContent = `${data.name} ${data.surname}`;
 
             } catch (err) {
                 YakaUI.toast.error(err.message);
