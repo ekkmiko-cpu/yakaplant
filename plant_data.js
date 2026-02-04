@@ -1156,5 +1156,25 @@ plantCatalog.push(
         humidity: 'Düşük',
         petFriendly: true,
         temp: '-10-35°C'
+    },
+    {
+        id: 'amerikan-sarmasigi',
+        category: 'cali',
+        title: 'Amerikan Sarmaşığı',
+        scientific: 'Parthenocissus quinquefolia',
+        desc: `<p><strong>Sonbahar Ressamı</strong><br>
+        Beş parçalı yaprakları ile tanınan, çok hızlı büyüyen ve tırmanıcı bir sarmaşıktır. En çarpıcı özelliği, sonbaharda yeşil yapraklarının muhteşem bir kızıla dönüşmesidir. Duvarları, çitleri ve çardakları hızla kaplar.</p>
+        <p><strong>Peyzajda Kullanımı:</strong><br>
+        Çirkin duvarları gizlemek, binalara ısı yalıtımı sağlamak (yazın serin, kışın yaprak döker) ve dikey bahçeler oluşturmak için mükemmeldir. Vantuzları sayesinde destek istemeden duvara tırmanabilir.</p>
+        <p><strong>Bakım İpuçları:</strong><br>
+        Güneşli veya yarı gölge alanlarda yetişir. Gölgede sonbahar renkleri daha az canlı olur. Susuzluğa dayanıklıdır ancak düzenli sulamada daha hızlı gelişir. Kontrolsüz yayılmasını önlemek için budama gerekebilir.</p>`,
+        env: 'Güneş / Yarı gölge',
+        water: 'Orta',
+        price: 'Bize Ulaşın',
+        image: 'assets/products/amerikan-sarmasigi-1.png',
+        difficulty: 'Kolay',
+        humidity: 'Normal',
+        petFriendly: false,
+        temp: '-20-30°C'
     }
 );
