@@ -33,7 +33,22 @@ async function apiRequest(endpoint, options = {}) {
 
     try {
         const response = await fetch(url, config);
-        const data = await response.json();
+
+        // Try to parse JSON, but handle non-JSON responses
+        let data;
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            data = await response.json();
+        } else {
+            // Non-JSON response (e.g., HTML error page from Vercel)
+            const text = await response.text();
+            if (!response.ok) {
+                const error = new Error('Sunucu şu anda erişilebilir değil. Lütfen daha sonra tekrar deneyin.');
+                error.status = response.status;
+                throw error;
+            }
+            data = { message: text };
+        }
 
         if (!response.ok) {
             // Create error with message from API
@@ -46,7 +61,7 @@ async function apiRequest(endpoint, options = {}) {
         return data;
 
     } catch (err) {
-        // Network error
+        // Network error or fetch failed
         if (!err.status) {
             err.message = 'Sunucuya bağlanılamadı. İnternet bağlantınızı kontrol edin.';
         }
