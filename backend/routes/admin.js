@@ -6,6 +6,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
+const { checkSupabaseAdminAccess } = require('../config/supabaseAdmin');
 
 /**
  * Middleware: Check if user is admin
@@ -103,6 +104,23 @@ router.put('/quotes/:id/status', requireAdmin, (req, res) => {
         console.error('Quote update error:', err);
         res.status(500).json({ error: 'Güncelleme başarısız' });
     }
+});
+
+/**
+ * GET /supabase/health - Verify server-side Supabase admin access
+ */
+router.get('/supabase/health', requireAdmin, async (req, res) => {
+    const status = await checkSupabaseAdminAccess();
+
+    if (!status.configured) {
+        return res.status(503).json(status);
+    }
+
+    if (!status.ok) {
+        return res.status(502).json(status);
+    }
+
+    res.json(status);
 });
 
 module.exports = router;
