@@ -9,6 +9,24 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
     : '/api';
 
 /**
+ * Get current Supabase user if available.
+ * Returns null when user is not logged in or Supabase is not initialized.
+ */
+async function getSupabaseUser() {
+    if (!window.YakaSupabase || !window.YakaSupabase.auth) {
+        return null;
+    }
+
+    try {
+        const { data, error } = await window.YakaSupabase.auth.getUser();
+        if (error || !data?.user) return null;
+        return data.user;
+    } catch (err) {
+        return null;
+    }
+}
+
+/**
  * Generic API request function
  * @param {string} endpoint - API endpoint (without /api prefix)
  * @param {object} options - Fetch options
@@ -147,30 +165,97 @@ const favoritesAPI = {
     /**
      * Get all favorites
      */
-    getAll: () => apiRequest('/favorites'),
+    getAll: async () => {
+        const user = await getSupabaseUser();
+        if (user) {
+            const { data, error } = await window.YakaSupabase
+                .from('favorites')
+                .select('product_id, created_at')
+                .eq('user_id', user.id)
+                .order('created_at', { ascending: false });
+
+            if (error) throw new Error(error.message);
+            return { favorites: data || [] };
+        }
+
+        return apiRequest('/favorites');
+    },
 
     /**
      * Add product to favorites
      * @param {string} productId
      */
-    add: (productId) => apiRequest('/favorites', {
-        method: 'POST',
-        body: { product_id: productId }
-    }),
+    add: async (productId) => {
+        const user = await getSupabaseUser();
+        if (user) {
+            const { data: existing, error: existsError } = await window.YakaSupabase
+                .from('favorites')
+                .select('id')
+                .eq('user_id', user.id)
+                .eq('product_id', productId)
+                .limit(1);
+
+            if (existsError) throw new Error(existsError.message);
+            if (existing && existing.length > 0) {
+                return { message: 'Ürün zaten favorilerde', product_id: productId };
+            }
+
+            const { error } = await window.YakaSupabase
+                .from('favorites')
+                .insert({ user_id: user.id, product_id: productId });
+
+            if (error) throw new Error(error.message);
+            return { message: 'Favorilere eklendi', product_id: productId };
+        }
+
+        return apiRequest('/favorites', {
+            method: 'POST',
+            body: { product_id: productId }
+        });
+    },
 
     /**
      * Remove product from favorites
      * @param {string} productId
      */
-    remove: (productId) => apiRequest(`/favorites/${productId}`, {
-        method: 'DELETE'
-    }),
+    remove: async (productId) => {
+        const user = await getSupabaseUser();
+        if (user) {
+            const { error } = await window.YakaSupabase
+                .from('favorites')
+                .delete()
+                .eq('user_id', user.id)
+                .eq('product_id', productId);
+
+            if (error) throw new Error(error.message);
+            return { message: 'Favorilerden çıkarıldı' };
+        }
+
+        return apiRequest(`/favorites/${productId}`, {
+            method: 'DELETE'
+        });
+    },
 
     /**
      * Check if product is favorited
      * @param {string} productId
      */
-    check: (productId) => apiRequest(`/favorites/check/${productId}`)
+    check: async (productId) => {
+        const user = await getSupabaseUser();
+        if (user) {
+            const { data, error } = await window.YakaSupabase
+                .from('favorites')
+                .select('id')
+                .eq('user_id', user.id)
+                .eq('product_id', productId)
+                .limit(1);
+
+            if (error) throw new Error(error.message);
+            return { isFavorite: Boolean(data && data.length > 0) };
+        }
+
+        return apiRequest(`/favorites/check/${productId}`);
+    }
 };
 
 // =====================================================
