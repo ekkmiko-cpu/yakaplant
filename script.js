@@ -180,7 +180,7 @@ const renderShop = async (filter = 'all') => {
             <div class="product-image">
                 <img src="${plant.image}" alt="${plant.title}">
                 <button class="fav-btn ${isFav ? 'active' : ''}" data-id="${plant.id}" onclick="toggleFavorite(event, '${plant.id}')">
-                    <i class="ph ${isFav ? 'ph-heart-fill' : 'ph-heart'}" style="${isFav ? 'color: #2d6a4f;' : ''}"></i>
+                    <i class="${isFav ? 'ph-fill ph-heart' : 'ph ph-heart'}" style="${isFav ? 'color: #2d6a4f;' : ''}"></i>
                 </button>
                 <div class="add-btn-container">
                     <button class="add-btn"><i class="ph ph-plus"></i></button>
@@ -236,7 +236,7 @@ window.toggleFavorite = async (event, productId) => {
 
     // Update icon class and style immediately
     if (!wasActive) {
-        icon.className = 'ph ph-heart-fill';
+        icon.className = 'ph-fill ph-heart';
         icon.style.color = '#2d6a4f';
     } else {
         icon.className = 'ph ph-heart';
@@ -261,7 +261,7 @@ window.toggleFavorite = async (event, productId) => {
             icon.className = 'ph ph-heart';
             icon.style.color = '';
         } else {
-            icon.className = 'ph ph-heart-fill';
+            icon.className = 'ph-fill ph-heart';
             icon.style.color = '#2d6a4f';
         }
         if (typeof YakaUI !== 'undefined') YakaUI.toast.error('İşlem başarısız');
