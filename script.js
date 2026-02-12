@@ -148,11 +148,12 @@ const plantData = (typeof plantCatalog !== 'undefined') ? plantCatalog.reduce((a
 
 
 // --- RENDER SHOP FUNCTION ---
-const renderShop = async (filter = 'all') => {
+const renderShop = async (filter = 'all', options = {}) => {
     const grid = document.getElementById('product-grid');
     if (!grid) return;
 
     grid.innerHTML = '';
+    const withCardEntrance = Boolean(options.withCardEntrance);
 
     const filtered = filter === 'all'
         ? plantCatalog
@@ -172,10 +173,14 @@ const renderShop = async (filter = 'all') => {
         }
     }
 
-    filtered.forEach(plant => {
+    filtered.forEach((plant, index) => {
         const isFav = favorites.has(plant.id);
         const card = document.createElement('div');
         card.className = 'product-card reveal';
+        if (withCardEntrance) {
+            card.classList.add('shop-card-enter');
+            card.style.setProperty('--shop-card-delay', `${Math.min(index * 45, 360)}ms`);
+        }
         card.innerHTML = `
             <div class="product-image">
                 <img src="${plant.image}" alt="${plant.title}">
@@ -268,22 +273,52 @@ window.toggleFavorite = async (event, productId) => {
     }
 };
 
-// Filter Button Listeners
-document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        // Toggle Active Class
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const shopFilterButtons = document.querySelectorAll('.shop-filters .filter-btn');
+const shopGrid = document.getElementById('product-grid');
+let currentShopFilter = document.querySelector('.shop-filters .filter-btn.active')?.getAttribute('data-category') || 'all';
+let isShopFilterTransitioning = false;
 
-        // Render
-        renderShop(btn.getAttribute('data-category'));
+if (shopFilterButtons.length > 0) {
+    shopFilterButtons.forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const nextFilter = btn.getAttribute('data-category');
+            if (!nextFilter || nextFilter === currentShopFilter || isShopFilterTransitioning) return;
+
+            isShopFilterTransitioning = true;
+            shopFilterButtons.forEach(b => b.disabled = true);
+
+            shopFilterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            if (shopGrid) {
+                shopGrid.classList.add('shop-grid-transition-out');
+                await wait(220);
+            }
+
+            await renderShop(nextFilter, { withCardEntrance: true });
+
+            if (shopGrid) {
+                shopGrid.classList.remove('shop-grid-transition-out');
+                shopGrid.classList.add('shop-grid-transition-in');
+                requestAnimationFrame(() => {
+                    shopGrid.classList.add('shop-grid-transition-in-active');
+                });
+                await wait(320);
+                shopGrid.classList.remove('shop-grid-transition-in', 'shop-grid-transition-in-active');
+            }
+
+            currentShopFilter = nextFilter;
+            shopFilterButtons.forEach(b => b.disabled = false);
+            isShopFilterTransitioning = false;
+        });
     });
-});
+}
 
 // Initial Render
 document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('product-grid')) {
-        renderShop('all');
+        renderShop(currentShopFilter || 'all');
     }
 });
 
