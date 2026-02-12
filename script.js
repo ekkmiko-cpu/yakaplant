@@ -151,8 +151,6 @@ const plantData = (typeof plantCatalog !== 'undefined') ? plantCatalog.reduce((a
 const renderShop = async (filter = 'all', options = {}) => {
     const grid = document.getElementById('product-grid');
     if (!grid) return;
-
-    grid.innerHTML = '';
     const withCardEntrance = Boolean(options.withCardEntrance);
 
     const filtered = filter === 'all'
@@ -173,10 +171,12 @@ const renderShop = async (filter = 'all', options = {}) => {
         }
     }
 
+    const nextCardsFragment = document.createDocumentFragment();
+
     filtered.forEach((plant, index) => {
         const isFav = favorites.has(plant.id);
         const card = document.createElement('div');
-        card.className = 'product-card reveal';
+        card.className = 'product-card';
         if (withCardEntrance) {
             card.classList.add('shop-card-enter');
             card.style.setProperty('--shop-card-delay', `${Math.min(index * 45, 360)}ms`);
@@ -211,11 +211,12 @@ const renderShop = async (filter = 'all', options = {}) => {
             openModal(plant.id);
         });
 
-        grid.appendChild(card);
+        nextCardsFragment.appendChild(card);
     });
 
-    // Re-trigger scroll observer for new elements
-    document.querySelectorAll('.reveal').forEach(el => revealOnScroll.observe(el));
+    // Swap content only after the next state is fully prepared to avoid blank flashes.
+    grid.replaceChildren(nextCardsFragment);
+
 };
 
 // Global Favorite Toggle Function
@@ -293,7 +294,7 @@ if (shopFilterButtons.length > 0) {
 
             if (shopGrid) {
                 shopGrid.classList.add('shop-grid-transition-out');
-                await wait(220);
+                await wait(130);
             }
 
             await renderShop(nextFilter, { withCardEntrance: true });
