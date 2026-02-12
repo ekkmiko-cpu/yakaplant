@@ -377,7 +377,13 @@ const openModal = (plantKey) => {
     }
 
     // Populate Data
-    if (title_el) title_el.textContent = data.title;
+    if (title_el) {
+        const a = document.createElement('a');
+        a.className = 'modal-care-link';
+        a.href = `/bakim/${plantKey}.html`;
+        a.textContent = data.title;
+        title_el.replaceChildren(a);
+    }
     if (scientific_el) scientific_el.textContent = data.scientific;
     if (desc_el) desc_el.innerHTML = data.desc;
     if (img_el) {
@@ -497,6 +503,7 @@ document.addEventListener('keydown', (e) => {
         closeProductModal();
     }
 });
+
 
 
 // Attach Click Handlers to Products

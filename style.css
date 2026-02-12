@@ -2093,6 +2093,17 @@ body.dark-mode .explore-card:hover {
     flex-shrink: 0;
 }
 
+.modal-care-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.modal-care-link:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+}
+
 /* Typography */
 .scientific-name {
     font-size: 0.95rem;
