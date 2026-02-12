@@ -663,13 +663,12 @@ body.dark-mode .support-title {
 
 .fav-btn:hover {
     background: white;
-    color: #e63946;
-    /* Red */
+    color: var(--primary);
     transform: scale(1.1);
 }
 
 .fav-btn.active {
-    color: #e63946;
+    color: var(--primary);
     opacity: 1;
     transform: translateY(0);
 }
