@@ -220,16 +220,14 @@
             }
         }
 
-        async function requestQuote(productId) {
-            try {
-                await YakaAPI.quotes.create({
-                    product_ids: [productId],
-                    request_text: 'Favori bitkimle ilgili teklif almak istiyorum.'
-                });
-                YakaUI.toast.success('Teklif talebiniz alındı!');
-            } catch (err) {
-                YakaUI.toast.error(err.message);
-            }
+        function requestQuote(productId) {
+            const plant = plantCatalog.find(p => p.id === productId);
+            const plantName = plant ? plant.title : 'bu bitki';
+
+            const message = `Merhaba, ${plantName} bitkisi hakkında bilgi almak istiyorum.`;
+            const whatsappUrl = `https://wa.me/905318433309?text=${encodeURIComponent(message)}`;
+
+            window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
         }
     </script>
 
