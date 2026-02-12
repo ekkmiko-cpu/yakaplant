@@ -222,9 +222,10 @@
 
         function requestQuote(productId) {
             const plant = plantCatalog.find(p => p.id === productId);
-            const plantName = plant ? plant.title : 'bu bitki';
+            const plantName = plant ? plant.title : 'Bu bitki';
+            const scientificName = plant ? plant.scientific : 'Latince Adı';
 
-            const message = `Merhaba, ${plantName} bitkisi hakkında bilgi almak istiyorum.`;
+            const message = `Merhaba, ${plantName} (${scientificName}) bitkisi hakkında fiyat bilgisi almak istiyorum.`;
             const whatsappUrl = `https://wa.me/905318433309?text=${encodeURIComponent(message)}`;
 
             window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
