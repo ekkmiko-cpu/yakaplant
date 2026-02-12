@@ -4704,7 +4704,8 @@ body.dark-mode .search-dropdown .filter-btn.active {
     position: absolute;
     top: 100%;
     right: 0;
-    background: white;
+    background: var(--bg-white);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     min-width: 200px;
@@ -4745,8 +4746,31 @@ body.dark-mode .search-dropdown .filter-btn.active {
 
 .dropdown-divider {
     border: none;
-    border-top: 1px solid #eee;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
     margin: 0.5rem 0;
+}
+
+body.dark-mode .nav-dropdown-menu {
+    background: #1e1e1e;
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.55);
+}
+
+body.dark-mode .dropdown-item {
+    color: var(--text-main);
+}
+
+body.dark-mode .dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .dropdown-item.logout-btn:hover {
+    background: rgba(231, 76, 60, 0.18);
+    color: #ffb3ab;
+}
+
+body.dark-mode .dropdown-divider {
+    border-top-color: rgba(255, 255, 255, 0.12);
 }
 
 /* Auth Link in Navbar */
