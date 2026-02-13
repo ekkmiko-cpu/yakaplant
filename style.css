@@ -3093,6 +3093,107 @@ body.dark-mode .shop-filters .filter-btn.active {
     border-color: transparent;
 }
 
+/* Shop Search (Collection) */
+.shop-search {
+    max-width: 760px;
+    margin: 0 auto 1.25rem auto;
+    position: relative;
+    z-index: 11;
+}
+
+.shop-search-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem 1.1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(45, 106, 79, 0.12);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(248, 250, 252, 0.96) 100%);
+    box-shadow:
+        0 10px 30px rgba(45, 106, 79, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+}
+
+.shop-search-inner i.ph-magnifying-glass {
+    font-size: 1.25rem;
+    color: rgba(45, 106, 79, 0.85);
+    flex: 0 0 auto;
+}
+
+#shop-search {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--text-main);
+}
+
+#shop-search::placeholder {
+    color: rgba(82, 121, 111, 0.9);
+}
+
+.shop-search-clear {
+    border: none;
+    background: rgba(45, 106, 79, 0.08);
+    color: var(--primary-dark);
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.shop-search-clear:hover {
+    background: rgba(45, 106, 79, 0.14);
+    transform: scale(1.03);
+}
+
+.shop-search.has-value .shop-search-clear {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.shop-search-meta {
+    margin-top: 0.55rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    padding: 0 0.5rem;
+    min-height: 1.2em;
+}
+
+body.dark-mode .shop-search-inner {
+    background: linear-gradient(135deg, rgba(40, 40, 40, 0.82) 0%, rgba(30, 30, 30, 0.92) 100%);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+body.dark-mode .shop-search-inner i.ph-magnifying-glass {
+    color: rgba(183, 228, 199, 0.9);
+}
+
+body.dark-mode #shop-search::placeholder {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+body.dark-mode .shop-search-clear {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.85);
+}
+
+body.dark-mode .shop-search-clear:hover {
+    background: rgba(255, 255, 255, 0.14);
+}
+
 @media (prefers-reduced-motion: reduce) {
     .grid-gallery {
         transition: none;

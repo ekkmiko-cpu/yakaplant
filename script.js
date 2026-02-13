@@ -152,10 +152,43 @@ const renderShop = async (filter = 'all', options = {}) => {
     const grid = document.getElementById('product-grid');
     if (!grid) return;
     const withCardEntrance = Boolean(options.withCardEntrance);
+    const query = (options.query || '').trim();
 
-    const filtered = filter === 'all'
+    const normalizeStringSimple = (str) => {
+        return String(str || '')
+            .toLocaleLowerCase('tr-TR')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, "");
+    };
+
+    const stripHtmlSimple = (html) => {
+        return String(html || '')
+            .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, ' ')
+            .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, ' ')
+            .replace(/<\/?[^>]+>/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+    };
+
+    let filtered = filter === 'all'
         ? plantCatalog
         : plantCatalog.filter(p => p.category === filter);
+
+    if (query) {
+        const q = normalizeStringSimple(query);
+        filtered = filtered.filter(p => {
+            const hay = normalizeStringSimple([
+                p.title,
+                p.scientific,
+                p.category,
+                p.env,
+                p.water,
+                p.difficulty,
+                stripHtmlSimple(p.desc)
+            ].join(' '));
+            return hay.includes(q);
+        });
+    }
 
     // Fetch user favorites if logged in
     let favorites = new Set();
@@ -172,6 +205,22 @@ const renderShop = async (filter = 'all', options = {}) => {
     }
 
     const nextCardsFragment = document.createDocumentFragment();
+
+    if (filtered.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'product-card';
+        empty.style.gridColumn = '1 / -1';
+        empty.innerHTML = `
+            <div class="product-info" style="text-align:center; padding: 2.25rem 1.5rem;">
+                <h3 style="margin-bottom: 0.35rem;">Sonuç bulunamadı</h3>
+                <p class="scientific-name" style="margin-bottom: 1.1rem;">Farklı bir arama veya kategori deneyin.</p>
+                <a href="shop.html" class="btn btn-outline">Aramayı Temizle</a>
+            </div>
+        `;
+        nextCardsFragment.appendChild(empty);
+        grid.replaceChildren(nextCardsFragment);
+        return;
+    }
 
     filtered.forEach((plant, index) => {
         const isFav = favorites.has(plant.id);
@@ -278,6 +327,7 @@ const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const shopFilterButtons = document.querySelectorAll('.shop-filters .filter-btn');
 const shopGrid = document.getElementById('product-grid');
 let currentShopFilter = document.querySelector('.shop-filters .filter-btn.active')?.getAttribute('data-category') || 'all';
+let currentShopQuery = '';
 let isShopFilterTransitioning = false;
 
 if (shopFilterButtons.length > 0) {
@@ -297,7 +347,7 @@ if (shopFilterButtons.length > 0) {
                 await wait(130);
             }
 
-            await renderShop(nextFilter, { withCardEntrance: true });
+            await renderShop(nextFilter, { withCardEntrance: true, query: currentShopQuery });
 
             if (shopGrid) {
                 shopGrid.classList.remove('shop-grid-transition-out');
@@ -319,7 +369,68 @@ if (shopFilterButtons.length > 0) {
 // Initial Render
 document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('product-grid')) {
-        renderShop(currentShopFilter || 'all');
+        renderShop(currentShopFilter || 'all', { query: currentShopQuery });
+    }
+});
+
+// Shop Search: coordinated with category filters
+document.addEventListener('DOMContentLoaded', () => {
+    const searchWrap = document.querySelector('.shop-search');
+    const input = document.getElementById('shop-search');
+    const clearBtn = document.getElementById('shop-search-clear');
+    const meta = document.getElementById('shop-search-meta');
+    const grid = document.getElementById('product-grid');
+    if (!input || !grid) return;
+
+    let t = null;
+    const updateMeta = () => {
+        if (!meta) return;
+        if (!currentShopQuery && currentShopFilter === 'all') {
+            meta.textContent = '';
+            return;
+        }
+        const filterLabel = document.querySelector('.shop-filters .filter-btn.active')?.textContent?.trim() || '';
+        meta.textContent = `${filterLabel}${currentShopQuery ? ` • "${currentShopQuery}"` : ''}`;
+    };
+
+    const apply = async (withAnim) => {
+        updateMeta();
+        await renderShop(currentShopFilter || 'all', { withCardEntrance: Boolean(withAnim), query: currentShopQuery });
+    };
+
+    const setWrapState = () => {
+        if (!searchWrap) return;
+        if (input.value.trim()) searchWrap.classList.add('has-value');
+        else searchWrap.classList.remove('has-value');
+    };
+
+    setWrapState();
+    updateMeta();
+
+    input.addEventListener('input', () => {
+        currentShopQuery = input.value.trim();
+        setWrapState();
+        if (t) clearTimeout(t);
+        t = setTimeout(() => apply(true), 160);
+    });
+
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            input.value = '';
+            currentShopQuery = '';
+            setWrapState();
+            apply(true);
+        }
+    });
+
+    if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+            input.value = '';
+            currentShopQuery = '';
+            setWrapState();
+            input.focus();
+            apply(true);
+        });
     }
 });
 

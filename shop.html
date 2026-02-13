@@ -81,6 +81,19 @@
                 <p class="section-subtitle">En çok tercih edilen salon ve dış mekan süs bitkilerimiz.</p>
             </div>
 
+            <!-- Search (works together with category filters) -->
+            <div class="shop-search" role="search" aria-label="Koleksiyonda ara">
+                <div class="shop-search-inner">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <input id="shop-search" type="search" placeholder="Bitki ara (örn. zeytin, Olea)..."
+                        autocomplete="off" aria-label="Bitki ara" />
+                    <button id="shop-search-clear" class="shop-search-clear" type="button" aria-label="Aramayı temizle">
+                        <i class="ph ph-x"></i>
+                    </button>
+                </div>
+                <div id="shop-search-meta" class="shop-search-meta" aria-live="polite"></div>
+            </div>
+
             <!-- Filters -->
             <div class="shop-filters"
                 style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; position: relative; z-index: 10;">
