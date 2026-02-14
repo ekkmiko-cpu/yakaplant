@@ -224,6 +224,8 @@ const renderShop = async (filter = 'all', options = {}) => {
 
     filtered.forEach((plant, index) => {
         const isFav = favorites.has(plant.id);
+        const quoteMessage = `Merhaba, ${plant.title} (${plant.scientific}) bitkisi hakkında fiyat bilgisi almak istiyorum.`;
+        const quoteUrl = `https://wa.me/905318433309?text=${encodeURIComponent(quoteMessage)}`;
         const card = document.createElement('div');
         card.className = 'product-card';
         if (withCardEntrance) {
@@ -244,6 +246,7 @@ const renderShop = async (filter = 'all', options = {}) => {
                 <h3>${plant.title}</h3>
                 <p class="scientific-name">${plant.scientific}</p>
                 <a href="contact.html" class="btn-order">Sipariş İçin İletişime Geç <i class="ph ph-whatsapp-logo"></i></a>
+                <a href="${quoteUrl}" class="btn-quote" target="_blank" rel="noopener">Teklif İste <i class="ph ph-whatsapp-logo"></i></a>
             </div>
         `;
 

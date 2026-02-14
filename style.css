@@ -2347,6 +2347,37 @@ body.dark-mode .modal-info strong {
     font-size: 1.2rem;
 }
 
+/* Shop Quote Button (WhatsApp) */
+.btn-quote {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.2rem;
+    background: var(--primary);
+    color: white;
+    border: 2px solid var(--primary);
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    text-decoration: none;
+    transition: var(--transition);
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    width: 100%;
+    justify-content: center;
+    box-shadow: 0 10px 24px rgba(45, 106, 79, 0.22);
+}
+
+.btn-quote:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(45, 106, 79, 0.26);
+}
+
+.btn-quote i {
+    font-size: 1.2rem;
+}
+
 /* Modern Contact Page Styles */
 
 /* Wrapper for Split Layout */
@@ -5361,6 +5392,15 @@ body.dark-mode .legal-footer {
     }
 
     .btn-order {
+        width: 100%;
+        justify-content: center;
+        padding: 0.65rem 0.85rem;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        line-height: 1.1;
+    }
+
+    .btn-quote {
         width: 100%;
         justify-content: center;
         padding: 0.65rem 0.85rem;
