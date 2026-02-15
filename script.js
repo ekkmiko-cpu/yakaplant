@@ -244,7 +244,7 @@ const renderShop = async (filter = 'all', options = {}) => {
         }
         card.innerHTML = `
             <div class="product-image">
-                <img src="${plant.image}" alt="${plant.title}">
+                <img src="${plant.image}" alt="${plant.title}" loading="${index < 4 ? 'eager' : 'lazy'}" decoding="async" fetchpriority="${index < 2 ? 'high' : 'auto'}">
                 <button class="fav-btn ${isFav ? 'active' : ''}" data-id="${plant.id}" onclick="toggleFavorite(event, '${plant.id}')">
                     <i class="${isFav ? 'ph-fill ph-heart' : 'ph ph-heart'}" style="${isFav ? 'color: #2d6a4f;' : ''}"></i>
                 </button>
@@ -700,7 +700,7 @@ const renderDropdown = (results) => {
             const item = document.createElement('div');
             item.className = 'search-result-item';
             item.innerHTML = `
-                <img src="${plant.image}" alt="${plant.title}">
+                <img src="${plant.image}" alt="${plant.title}" loading="lazy" decoding="async">
                 <div>
                     <div style="font-weight: 500; color: var(--primary-dark);">${plant.title}</div>
                     <div style="font-size: 0.8rem; color: var(--text-muted); font-style: italic;">${plant.scientific}</div>
@@ -726,7 +726,7 @@ const selectPlant = (key) => {
     searchResultContainer.innerHTML = `
         <div class="product-card" id="search-result-card" style="cursor: pointer;">
             <div class="product-image">
-                <img src="${plant.image}" alt="${plant.title}" style="width: 100%; height: 100%; object-fit: contain; padding: 1rem; background: #f8f9fa;">
+                <img src="${plant.image}" alt="${plant.title}" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: contain; padding: 1rem; background: #f8f9fa;">
             </div>
             <div class="product-info">
                 <h3>${plant.title}</h3>
@@ -895,7 +895,7 @@ const renderSearchResults = (plants) => {
         // Assuming openModal is globally available or defined earlier
         card.innerHTML = `
             <div class="product-image">
-                 <img src="${plant.image}" alt="${plant.title}">
+                 <img src="${plant.image}" alt="${plant.title}" loading="lazy" decoding="async">
                  <div class="product-overlay">
                     <button class="add-btn" onclick="openModal('${plant.id}')">
                         <i class="ph ph-eye"></i> İncele
