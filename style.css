@@ -17,6 +17,7 @@
 
     --bg-body: #f8f9fa;
     --bg-white: #ffffff;
+    --bg-light: #f8f9fa;
     --bg-glass: rgba(255, 255, 255, 0.8);
 
     --text-main: #1b4332;
@@ -48,6 +49,7 @@ body.dark-mode {
     color-scheme: dark;
     --bg-body: #121212;
     --bg-white: #1e1e1e;
+    --bg-light: #121212;
     --bg-glass: rgba(30, 30, 30, 0.8);
 
     --text-main: #e0e0e0;
@@ -4085,7 +4087,7 @@ body.dark-mode .search-dropdown .filter-btn.active {
 
 /* Sidebar */
 .account-sidebar {
-    background: white;
+    background: var(--bg-white);
     border-radius: 16px;
     padding: 1.5rem;
     height: fit-content;
@@ -4190,7 +4192,7 @@ body.dark-mode .search-dropdown .filter-btn.active {
 
 /* Account Content */
 .account-content {
-    background: white;
+    background: var(--bg-white);
     border-radius: 16px;
     padding: 2rem;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
@@ -4311,7 +4313,7 @@ body.dark-mode .search-dropdown .filter-btn.active {
 }
 
 .favorite-card {
-    background: white;
+    background: var(--bg-white);
     border: 1px solid #eee;
     border-radius: 16px;
     overflow: hidden;
@@ -4341,7 +4343,7 @@ body.dark-mode .search-dropdown .filter-btn.active {
     right: 0.75rem;
     width: 32px;
     height: 32px;
-    background: white;
+    background: var(--bg-white);
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -5117,6 +5119,129 @@ body.dark-mode .search-result-item div[style*="color: var(--primary-dark)"] {
 /* Dark Mode - Product Modal Stats */
 body.dark-mode .stat-info strong {
     color: white !important;
+}
+
+/* Dark Mode - Account Pages */
+body.dark-mode .account-page {
+    background: var(--bg-body);
+}
+
+body.dark-mode .account-sidebar,
+body.dark-mode .account-content,
+body.dark-mode .favorite-card {
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
+}
+
+body.dark-mode .account-sidebar {
+    border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+body.dark-mode .sidebar-header,
+body.dark-mode .account-header,
+body.dark-mode .account-form .form-section {
+    border-bottom-color: rgba(255, 255, 255, 0.10);
+}
+
+body.dark-mode .sidebar-divider {
+    border-top-color: rgba(255, 255, 255, 0.10);
+}
+
+body.dark-mode .sidebar-header h3,
+body.dark-mode .account-header h1,
+body.dark-mode .account-form .form-section h3,
+body.dark-mode .favorite-info h4,
+body.dark-mode .project-header h4,
+body.dark-mode .info-value,
+body.dark-mode .request-text {
+    color: var(--text-main);
+}
+
+body.dark-mode .account-header p,
+body.dark-mode .favorite-info .scientific,
+body.dark-mode .info-label,
+body.dark-mode .request-id,
+body.dark-mode .request-date,
+body.dark-mode .project-notes,
+body.dark-mode .btn-icon {
+    color: var(--text-muted);
+}
+
+body.dark-mode .account-form input,
+body.dark-mode .account-form textarea {
+    background: #121212;
+    border-color: rgba(255, 255, 255, 0.14);
+    color: var(--text-main);
+}
+
+body.dark-mode .account-form input:focus,
+body.dark-mode .account-form textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.25);
+}
+
+body.dark-mode .account-form input:disabled {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.55);
+}
+
+body.dark-mode .role-badge.role-landscape_architect,
+body.dark-mode .role-badge.role-company {
+    background: rgba(45, 106, 79, 0.22);
+    color: #b7e4c7;
+}
+
+body.dark-mode .logout-link:hover {
+    background: rgba(231, 76, 60, 0.18);
+    color: #ffb3ab;
+}
+
+body.dark-mode .request-card,
+body.dark-mode .project-card {
+    border-color: rgba(255, 255, 255, 0.10);
+}
+
+body.dark-mode .request-card:hover,
+body.dark-mode .project-card:hover {
+    border-color: rgba(45, 106, 79, 0.7);
+}
+
+body.dark-mode .remove-favorite {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+}
+
+body.dark-mode .badge-success {
+    background: rgba(34, 197, 94, 0.18);
+    color: #86efac;
+}
+
+body.dark-mode .badge-warning {
+    background: rgba(245, 158, 11, 0.18);
+    color: #fdba74;
+}
+
+body.dark-mode .badge-danger {
+    background: rgba(239, 68, 68, 0.18);
+    color: #fca5a5;
+}
+
+body.dark-mode .status-warning {
+    background: rgba(245, 158, 11, 0.18);
+    color: #fdba74;
+}
+
+body.dark-mode .status-info {
+    background: rgba(14, 165, 233, 0.18);
+    color: #7dd3fc;
+}
+
+body.dark-mode .status-success {
+    background: rgba(34, 197, 94, 0.18);
+    color: #86efac;
+}
+
+body.dark-mode .status-secondary {
+    background: rgba(255, 255, 255, 0.10);
+    color: rgba(255, 255, 255, 0.72);
 }
 
 /* =============================================================================
