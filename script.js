@@ -11,7 +11,9 @@ const toggleTheme = () => {
     const isDark = document.body.classList.contains('dark-mode');
 
     // Update Icon - Using innerHTML to ensure we re-render the icon correctly if libraries mess with it
-    themeToggle.innerHTML = isDark ? '<i class="ph ph-sun"></i>' : '<i class="ph ph-moon"></i>';
+    if (themeToggle) {
+        themeToggle.innerHTML = isDark ? '<i class="ph ph-sun"></i>' : '<i class="ph ph-moon"></i>';
+    }
 
     // Save preference
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
@@ -21,37 +23,45 @@ const toggleTheme = () => {
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme === 'dark') {
     document.body.classList.add('dark-mode');
-    themeToggle.innerHTML = '<i class="ph ph-sun"></i>';
+    if (themeToggle) {
+        themeToggle.innerHTML = '<i class="ph ph-sun"></i>';
+    }
 }
 
-themeToggle.addEventListener('click', toggleTheme);
+if (themeToggle) {
+    themeToggle.addEventListener('click', toggleTheme);
+}
 
 // Toggle Mobile Menu
 
 // Toggle Mobile Menu
-mobileToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
+if (mobileToggle && navLinks) {
+    mobileToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
 
-    // Toggle icon between list and x
-    const icon = mobileToggle.querySelector('i');
-    if (navLinks.classList.contains('active')) {
-        icon.classList.replace('ph-list', 'ph-x');
-    } else {
-        icon.classList.replace('ph-x', 'ph-list');
-    }
-});
-
-// Close mobile menu when a link is clicked
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-        navLinks.classList.remove('active');
+        // Toggle icon between list and x
         const icon = mobileToggle.querySelector('i');
-        icon.classList.replace('ph-x', 'ph-list');
+        if (!icon) return;
+        if (navLinks.classList.contains('active')) {
+            icon.classList.replace('ph-list', 'ph-x');
+        } else {
+            icon.classList.replace('ph-x', 'ph-list');
+        }
     });
-});
+
+    // Close mobile menu when a link is clicked (scope to the menu)
+    navLinks.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            const icon = mobileToggle.querySelector('i');
+            if (icon) icon.classList.replace('ph-x', 'ph-list');
+        });
+    });
+}
 
 // Navbar scroll effect
 window.addEventListener('scroll', () => {
+    if (!header) return;
     if (window.scrollY > 50) {
         header.style.boxShadow = '0 4px 6px rgba(0,0,0,0.05)';
     } else {

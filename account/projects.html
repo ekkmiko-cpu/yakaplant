@@ -32,11 +32,26 @@
     <nav class="navbar">
         <div class="container nav-container">
             <a href="/" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
-            <ul class="nav-links">
+            <ul class="nav-links" id="nav-links">
                 <li><a href="/" class="nav-link">Ana Sayfa</a></li>
                 <li><a href="/shop" class="nav-link">Koleksiyon</a></li>
                 <li><a href="/care" class="nav-link">Bakım Rehberi</a></li>
+                <!-- Auth container (populated by auth.js) -->
+                <li id="nav-auth-container">
+                    <a href="/login" class="nav-link auth-link">
+                        <i class="ph ph-sign-in"></i> Giriş Yap
+                    </a>
+                </li>
             </ul>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod">
+                    <i class="ph ph-moon"></i>
+                </button>
+                <button class="mobile-toggle" aria-label="Menüyü Aç" id="mobile-toggle">
+                    <i class="ph ph-list"></i>
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -157,6 +172,7 @@
     <script src="../js/api.js"></script>
     <script src="../js/ui.js"></script>
     <script src="../js/auth.js"></script>
+    <script src="/script.js"></script>
     <script>
         const projectsGrid = document.getElementById('projects-grid');
         const emptyState = document.getElementById('empty-state');
