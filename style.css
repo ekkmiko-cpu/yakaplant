@@ -3768,11 +3768,18 @@ body.dark-mode .search-dropdown .filter-btn.active {
 .toggle-password {
     position: absolute;
     right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
     background: none;
     border: none;
     cursor: pointer;
     color: var(--text-muted);
     padding: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .toggle-password:hover {
