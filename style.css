@@ -5023,6 +5023,13 @@ body.dark-mode .dropdown-divider {
 
     .form-row {
         flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 1rem;
+    }
+
+    .form-row .form-group {
+        width: 100%;
     }
 
     .favorites-grid,
@@ -5032,6 +5039,47 @@ body.dark-mode .dropdown-divider {
 
     .info-grid {
         grid-template-columns: 1fr;
+    }
+
+    /* Account pages: cleaner mobile layout */
+    .account-page {
+        padding: 1rem 0;
+    }
+
+    .account-sidebar {
+        padding: 1.25rem;
+        border-radius: 14px;
+    }
+
+    .account-content {
+        padding: 1.25rem;
+        border-radius: 14px;
+    }
+
+    .sidebar-nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.6rem;
+    }
+
+    .sidebar-link {
+        min-width: 0;
+        width: 100%;
+        flex: initial;
+        padding: 0.85rem 0.75rem;
+        font-size: 0.95rem;
+        text-align: center;
+        flex-direction: column;
+        gap: 0.35rem;
+        line-height: 1.15;
+    }
+
+    .sidebar-link i {
+        font-size: 1.15rem;
+    }
+
+    .sidebar-nav .logout-link {
+        grid-column: 1 / -1;
     }
 }
 
