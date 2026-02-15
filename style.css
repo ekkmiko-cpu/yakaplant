@@ -3079,8 +3079,9 @@ body.dark-mode .premium-form input:focus {
 }
 
 .shop-filters .filter-btn:disabled {
-    cursor: wait;
-    opacity: 0.85;
+    /* Don't show "loading" cursor on click; JS already guards rapid switches. */
+    cursor: pointer;
+    opacity: 0.75;
 }
 
 .shop-filters .filter-btn.active {

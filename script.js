@@ -163,6 +163,7 @@ const renderShop = async (filter = 'all', options = {}) => {
     if (!grid) return;
     const withCardEntrance = Boolean(options.withCardEntrance);
     const query = (options.query || '').trim();
+    lastShopRenderState = { filter, query };
 
     const normalizeStringSimple = (str) => {
         return String(str || '')
@@ -200,19 +201,9 @@ const renderShop = async (filter = 'all', options = {}) => {
         });
     }
 
-    // Fetch user favorites if logged in
-    let favorites = new Set();
-    const user = typeof YakaAuth !== 'undefined' ? YakaAuth.getUser() : null;
-    if (user) {
-        try {
-            const data = await YakaAPI.favorites.getAll();
-            if (data.favorites) {
-                data.favorites.forEach(f => favorites.add(f.product_id));
-            }
-        } catch (err) {
-            console.error('Failed to fetch favorites', err);
-        }
-    }
+    // Favorites: use cached values to keep filtering snappy. Load in background if needed.
+    ensureShopFavoritesLoaded();
+    const favorites = shopFavoritesSet || new Set();
 
     const nextCardsFragment = document.createDocumentFragment();
 
@@ -279,6 +270,11 @@ const renderShop = async (filter = 'all', options = {}) => {
     // Swap content only after the next state is fully prepared to avoid blank flashes.
     grid.replaceChildren(nextCardsFragment);
 
+    // If favorites finished loading while we were rendering, patch heart states.
+    if (shopFavoritesSet) {
+        applyFavoritesToGrid(grid, shopFavoritesSet);
+    }
+
 };
 
 // Global Favorite Toggle Function
@@ -306,9 +302,11 @@ window.toggleFavorite = async (event, productId) => {
     if (!wasActive) {
         icon.className = 'ph-fill ph-heart';
         icon.style.color = '#2d6a4f';
+        if (shopFavoritesSet) shopFavoritesSet.add(productId);
     } else {
         icon.className = 'ph ph-heart';
         icon.style.color = '';
+        if (shopFavoritesSet) shopFavoritesSet.delete(productId);
     }
 
     try {
@@ -328,9 +326,11 @@ window.toggleFavorite = async (event, productId) => {
         if (!wasActive) {
             icon.className = 'ph ph-heart';
             icon.style.color = '';
+            if (shopFavoritesSet) shopFavoritesSet.delete(productId);
         } else {
             icon.className = 'ph-fill ph-heart';
             icon.style.color = '#2d6a4f';
+            if (shopFavoritesSet) shopFavoritesSet.add(productId);
         }
         if (typeof YakaUI !== 'undefined') YakaUI.toast.error('İşlem başarısız');
     }
@@ -343,6 +343,51 @@ let currentShopFilter = document.querySelector('.shop-filters .filter-btn.active
 let currentShopQuery = '';
 let isShopFilterTransitioning = false;
 
+// Favorites caching: avoid refetching on every filter/search change.
+let shopFavoritesSet = null;
+let shopFavoritesPromise = null;
+let lastShopRenderState = { filter: 'all', query: '' };
+
+function applyFavoritesToGrid(gridEl, favSet) {
+    if (!gridEl || !favSet) return;
+    gridEl.querySelectorAll('.fav-btn').forEach(btn => {
+        const id = btn.getAttribute('data-id');
+        if (!id) return;
+        const icon = btn.querySelector('i');
+        const isFav = favSet.has(id);
+        btn.classList.toggle('active', isFav);
+        if (icon) {
+            icon.className = isFav ? 'ph-fill ph-heart' : 'ph ph-heart';
+            icon.style.color = isFav ? '#2d6a4f' : '';
+        }
+    });
+}
+
+function ensureShopFavoritesLoaded() {
+    const user = (typeof YakaAuth !== 'undefined') ? YakaAuth.getUser() : null;
+    if (!user) return;
+    if (shopFavoritesSet) return;
+    if (shopFavoritesPromise) return;
+
+    shopFavoritesPromise = (async () => {
+        try {
+            const data = await YakaAPI.favorites.getAll();
+            const s = new Set();
+            if (data?.favorites) data.favorites.forEach(f => s.add(f.product_id));
+            shopFavoritesSet = s;
+
+            // If shop grid is currently showing, patch in heart states without re-rendering.
+            const grid = document.getElementById('product-grid');
+            if (grid) applyFavoritesToGrid(grid, shopFavoritesSet);
+        } catch (err) {
+            console.error('Failed to fetch favorites', err);
+            shopFavoritesSet = new Set();
+        } finally {
+            shopFavoritesPromise = null;
+        }
+    })();
+}
+
 if (shopFilterButtons.length > 0) {
     shopFilterButtons.forEach(btn => {
         btn.addEventListener('click', async () => {
@@ -350,7 +395,6 @@ if (shopFilterButtons.length > 0) {
             if (!nextFilter || nextFilter === currentShopFilter || isShopFilterTransitioning) return;
 
             isShopFilterTransitioning = true;
-            shopFilterButtons.forEach(b => b.disabled = true);
 
             shopFilterButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
@@ -373,7 +417,6 @@ if (shopFilterButtons.length > 0) {
             }
 
             currentShopFilter = nextFilter;
-            shopFilterButtons.forEach(b => b.disabled = false);
             isShopFilterTransitioning = false;
         });
     });
