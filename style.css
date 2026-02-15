@@ -5078,8 +5078,9 @@ body.dark-mode .dropdown-divider {
         font-size: 1.15rem;
     }
 
+    /* Keep logout as a normal grid item so it fills the empty slot (2x2) */
     .sidebar-nav .logout-link {
-        grid-column: 1 / -1;
+        grid-column: auto;
     }
 }
 
