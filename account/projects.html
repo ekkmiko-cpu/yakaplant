@@ -174,10 +174,18 @@
                 return;
             }
 
-            // Update sidebar
-            document.getElementById('user-name').textContent = `${user.name} ${user.surname}`;
-            document.getElementById('user-role').textContent = YakaUI.getRoleName(user.role);
-            document.getElementById('user-role').className = `role-badge role-${user.role}`;
+            const profile = YakaAuth.getProfile() || user.profile || null;
+            const displayName = [
+                profile?.name,
+                profile?.surname
+            ].filter(Boolean).join(' ') || user?.user_metadata?.name || user?.email || 'Kullanıcı';
+
+            // Update sidebar (use profile, not auth user fields)
+            document.getElementById('user-name').textContent = displayName;
+            if (profile?.role) {
+                document.getElementById('user-role').textContent = YakaUI.getRoleName(profile.role);
+                document.getElementById('user-role').className = `role-badge role-${profile.role}`;
+            }
 
             // Load projects
             await loadProjects();
