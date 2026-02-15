@@ -3812,6 +3812,17 @@ body.dark-mode .search-dropdown .filter-btn.active {
     accent-color: var(--primary);
 }
 
+/* Legal links inside register checkbox */
+.terms-checkbox a {
+    color: var(--primary);
+    text-decoration: none;
+    text-underline-offset: 3px;
+}
+
+.terms-checkbox a:hover {
+    text-decoration: underline;
+}
+
 .forgot-link {
     font-size: 0.9rem;
     color: var(--primary);
