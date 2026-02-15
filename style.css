@@ -5184,6 +5184,187 @@ body.dark-mode .search-result-item div[style*="color: var(--primary-dark)"] {
     color: var(--text-light) !important;
 }
 
+/* =============================================================================
+   CITY PICKER (Mobile)
+   ============================================================================= */
+
+.city-picker {
+    position: fixed;
+    inset: 0;
+    display: none;
+    z-index: 2000;
+}
+
+.city-picker.show {
+    display: block;
+}
+
+.city-picker-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.city-picker-sheet {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-white);
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.22);
+    transform: translateY(12px);
+    opacity: 0;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    padding: 0.85rem 1rem 1rem 1rem;
+}
+
+.city-picker.show .city-picker-sheet {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.city-picker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.city-picker-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.city-picker-close {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: transparent;
+    color: var(--text-main);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.city-picker-search {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    border-radius: 14px;
+    padding: 0.8rem 0.9rem;
+    background: rgba(255, 255, 255, 0.65);
+    margin-bottom: 0.75rem;
+}
+
+.city-picker-search i {
+    color: var(--text-muted);
+    font-size: 1.15rem;
+}
+
+.city-picker-search input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--text-main);
+    font-size: 1rem;
+}
+
+.city-wheel {
+    position: relative;
+    height: 270px;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.75);
+}
+
+.city-wheel::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.city-wheel::before,
+.city-wheel::after {
+    content: '';
+    display: block;
+    height: 110px; /* spacer so items can snap to center */
+}
+
+.city-wheel-highlight {
+    pointer-events: none;
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 46px;
+    border-radius: 14px;
+    border: 1px solid rgba(45, 106, 79, 0.35);
+    background: rgba(45, 106, 79, 0.08);
+}
+
+.city-wheel-item {
+    height: 46px;
+    width: 100%;
+    scroll-snap-align: center;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    font-weight: 650;
+    letter-spacing: -0.2px;
+    cursor: pointer;
+}
+
+.city-wheel-item.is-selected {
+    color: var(--text-main);
+}
+
+.city-picker-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.85rem;
+}
+
+.city-picker-actions .btn {
+    flex: 1;
+    justify-content: center;
+}
+
+/* Dark mode */
+body.dark-mode .city-picker-backdrop {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+body.dark-mode .city-picker-sheet {
+    background: var(--bg-white);
+    border-top: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+body.dark-mode .city-picker-close {
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+body.dark-mode .city-picker-search {
+    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .city-wheel {
+    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+}
+
 /* Dark Mode - Product Modal Stats */
 body.dark-mode .stat-info strong {
     color: white !important;

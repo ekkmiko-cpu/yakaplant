@@ -69,6 +69,183 @@ window.addEventListener('scroll', () => {
     }
 });
 
+// =====================================================
+// City Picker (mobile wheel)
+// =====================================================
+
+const TURKIYE_SEHIRLERI = [
+    'Adana', 'Adıyaman', 'Afyonkarahisar', 'Ağrı', 'Aksaray', 'Amasya', 'Ankara', 'Antalya', 'Ardahan', 'Artvin',
+    'Aydın', 'Balıkesir', 'Bartın', 'Batman', 'Bayburt', 'Bilecik', 'Bingöl', 'Bitlis', 'Bolu', 'Burdur',
+    'Bursa', 'Çanakkale', 'Çankırı', 'Çorum', 'Denizli', 'Diyarbakır', 'Düzce', 'Edirne', 'Elazığ', 'Erzincan',
+    'Erzurum', 'Eskişehir', 'Gaziantep', 'Giresun', 'Gümüşhane', 'Hakkari', 'Hatay', 'Iğdır', 'Isparta', 'İstanbul',
+    'İzmir', 'Kahramanmaraş', 'Karabük', 'Karaman', 'Kars', 'Kastamonu', 'Kayseri', 'Kilis', 'Kırıkkale', 'Kırklareli',
+    'Kırşehir', 'Kocaeli', 'Konya', 'Kütahya', 'Malatya', 'Manisa', 'Mardin', 'Mersin', 'Muğla', 'Muş',
+    'Nevşehir', 'Niğde', 'Ordu', 'Osmaniye', 'Rize', 'Sakarya', 'Samsun', 'Siirt', 'Sinop', 'Sivas',
+    'Şanlıurfa', 'Şırnak', 'Tekirdağ', 'Tokat', 'Trabzon', 'Tunceli', 'Uşak', 'Van', 'Yalova', 'Yozgat', 'Zonguldak'
+];
+
+function setupCityPicker() {
+    const inputs = Array.from(document.querySelectorAll('input[name="city"], input#city')).filter(Boolean);
+    if (inputs.length === 0) return;
+
+    // Create modal once
+    let modal = document.getElementById('city-picker');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'city-picker';
+        modal.className = 'city-picker';
+        modal.innerHTML = `
+            <div class="city-picker-backdrop" data-close="1"></div>
+            <div class="city-picker-sheet" role="dialog" aria-modal="true" aria-label="Şehir seç">
+                <div class="city-picker-header">
+                    <div class="city-picker-title">Şehir Seç</div>
+                    <button type="button" class="city-picker-close" aria-label="Kapat" data-close="1">
+                        <i class="ph ph-x"></i>
+                    </button>
+                </div>
+                <div class="city-picker-search">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <input type="search" id="city-picker-search" placeholder="Şehir ara..." autocomplete="off" />
+                </div>
+                <div style="position: relative;">
+                    <div class="city-wheel" id="city-wheel"></div>
+                    <div class="city-wheel-highlight" aria-hidden="true"></div>
+                </div>
+                <div class="city-picker-actions">
+                    <button type="button" class="btn btn-secondary" data-close="1">İptal</button>
+                    <button type="button" class="btn btn-primary" id="city-picker-choose">Seç</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    const wheel = modal.querySelector('#city-wheel');
+    const search = modal.querySelector('#city-picker-search');
+    const chooseBtn = modal.querySelector('#city-picker-choose');
+    if (!wheel || !search || !chooseBtn) return;
+
+    let activeInput = null;
+    let cities = [...TURKIYE_SEHIRLERI];
+    let selectedCity = null;
+
+    const normalize = (s) => String(s || '')
+        .toLocaleLowerCase('tr-TR')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+
+    const renderWheel = (list) => {
+        wheel.replaceChildren();
+        const frag = document.createDocumentFragment();
+        for (const name of list) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'city-wheel-item';
+            btn.dataset.city = name;
+            btn.textContent = name;
+            btn.addEventListener('click', () => {
+                selectedCity = name;
+                if (activeInput) activeInput.value = name;
+                close();
+            });
+            frag.appendChild(btn);
+        }
+        wheel.appendChild(frag);
+    };
+
+    const getCenteredItem = () => {
+        const rect = wheel.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+        const el = document.elementFromPoint(x, y);
+        return el ? el.closest('.city-wheel-item') : null;
+    };
+
+    const updateSelectedFromScroll = () => {
+        const centered = getCenteredItem();
+        if (!centered) return;
+        const city = centered.dataset.city;
+        if (!city) return;
+        selectedCity = city;
+        wheel.querySelectorAll('.city-wheel-item.is-selected').forEach(n => n.classList.remove('is-selected'));
+        centered.classList.add('is-selected');
+    };
+
+    let scrollT = null;
+    wheel.addEventListener('scroll', () => {
+        if (scrollT) cancelAnimationFrame(scrollT);
+        scrollT = requestAnimationFrame(updateSelectedFromScroll);
+    }, { passive: true });
+
+    const open = (input) => {
+        activeInput = input;
+        cities = [...TURKIYE_SEHIRLERI];
+        search.value = '';
+        renderWheel(cities);
+
+        // Prevent mobile keyboard; allow desktop typing if needed.
+        const isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+        if (isMobile) {
+            input.setAttribute('readonly', '');
+            input.blur();
+        }
+
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+
+        // Scroll to current value if present
+        const current = (input.value || '').trim();
+        const targetCity = cities.find(c => normalize(c) === normalize(current)) || 'İstanbul';
+        const targetEl = wheel.querySelector(`.city-wheel-item[data-city="${CSS.escape(targetCity)}"]`);
+        if (targetEl) {
+            targetEl.scrollIntoView({ block: 'center' });
+            requestAnimationFrame(updateSelectedFromScroll);
+        }
+
+        // Focus search (so user can also type filter)
+        setTimeout(() => search.focus(), 50);
+    };
+
+    const close = () => {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+        activeInput = null;
+    };
+
+    // Close handlers
+    modal.querySelectorAll('[data-close="1"]').forEach(el => {
+        el.addEventListener('click', close);
+    });
+
+    // Choose button
+    chooseBtn.addEventListener('click', () => {
+        if (activeInput && selectedCity) activeInput.value = selectedCity;
+        close();
+    });
+
+    // Filter/search
+    search.addEventListener('input', () => {
+        const q = normalize(search.value.trim());
+        cities = q ? TURKIYE_SEHIRLERI.filter(c => normalize(c).includes(q)) : [...TURKIYE_SEHIRLERI];
+        renderWheel(cities);
+        requestAnimationFrame(updateSelectedFromScroll);
+    });
+
+    // Attach to inputs
+    inputs.forEach((input) => {
+        input.autocomplete = 'address-level2';
+        input.addEventListener('click', (e) => {
+            // Only open picker on touch-ish / small screens to avoid surprising desktop users.
+            const isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+            if (!isMobile) return;
+            e.preventDefault();
+            open(input);
+        });
+    });
+}
+
+document.addEventListener('DOMContentLoaded', setupCityPicker);
+
 // Form Submission (Mock)
 // Form Submission (Mock)
 if (contactForm) {
