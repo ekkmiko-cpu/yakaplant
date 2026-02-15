@@ -214,7 +214,7 @@ const renderShop = async (filter = 'all', options = {}) => {
             <div class="product-info" style="text-align:center; padding: 2.25rem 1.5rem;">
                 <h3 style="margin-bottom: 0.35rem;">Sonuç bulunamadı</h3>
                 <p class="scientific-name" style="margin-bottom: 1.1rem;">Farklı bir arama veya kategori deneyin.</p>
-                <a href="shop.html" class="btn btn-outline">Aramayı Temizle</a>
+                <a href="/shop" class="btn btn-outline">Aramayı Temizle</a>
             </div>
         `;
         nextCardsFragment.appendChild(empty);
@@ -245,7 +245,7 @@ const renderShop = async (filter = 'all', options = {}) => {
             <div class="product-info">
                 <h3>${plant.title}</h3>
                 <p class="scientific-name">${plant.scientific}</p>
-                <a href="contact.html" class="btn-order">Sipariş İçin İletişime Geç <i class="ph ph-whatsapp-logo"></i></a>
+                <a href="/contact" class="btn-order">Sipariş İçin İletişime Geç <i class="ph ph-whatsapp-logo"></i></a>
                 <a href="${quoteUrl}" class="btn-quote" target="_blank" rel="noopener">Teklif İste <i class="ph ph-whatsapp-logo"></i></a>
             </div>
         `;
@@ -487,14 +487,14 @@ const openModal = (plantKey) => {
     const ctaBtn = modal_local.querySelector('.modal-footer .btn');
     if (ctaBtn) {
         ctaBtn.innerHTML = `Sipariş için İletişime Geç <i class="ph ph-whatsapp-logo"></i>`;
-        ctaBtn.href = "contact.html";
+        ctaBtn.href = "/contact";
     }
 
     // Populate Data
     if (title_el) {
         const a = document.createElement('a');
         a.className = 'modal-care-link';
-        a.href = `/bakim/${plantKey}.html`;
+        a.href = `/bakim/${plantKey}`;
         a.textContent = data.title;
         title_el.replaceChildren(a);
     }
@@ -767,7 +767,7 @@ const openCareModal = (key) => {
     openModal(key);
     // Override the footer text for Care Guide context
     if (modalCtaText) {
-        modalCtaText.innerHTML = 'Sorununu bulamadın mı? <a href="contact.html">Bizimle iletişime geç!</a>';
+        modalCtaText.innerHTML = 'Sorununu bulamadın mı? <a href="/contact">Bizimle iletişime geç!</a>';
     }
 };
 

@@ -57,7 +57,7 @@
           "url": "https://www.yakaplant.com",
           "potentialAction": {
             "@type": "SearchAction",
-            "target": "https://www.yakaplant.com/care.html?q={search_term_string}",
+            "target": "https://www.yakaplant.com/care?q={search_term_string}",
             "query-input": "required name=search_term_string"
           }
         },
@@ -69,28 +69,28 @@
               "position": 1,
               "name": "Koleksiyon",
               "description": "En özel bitki koleksiyonumuzu keşfedin.",
-              "url": "https://www.yakaplant.com/shop.html"
+              "url": "https://www.yakaplant.com/shop"
             },
             {
               "@type": "SiteNavigationElement",
               "position": 2,
               "name": "Bakım Rehberi",
               "description": "Bitkileriniz için detaylı bakım ipuçları.",
-              "url": "https://www.yakaplant.com/care.html"
+              "url": "https://www.yakaplant.com/care"
             },
             {
                 "@type": "SiteNavigationElement",
                 "position": 3,
                 "name": "Hakkımızda",
                 "description": "Yakaplant'ın hikayesi ve vizyonu.",
-                "url": "https://www.yakaplant.com/about.html"
+                "url": "https://www.yakaplant.com/about"
             },
             {
                 "@type": "SiteNavigationElement",
                 "position": 4,
                 "name": "İletişim",
                 "description": "Bizimle iletişime geçin.",
-                "url": "https://www.yakaplant.com/contact.html"
+                "url": "https://www.yakaplant.com/contact"
             }
           ]
         }
@@ -104,17 +104,17 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container nav-container">
-            <a href="index.html" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+            <a href="/" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
 
             <ul class="nav-links" id="nav-links">
-                <li><a href="index.html" class="nav-link">Ana Sayfa</a></li>
-                <li><a href="about.html" class="nav-link">Hakkımızda</a></li>
-                <li><a href="care.html" class="nav-link">Bakım Rehberi</a></li>
-                <li><a href="shop.html" class="nav-link">Koleksiyon</a></li>
-                <li><a href="contact.html" class="nav-link button-primary">İletişim</a></li>
+                <li><a href="/" class="nav-link">Ana Sayfa</a></li>
+                <li><a href="/about" class="nav-link">Hakkımızda</a></li>
+                <li><a href="/care" class="nav-link">Bakım Rehberi</a></li>
+                <li><a href="/shop" class="nav-link">Koleksiyon</a></li>
+                <li><a href="/contact" class="nav-link button-primary">İletişim</a></li>
                 <!-- Auth container (populated by auth.js) -->
                 <li id="nav-auth-container">
-                    <a href="login.html" class="nav-link auth-link">
+                    <a href="/login" class="nav-link auth-link">
                         <i class="ph ph-sign-in"></i> Giriş Yap
                     </a>
                 </li>
@@ -149,10 +149,10 @@
         </h1>
 
         <div class="hero-btn-group">
-            <a href="shop.html" class="modern-hero-btn">
+            <a href="/shop" class="modern-hero-btn">
                 Koleksiyonu Keşfet <i class="ph ph-arrow-right"></i>
             </a>
-            <a href="contact.html" class="modern-hero-btn">
+            <a href="/contact" class="modern-hero-btn">
                 İletişime Geç <i class="ph ph-chat-circle-dots"></i>
             </a>
 
@@ -215,7 +215,7 @@
 
         <div class="bento-grid">
             <!-- Large Item: Collection -->
-            <a href="shop.html" class="bento-item bento-large reveal">
+            <a href="/shop" class="bento-item bento-large reveal">
                 <img src="assets/collection_bg.png" alt="Koleksiyon">
                 <!-- Using hero image as placeholder for collection focus -->
                 <div class="bento-overlay">
@@ -225,7 +225,7 @@
             </a>
 
             <!-- Tall Item: Care -->
-            <a href="care.html" class="bento-item bento-tall reveal">
+            <a href="/care" class="bento-item bento-tall reveal">
                 <!-- We need a distinct image ideally, creating a colored placeholder block via style if no image available, or reusing asset -->
                 <img src="assets/care_bg.png" alt="Bakım Rehberi" style="filter: grayscale(20%);">
                 <div class="bento-overlay">
@@ -235,7 +235,7 @@
             </a>
 
             <!-- Wide Item: About -->
-            <a href="about.html" class="bento-item bento-wide reveal">
+            <a href="/about" class="bento-item bento-wide reveal">
                 <img src="assets/about_bg.png" alt="Hakkımızda">
                 <div class="bento-overlay">
                     <h3>Hakkımızda</h3>
@@ -253,7 +253,7 @@
     <div class="container">
         <div class="footer-content">
             <div class="footer-brand">
-                <a href="index.html" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+                <a href="/" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
                 <p>© 2024 Tüm hakları saklıdır.</p>
             </div>
             <div class="social-links">

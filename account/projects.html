@@ -7,7 +7,7 @@
     <title>Projelerim | YakaPlant</title>
     <meta name="description" content="YakaPlant proje yönetimi.">
     <meta name="robots" content="noindex, nofollow" />
-    <link rel="canonical" href="https://www.yakaplant.com/account/projects.html" />
+    <link rel="canonical" href="https://www.yakaplant.com/account/projects" />
 
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -31,11 +31,11 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container nav-container">
-            <a href="../index.html" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+            <a href="/" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
             <ul class="nav-links">
-                <li><a href="../index.html" class="nav-link">Ana Sayfa</a></li>
-                <li><a href="../shop.html" class="nav-link">Koleksiyon</a></li>
-                <li><a href="../care.html" class="nav-link">Bakım Rehberi</a></li>
+                <li><a href="/" class="nav-link">Ana Sayfa</a></li>
+                <li><a href="/shop" class="nav-link">Koleksiyon</a></li>
+                <li><a href="/care" class="nav-link">Bakım Rehberi</a></li>
             </ul>
         </div>
     </nav>
@@ -57,16 +57,16 @@
                     </div>
 
                     <nav class="sidebar-nav">
-                        <a href="index.html" class="sidebar-link">
+                        <a href="/account" class="sidebar-link">
                             <i class="ph ph-user-circle"></i> Profilim
                         </a>
-                        <a href="favorites.html" class="sidebar-link">
+                        <a href="/account/favorites" class="sidebar-link">
                             <i class="ph ph-heart"></i> Favorilerim
                         </a>
-                        <a href="requests.html" class="sidebar-link">
+                        <a href="/account/requests" class="sidebar-link">
                             <i class="ph ph-file-text"></i> Teklif Taleplerim
                         </a>
-                        <a href="projects.html" class="sidebar-link active">
+                        <a href="/account/projects" class="sidebar-link active">
                             <i class="ph ph-folder"></i> Projelerim
                         </a>
                         <hr class="sidebar-divider">
@@ -170,7 +170,7 @@
 
             // Check PRO role
             if (!YakaAuth.isPro()) {
-                window.location.href = 'index.html';
+                window.location.href = '/account';
                 return;
             }
 
@@ -225,7 +225,7 @@
                             <span><i class="ph ph-calendar"></i> ${YakaUI.formatRelativeTime(project.updated_at)}</span>
                         </div>
                         <div class="project-footer">
-                            <a href="../shop.html?project=${project.id}" class="btn btn-sm btn-secondary">
+                            <a href="/shop?project=${project.id}" class="btn btn-sm btn-secondary">
                                 <i class="ph ph-plus"></i> Bitki Ekle
                             </a>
                             <button onclick="requestProjectQuote(${project.id})" class="btn btn-sm btn-primary">

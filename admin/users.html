@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
     <meta name="robots" content="noindex, nofollow" />
-    <link rel="canonical" href="https://www.yakaplant.com/admin/users.html" />
+    <link rel="canonical" href="https://www.yakaplant.com/admin/users" />
     <title>Kullanıcılar - Yönetim Paneli</title>
     <link rel="stylesheet" href="../style.css">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -217,15 +217,15 @@
             </div>
 
             <nav class="admin-nav">
-                <a href="index.html">
+                <a href="/admin">
                     <i class="ph ph-squares-four"></i>
                     <span>Genel Bakış</span>
                 </a>
-                <a href="users.html" class="active">
+                <a href="/admin/users" class="active">
                     <i class="ph ph-users"></i>
                     <span>Kullanıcılar</span>
                 </a>
-                <a href="quotes.html">
+                <a href="/admin/quotes">
                     <i class="ph ph-file-text"></i>
                     <span>Teklifler</span>
                 </a>
@@ -263,7 +263,7 @@
             try {
                 const meResponse = await fetch('/api/me', { credentials: 'include' });
                 if (!meResponse.ok) {
-                    window.location.href = '/login.html';
+                    window.location.href = '/login';
                     return;
                 }
 

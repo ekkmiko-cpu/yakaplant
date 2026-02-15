@@ -7,7 +7,7 @@
     <title>Üye Ol | YakaPlant</title>
     <meta name="description" content="YakaPlant'a üye olun ve bitkilerinizi profesyonelce yetiştirin.">
     <meta name="robots" content="noindex, nofollow" />
-    <link rel="canonical" href="https://www.yakaplant.com/register.html" />
+    <link rel="canonical" href="https://www.yakaplant.com/register" />
 
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -31,11 +31,11 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container nav-container">
-            <a href="index.html" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+            <a href="/" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
             <ul class="nav-links">
-                <li><a href="index.html" class="nav-link">Ana Sayfa</a></li>
-                <li><a href="shop.html" class="nav-link">Koleksiyon</a></li>
-                <li><a href="care.html" class="nav-link">Bakım Rehberi</a></li>
+                <li><a href="/" class="nav-link">Ana Sayfa</a></li>
+                <li><a href="/shop" class="nav-link">Koleksiyon</a></li>
+                <li><a href="/care" class="nav-link">Bakım Rehberi</a></li>
             </ul>
         </div>
     </nav>
@@ -167,7 +167,7 @@
                         <label class="checkbox-wrapper terms-checkbox">
                             <input type="checkbox" name="terms" required>
                             <span class="checkmark"></span>
-                            <a href="terms.html" target="_blank">Kullanım şartlarını</a> ve <a href="privacy.html"
+                            <a href="/terms" target="_blank">Kullanım şartlarını</a> ve <a href="/privacy"
                                 target="_blank">gizlilik
                                 politikasını</a> kabul ediyorum
                         </label>
@@ -183,7 +183,7 @@
                     </form>
 
                     <div class="auth-footer">
-                        <p>Zaten hesabınız var mı? <a href="login.html">Giriş Yapın</a></p>
+                        <p>Zaten hesabınız var mı? <a href="/login">Giriş Yapın</a></p>
                     </div>
                 </div>
             </div>
@@ -275,7 +275,7 @@
                 YakaUI.toast.success('Kayıt başarılı! Giriş yapabilirsiniz.');
 
                 setTimeout(() => {
-                    window.location.href = '/login.html';
+                    window.location.href = '/login';
                 }, 1500);
 
             } catch (err) {

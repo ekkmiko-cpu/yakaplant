@@ -33,18 +33,18 @@ function main() {
 
   // Core pages
   entries.push(url(`${SITE_ORIGIN}/`, 'weekly', '1.0'));
-  entries.push(url(`${SITE_ORIGIN}/shop.html`, 'weekly', '0.9'));
-  entries.push(url(`${SITE_ORIGIN}/care.html`, 'monthly', '0.8'));
-  entries.push(url(`${SITE_ORIGIN}/bakim/index.html`, 'weekly', '0.8'));
-  entries.push(url(`${SITE_ORIGIN}/about.html`, 'monthly', '0.7'));
-  entries.push(url(`${SITE_ORIGIN}/contact.html`, 'monthly', '0.7'));
-  entries.push(url(`${SITE_ORIGIN}/privacy.html`, 'yearly', '0.4'));
-  entries.push(url(`${SITE_ORIGIN}/terms.html`, 'yearly', '0.4'));
+  entries.push(url(`${SITE_ORIGIN}/shop`, 'weekly', '0.9'));
+  entries.push(url(`${SITE_ORIGIN}/care`, 'monthly', '0.8'));
+  entries.push(url(`${SITE_ORIGIN}/bakim`, 'weekly', '0.8'));
+  entries.push(url(`${SITE_ORIGIN}/about`, 'monthly', '0.7'));
+  entries.push(url(`${SITE_ORIGIN}/contact`, 'monthly', '0.7'));
+  entries.push(url(`${SITE_ORIGIN}/privacy`, 'yearly', '0.4'));
+  entries.push(url(`${SITE_ORIGIN}/terms`, 'yearly', '0.4'));
 
   // Plant care pages
   for (const p of plants) {
     if (!p || !p.id) continue;
-    entries.push(url(`${SITE_ORIGIN}/bakim/${p.id}.html`, 'monthly', '0.6'));
+    entries.push(url(`${SITE_ORIGIN}/bakim/${p.id}`, 'monthly', '0.6'));
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n` +
@@ -57,4 +57,3 @@ function main() {
 }
 
 main();
-

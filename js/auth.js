@@ -174,7 +174,7 @@ async function logout() {
     currentUser = null;
     currentProfile = null;
     authChecked = false;
-    window.location.href = '/index.html';
+    window.location.href = '/';
 }
 
 /**
@@ -184,7 +184,7 @@ async function requireAuth() {
     const user = await checkAuth();
     if (!user) {
         sessionStorage.setItem('redirectAfterLogin', window.location.href);
-        window.location.href = '/login.html';
+        window.location.href = '/login';
         return null;
     }
     return user;
@@ -196,7 +196,7 @@ async function requireAuth() {
 async function redirectIfLoggedIn() {
     const user = await checkAuth();
     if (user) {
-        window.location.href = '/account/index.html';
+        window.location.href = '/account';
     }
 }
 
@@ -206,7 +206,7 @@ async function redirectIfLoggedIn() {
 function getRedirectUrl() {
     const url = sessionStorage.getItem('redirectAfterLogin');
     sessionStorage.removeItem('redirectAfterLogin');
-    return url || '/account/index.html';
+    return url || '/account';
 }
 
 /**
@@ -235,23 +235,23 @@ async function updateNavbar() {
                 </button>
                 <div class="nav-dropdown-menu">
                     ${isAdmin() ? `
-                    <a href="/admin/index.html" class="dropdown-item" style="color:var(--primary); font-weight:600;">
+                    <a href="/admin" class="dropdown-item" style="color:var(--primary); font-weight:600;">
                         <i class="ph ph-squares-four"></i> Yönetim Paneli
                     </a>
                     <hr class="dropdown-divider">
                     ` : ''}
                     
-                    <a href="/account/index.html" class="dropdown-item">
+                    <a href="/account" class="dropdown-item">
                         <i class="ph ph-user"></i> Profilim
                     </a>
-                    <a href="/account/favorites.html" class="dropdown-item">
+                    <a href="/account/favorites" class="dropdown-item">
                         <i class="ph ph-heart"></i> Favorilerim
                     </a>
-                    <a href="/account/requests.html" class="dropdown-item">
+                    <a href="/account/requests" class="dropdown-item">
                         <i class="ph ph-file-text"></i> Teklif Taleplerim
                     </a>
                     ${isPro() ? `
-                    <a href="/account/projects.html" class="dropdown-item">
+                    <a href="/account/projects" class="dropdown-item">
                         <i class="ph ph-folder"></i> Projelerim
                     </a>
                     ` : ''}
@@ -279,7 +279,7 @@ async function updateNavbar() {
 
     } else {
         authContainer.innerHTML = `
-            <a href="/login.html" class="nav-link auth-link">
+            <a href="/login" class="nav-link auth-link">
                 <i class="ph ph-sign-in"></i> Giriş Yap
             </a>
         `;
@@ -292,7 +292,7 @@ async function updateNavbar() {
  */
 async function forgotPassword(email) {
     const { error } = await window.YakaSupabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password.html`
+        redirectTo: `${window.location.origin}/reset-password`
     });
 
     if (error) {

@@ -54,7 +54,7 @@ function yesNo(val) {
 
 function pageTemplate(plant) {
   const title = `${plant.title} Bakımı | Yakaplant`;
-  const canonicalPath = `/bakim/${plant.id}.html`;
+  const canonicalPath = `/bakim/${plant.id}`;
   const canonicalUrl = `${SITE_ORIGIN}${canonicalPath}`;
   const metaDesc = buildMetaDescription(plant);
 
@@ -115,13 +115,13 @@ function pageTemplate(plant) {
 <body>
   <nav class="navbar">
     <div class="container nav-container">
-      <a href="/index.html" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+      <a href="/" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
       <ul class="nav-links" id="nav-links">
-        <li><a href="/index.html" class="nav-link">Ana Sayfa</a></li>
-        <li><a href="/about.html" class="nav-link">Hakkımızda</a></li>
-        <li><a href="/care.html" class="nav-link">Bakım Rehberi</a></li>
-        <li><a href="/shop.html" class="nav-link">Koleksiyon</a></li>
-        <li><a href="/contact.html" class="nav-link button-primary">İletişim</a></li>
+        <li><a href="/" class="nav-link">Ana Sayfa</a></li>
+        <li><a href="/about" class="nav-link">Hakkımızda</a></li>
+        <li><a href="/care" class="nav-link">Bakım Rehberi</a></li>
+        <li><a href="/shop" class="nav-link">Koleksiyon</a></li>
+        <li><a href="/contact" class="nav-link button-primary">İletişim</a></li>
       </ul>
       <div class="nav-actions">
         <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod">
@@ -164,15 +164,15 @@ function pageTemplate(plant) {
             </div>
 
             <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.25rem;">
-              <a href="/shop.html" class="btn btn-secondary">Koleksiyona Dön</a>
-              <a href="/contact.html" class="btn btn-primary">Fiyat/Sipariş İçin İletişim</a>
+              <a href="/shop" class="btn btn-secondary">Koleksiyona Dön</a>
+              <a href="/contact" class="btn btn-primary">Fiyat/Sipariş İçin İletişim</a>
             </div>
           </div>
         </article>
       </div>
 
       <p style="max-width: 980px; margin: 1.25rem auto 0 auto; color: var(--text-muted); font-size: 0.95rem;">
-        Tüm bakım rehberleri için <a href="/bakim/index.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">bakım listesine</a> göz atın.
+        Tüm bakım rehberleri için <a href="/bakim" style="color: var(--primary); text-decoration: none; font-weight: 600;">bakım listesine</a> göz atın.
       </p>
     </div>
   </section>
@@ -181,7 +181,7 @@ function pageTemplate(plant) {
     <div class="container">
       <div class="footer-content">
         <div class="footer-brand">
-          <a href="/index.html" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+          <a href="/" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
           <p>© 2024 Tüm hakları saklıdır.</p>
         </div>
         <div class="social-links">
@@ -204,14 +204,14 @@ function pageTemplate(plant) {
 
 function indexTemplate(plants) {
   const title = 'Bitki Bakım Rehberleri | Yakaplant';
-  const canonicalUrl = `${SITE_ORIGIN}/bakim/index.html`;
+  const canonicalUrl = `${SITE_ORIGIN}/bakim`;
   const metaDesc = 'Yakaplant bitki bakım rehberleri: sulama, ışık, sıcaklık ve pratik ipuçları.';
 
   const items = plants
     .slice()
     .sort((a, b) => String(a.title).localeCompare(String(b.title), 'tr'))
     .map(p => {
-      const href = `/bakim/${p.id}.html`;
+      const href = `/bakim/${p.id}`;
       const label = `${p.title}${p.scientific ? ` (${p.scientific})` : ''}`;
       return `<li style="margin: 0.2rem 0;"><a href="${href}" style="color: inherit; text-decoration: none;"><strong>${escapeHtml(label)}</strong></a></li>`;
     })
@@ -239,13 +239,13 @@ function indexTemplate(plants) {
 <body>
   <nav class="navbar">
     <div class="container nav-container">
-      <a href="/index.html" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+      <a href="/" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
       <ul class="nav-links" id="nav-links">
-        <li><a href="/index.html" class="nav-link">Ana Sayfa</a></li>
-        <li><a href="/about.html" class="nav-link">Hakkımızda</a></li>
-        <li><a href="/care.html" class="nav-link">Bakım Rehberi</a></li>
-        <li><a href="/shop.html" class="nav-link">Koleksiyon</a></li>
-        <li><a href="/contact.html" class="nav-link button-primary">İletişim</a></li>
+        <li><a href="/" class="nav-link">Ana Sayfa</a></li>
+        <li><a href="/about" class="nav-link">Hakkımızda</a></li>
+        <li><a href="/care" class="nav-link">Bakım Rehberi</a></li>
+        <li><a href="/shop" class="nav-link">Koleksiyon</a></li>
+        <li><a href="/contact" class="nav-link button-primary">İletişim</a></li>
       </ul>
       <div class="nav-actions">
         <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod">
@@ -281,7 +281,7 @@ function indexTemplate(plants) {
     <div class="container">
       <div class="footer-content">
         <div class="footer-brand">
-          <a href="/index.html" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+          <a href="/" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
           <p>© 2024 Tüm hakları saklıdır.</p>
         </div>
         <div class="social-links">
