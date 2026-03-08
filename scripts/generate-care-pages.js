@@ -182,7 +182,7 @@ function pageTemplate(plant) {
       <div class="footer-content">
         <div class="footer-brand">
           <a href="/" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
-          <p>© 2024 Tüm hakları saklıdır.</p>
+          <p>© 2026 Tüm hakları saklıdır.</p>
         </div>
         <div class="social-links">
           <a href="https://www.instagram.com/yakaplant" target="_blank" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
@@ -282,7 +282,7 @@ function indexTemplate(plants) {
       <div class="footer-content">
         <div class="footer-brand">
           <a href="/" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
-          <p>© 2024 Tüm hakları saklıdır.</p>
+          <p>© 2026 Tüm hakları saklıdır.</p>
         </div>
         <div class="social-links">
           <a href="https://www.instagram.com/yakaplant" target="_blank" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
