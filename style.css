@@ -2122,7 +2122,7 @@ body.dark-mode .explore-card:hover {
 /* Slider Dots - fixed position within hero */
 .hero-dots {
     position: absolute;
-    bottom: 20px;
+    bottom: 32px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
