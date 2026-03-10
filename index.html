@@ -140,34 +140,116 @@
 </body>
 
 <!-- Hero Section -->
-<!-- 1. Modern Hero -->
+<!-- 1. Modern Hero with Slider -->
 <header class="modern-hero">
     <div class="hero-bg"></div>
+
+    <!-- Slider Arrows (on hero edges) -->
+    <button class="hero-arrow hero-arrow-left" aria-label="Önceki slayt">
+        <i class="ph ph-caret-left"></i>
+    </button>
+    <button class="hero-arrow hero-arrow-right" aria-label="Sonraki slayt">
+        <i class="ph ph-caret-right"></i>
+    </button>
+
     <div class="modern-hero-content">
-        <h1 class="modern-hero-title">
-            DOĞAYI <span class="highlight">TASARLA</span>
-        </h1>
+        <div class="hero-slider">
+            <!-- Slide 1: Mevcut içerik -->
+            <div class="hero-slide active">
+                <h1 class="modern-hero-title">
+                    DOĞAYI <span class="highlight">TASARLA</span>
+                </h1>
+                <div class="hero-btn-group">
+                    <a href="/shop" class="modern-hero-btn">
+                        Koleksiyonu Keşfet <i class="ph ph-arrow-right"></i>
+                    </a>
+                    <a href="/contact" class="modern-hero-btn">
+                        İletişime Geç <i class="ph ph-chat-circle-dots"></i>
+                    </a>
+                    <div class="hero-social-row">
+                        <a href="https://wa.me/905318433309" target="_blank" class="hero-social-link" aria-label="WhatsApp">
+                            <i class="ph ph-whatsapp-logo"></i>
+                        </a>
+                        <a href="https://www.instagram.com/yakaplant" target="_blank" class="hero-social-link" aria-label="Instagram">
+                            <i class="ph ph-instagram-logo"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
-        <div class="hero-btn-group">
-            <a href="/shop" class="modern-hero-btn">
-                Koleksiyonu Keşfet <i class="ph ph-arrow-right"></i>
-            </a>
-            <a href="/contact" class="modern-hero-btn">
-                İletişime Geç <i class="ph ph-chat-circle-dots"></i>
-            </a>
+            <!-- Slide 2: Instagram -->
+            <div class="hero-slide">
+                <img src="assets/instagram-screenshot.png" alt="Yakaplant Instagram" class="hero-instagram-img">
+                <p class="hero-slide-label">Bizi Instagram'da Takip Edin</p>
+                <a href="https://www.instagram.com/yakaplant" target="_blank" class="modern-hero-btn">
+                    Yakaplant <i class="ph ph-instagram-logo"></i>
+                </a>
+            </div>
 
-            <div class="hero-social-row">
-                <a href="https://wa.me/905318433309" target="_blank" class="hero-social-link" aria-label="WhatsApp">
-                    <i class="ph ph-whatsapp-logo"></i>
+            <!-- Slide 3: WhatsApp -->
+            <div class="hero-slide">
+                <i class="ph ph-whatsapp-logo hero-whatsapp-icon"></i>
+                <a href="https://wa.me/905318433309" target="_blank" class="modern-hero-btn hero-whatsapp-btn">
+                    İletişime Geç <i class="ph ph-arrow-right"></i>
                 </a>
-                <a href="https://www.instagram.com/yakaplant" target="_blank" class="hero-social-link"
-                    aria-label="Instagram">
-                    <i class="ph ph-instagram-logo"></i>
-                </a>
+            </div>
+
+            <!-- Slider Dots -->
+            <div class="hero-dots">
+                <button class="hero-dot active" aria-label="Slayt 1"></button>
+                <button class="hero-dot" aria-label="Slayt 2"></button>
+                <button class="hero-dot" aria-label="Slayt 3"></button>
             </div>
         </div>
     </div>
 </header>
+
+<!-- Hero Slider Script -->
+<script>
+(function() {
+    var slides = document.querySelectorAll('.hero-slide');
+    var dots = document.querySelectorAll('.hero-dot');
+    var arrowLeft = document.querySelector('.hero-arrow-left');
+    var arrowRight = document.querySelector('.hero-arrow-right');
+    if (!slides.length) return;
+
+    var current = 0;
+    var interval;
+
+    function goTo(i) {
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = i;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+    }
+
+    function next() { goTo((current + 1) % slides.length); }
+    function prev() { goTo((current - 1 + slides.length) % slides.length); }
+
+    function startAuto() { interval = setInterval(next, 5000); }
+    function resetAuto() { clearInterval(interval); startAuto(); }
+
+    dots.forEach(function(dot, i) {
+        dot.addEventListener('click', function() { goTo(i); resetAuto(); });
+    });
+
+    if (arrowLeft) arrowLeft.addEventListener('click', function() { prev(); resetAuto(); });
+    if (arrowRight) arrowRight.addEventListener('click', function() { next(); resetAuto(); });
+
+    var slider = document.querySelector('.hero-slider');
+    if (slider) {
+        var startX = 0;
+        slider.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; }, {passive: true});
+        slider.addEventListener('touchend', function(e) {
+            var diff = startX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) { diff > 0 ? next() : prev(); resetAuto(); }
+        }, {passive: true});
+    }
+
+    startAuto();
+})();
+</script>
 
 <!-- 2. Infinite Marquee (Turkish) -->
 <div class="marquee-strip">
