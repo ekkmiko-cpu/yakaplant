@@ -225,6 +225,16 @@ async function updateNavbar() {
         navLinks.appendChild(authContainer);
     }
 
+    // Translation helper for auth
+    var _t = function(key, fallback) {
+        if (typeof window.YakaLang !== 'undefined' && typeof translations !== 'undefined') {
+            var lang = window.YakaLang.get();
+            var val = key.split('.').reduce(function(obj, k) { return obj && obj[k] !== undefined ? obj[k] : null; }, translations[lang]);
+            if (val !== null) return val;
+        }
+        return fallback;
+    };
+
     if (user && currentProfile) {
         authContainer.innerHTML = `
             <div class="nav-dropdown">
@@ -236,28 +246,28 @@ async function updateNavbar() {
                 <div class="nav-dropdown-menu">
                     ${isAdmin() ? `
                     <a href="/admin" class="dropdown-item" style="color:var(--primary); font-weight:600;">
-                        <i class="ph ph-squares-four"></i> Yönetim Paneli
+                        <i class="ph ph-squares-four"></i> ${_t('auth.adminPanel', 'Yönetim Paneli')}
                     </a>
                     <hr class="dropdown-divider">
                     ` : ''}
-                    
-                    <a href="/account" class="dropdown-item">
-                        <i class="ph ph-user"></i> Profilim
+
+                    <a href="/account" class="dropdown-item" data-i18n="auth.myProfile">
+                        <i class="ph ph-user"></i> ${_t('auth.myProfile', 'Profilim')}
                     </a>
-                    <a href="/account/favorites" class="dropdown-item">
-                        <i class="ph ph-heart"></i> Favorilerim
+                    <a href="/account/favorites" class="dropdown-item" data-i18n="auth.myFavorites">
+                        <i class="ph ph-heart"></i> ${_t('auth.myFavorites', 'Favorilerim')}
                     </a>
-                    <a href="/account/requests" class="dropdown-item">
-                        <i class="ph ph-file-text"></i> Teklif Taleplerim
+                    <a href="/account/requests" class="dropdown-item" data-i18n="auth.myRequests">
+                        <i class="ph ph-file-text"></i> ${_t('auth.myRequests', 'Teklif Taleplerim')}
                     </a>
                     ${isPro() ? `
-                    <a href="/account/projects" class="dropdown-item">
-                        <i class="ph ph-folder"></i> Projelerim
+                    <a href="/account/projects" class="dropdown-item" data-i18n="auth.myProjects">
+                        <i class="ph ph-folder"></i> ${_t('auth.myProjects', 'Projelerim')}
                     </a>
                     ` : ''}
                     <hr class="dropdown-divider">
-                    <button onclick="YakaAuth.logout()" class="dropdown-item logout-btn">
-                        <i class="ph ph-sign-out"></i> Çıkış Yap
+                    <button onclick="YakaAuth.logout()" class="dropdown-item logout-btn" data-i18n="auth.logout">
+                        <i class="ph ph-sign-out"></i> ${_t('auth.logout', 'Çıkış Yap')}
                     </button>
                 </div>
             </div>
@@ -279,8 +289,8 @@ async function updateNavbar() {
 
     } else {
         authContainer.innerHTML = `
-            <a href="/login" class="nav-link auth-link">
-                <i class="ph ph-sign-in"></i> Giriş Yap
+            <a href="/login" class="nav-link auth-link" data-i18n="nav.login">
+                <i class="ph ph-sign-in"></i> ${_t('nav.login', 'Giriş Yap')}
             </a>
         `;
     }

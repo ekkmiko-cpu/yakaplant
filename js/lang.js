@@ -108,6 +108,10 @@
     if (SUPPORTED.indexOf(lang) === -1) return;
     try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
     applyTranslations(lang);
+    // Re-render auth nav if available (since auth.js creates elements dynamically)
+    if (typeof YakaAuth !== 'undefined' && typeof YakaAuth.updateNavbar === 'function') {
+      YakaAuth.updateNavbar();
+    }
   }
 
   /** Initialize dropdown behaviour */

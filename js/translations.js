@@ -14,6 +14,14 @@ const translations = {
       darkMode: "Karanlık Mod",
       openMenu: "Menüyü Aç"
     },
+    auth: {
+      adminPanel: "Yönetim Paneli",
+      myProfile: "Profilim",
+      myFavorites: "Favorilerim",
+      myRequests: "Teklif Taleplerim",
+      myProjects: "Projelerim",
+      logout: "Çıkış Yap"
+    },
     footer: {
       rights: "\u00a9 2026 Tüm hakları saklıdır."
     },
@@ -295,6 +303,14 @@ const translations = {
       darkMode: "Dark Mode",
       openMenu: "Open Menu"
     },
+    auth: {
+      adminPanel: "Admin Panel",
+      myProfile: "My Profile",
+      myFavorites: "My Favorites",
+      myRequests: "My Requests",
+      myProjects: "My Projects",
+      logout: "Sign Out"
+    },
     footer: {
       rights: "\u00a9 2026 All rights reserved."
     },
@@ -568,13 +584,21 @@ const translations = {
   de: {
     nav: {
       home: "Startseite",
-      about: "\u00dcber uns",
+      about: "Über uns",
       care: "Pflegeratgeber",
       shop: "Kollektion",
       contact: "Kontakt",
       login: "Anmelden",
       darkMode: "Dunkelmodus",
-      openMenu: "Men\u00fc \u00f6ffnen"
+      openMenu: "Menü öffnen"
+    },
+    auth: {
+      adminPanel: "Admin-Bereich",
+      myProfile: "Mein Profil",
+      myFavorites: "Meine Favoriten",
+      myRequests: "Meine Anfragen",
+      myProjects: "Meine Projekte",
+      logout: "Abmelden"
     },
     footer: {
       rights: "\u00a9 2026 Alle Rechte vorbehalten."
@@ -856,6 +880,14 @@ const translations = {
       login: "Inloggen",
       darkMode: "Donkere modus",
       openMenu: "Menu openen"
+    },
+    auth: {
+      adminPanel: "Beheerder",
+      myProfile: "Mijn profiel",
+      myFavorites: "Mijn favorieten",
+      myRequests: "Mijn aanvragen",
+      myProjects: "Mijn projecten",
+      logout: "Uitloggen"
     },
     footer: {
       rights: "\u00a9 2026 Alle rechten voorbehouden."
