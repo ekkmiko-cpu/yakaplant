@@ -32,18 +32,30 @@
         <div class="container nav-container">
             <a href="/" class="logo"><img src="/assets/logo.jpeg" alt="Yakaplant Logo" class="logo-img"><span class="logo-text">Yaka<span class="highlight">plant</span><span class="dot">.</span></span></a>
             <ul class="nav-links" id="nav-links">
-                <li><a href="/" class="nav-link">Ana Sayfa</a></li>
-                <li><a href="/about" class="nav-link">Hakkımızda</a></li>
-                <li><a href="/care" class="nav-link">Bakım Rehberi</a></li>
-                <li><a href="/shop" class="nav-link">Koleksiyon</a></li>
-                <li><a href="/contact" class="nav-link button-primary">İletişim</a></li>
+                <li><a href="/" class="nav-link" data-i18n="nav.home">Ana Sayfa</a></li>
+                <li><a href="/about" class="nav-link" data-i18n="nav.about">Hakkımızda</a></li>
+                <li><a href="/care" class="nav-link" data-i18n="nav.care">Bakım Rehberi</a></li>
+                <li><a href="/shop" class="nav-link" data-i18n="nav.shop">Koleksiyon</a></li>
+                <li><a href="/contact" class="nav-link button-primary" data-i18n="nav.contact">İletişim</a></li>
             </ul>
 
             <div class="nav-actions">
-                <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod">
+                <div class="lang-selector">
+                    <button class="lang-toggle" id="lang-toggle">
+                        <i class="ph ph-globe"></i>
+                        <span id="current-lang">TR</span>
+                    </button>
+                    <div class="lang-dropdown" id="lang-dropdown">
+                        <button class="lang-option" data-lang="tr">TR Türkçe</button>
+                        <button class="lang-option" data-lang="en">EN English</button>
+                        <button class="lang-option" data-lang="de">DE Deutsch</button>
+                        <button class="lang-option" data-lang="nl">NL Nederlands</button>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod" data-i18n-aria="nav.darkMode">
                     <i class="ph ph-moon"></i>
                 </button>
-                <button class="mobile-toggle" aria-label="Menüyü Aç" id="mobile-toggle">
+                <button class="mobile-toggle" aria-label="Menüyü Aç" id="mobile-toggle" data-i18n-aria="nav.openMenu">
                     <i class="ph ph-list"></i>
                 </button>
             </div>
@@ -56,8 +68,8 @@
     <main class="legal-page">
         <div class="container">
             <div class="legal-content">
-                <h1>Gizlilik Politikası</h1>
-                <p class="legal-date">Son güncelleme: 2 Şubat 2026</p>
+                <h1 data-i18n="privacy.title">Gizlilik Politikası</h1>
+                <p class="legal-date" data-i18n="privacy.lastUpdate">Son güncelleme: 2 Şubat 2026</p>
 
                 <section class="legal-section">
                     <h2>1. Giriş</h2>
@@ -202,7 +214,7 @@
                 </section>
 
                 <div class="legal-footer">
-                    <a href="/register" class="btn btn-primary">
+                    <a href="/register" class="btn btn-primary" data-i18n="privacy.backToRegister">
                         <i class="ph ph-arrow-left"></i> Kayıt Sayfasına Dön
                     </a>
                 </div>
@@ -217,7 +229,7 @@
                 <div class="footer-brand">
                     <a href="/" class="logo">Yaka<span class="highlight">plant</span><span
                             class="dot">.</span></a>
-                    <p>© 2026 Tüm hakları saklıdır.</p>
+                    <p data-i18n="footer.rights">© 2026 Tüm hakları saklıdır.</p>
                 </div>
                 <div class="social-links">
                     <a href="https://www.instagram.com/yakaplant" target="_blank" aria-label="Instagram"><i
@@ -229,6 +241,8 @@
         </div>
     </footer>
 
+    <script src="js/translations.js"></script>
+    <script src="js/lang.js"></script>
     <script src="script.js"></script>
 </body>
 

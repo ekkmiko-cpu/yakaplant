@@ -43,24 +43,36 @@
             <a href="/" class="logo"><img src="/assets/logo.jpeg" alt="Yakaplant Logo" class="logo-img"><span class="logo-text">Yaka<span class="highlight">plant</span><span class="dot">.</span></span></a>
 
             <ul class="nav-links" id="nav-links">
-                <li><a href="/" class="nav-link">Ana Sayfa</a></li>
-                <li><a href="/about" class="nav-link">Hakkımızda</a></li>
-                <li><a href="/care" class="nav-link active">Bakım Rehberi</a></li>
-                <li><a href="/shop" class="nav-link">Koleksiyon</a></li>
-                <li><a href="/contact" class="nav-link button-primary">İletişim</a></li>
+                <li><a href="/" class="nav-link" data-i18n="nav.home">Ana Sayfa</a></li>
+                <li><a href="/about" class="nav-link" data-i18n="nav.about">Hakkımızda</a></li>
+                <li><a href="/care" class="nav-link active" data-i18n="nav.care">Bakım Rehberi</a></li>
+                <li><a href="/shop" class="nav-link" data-i18n="nav.shop">Koleksiyon</a></li>
+                <li><a href="/contact" class="nav-link button-primary" data-i18n="nav.contact">İletişim</a></li>
                 <!-- Auth container (populated by auth.js) -->
                 <li id="nav-auth-container">
-                    <a href="/login" class="nav-link auth-link">
+                    <a href="/login" class="nav-link auth-link" data-i18n="nav.login">
                         <i class="ph ph-sign-in"></i> Giriş Yap
                     </a>
                 </li>
             </ul>
 
             <div class="nav-actions">
-                <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod">
+                <div class="lang-selector">
+                    <button class="lang-toggle" id="lang-toggle">
+                        <i class="ph ph-globe"></i>
+                        <span id="current-lang">TR</span>
+                    </button>
+                    <div class="lang-dropdown" id="lang-dropdown">
+                        <button class="lang-option" data-lang="tr">TR Türkçe</button>
+                        <button class="lang-option" data-lang="en">EN English</button>
+                        <button class="lang-option" data-lang="de">DE Deutsch</button>
+                        <button class="lang-option" data-lang="nl">NL Nederlands</button>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod" data-i18n-aria="nav.darkMode">
                     <i class="ph ph-moon"></i>
                 </button>
-                <button class="mobile-toggle" aria-label="Menüyü Aç" id="mobile-toggle">
+                <button class="mobile-toggle" aria-label="Menüyü Aç" id="mobile-toggle" data-i18n-aria="nav.openMenu">
                     <i class="ph ph-list"></i>
                 </button>
             </div>
@@ -75,7 +87,7 @@
         <div class="container">
             <div class="search-wrapper-centered">
                 <h1 class="minimal-title" style="font-weight: 800; text-transform: uppercase; letter-spacing: -2px;">
-                    BAKIM <span class="highlight">REHBERİ</span>
+                    <span data-i18n="care.title1">BAKIM</span> <span class="highlight" data-i18n="care.titleHighlight">REHBERİ</span>
                 </h1>
 
                 <!-- Search Component -->
@@ -83,7 +95,7 @@
                     <div class="search-input-group">
                         <i class="ph ph-magnifying-glass"></i>
                         <input type="text" id="plant-search" placeholder="Bitki adı veya problem arayın..."
-                            autocomplete="off">
+                            autocomplete="off" data-i18n-placeholder="care.searchPlaceholder">
                     </div>
                     <div id="search-dropdown" class="search-dropdown-modern"></div>
                 </div>
@@ -118,7 +130,7 @@
                             <span id="badge-difficulty" class="modal-badge"></span>
                             <span id="badge-pet" class="modal-badge"></span>
                         </div>
-                        <h2 id="modal-title" class="stagger-item">Ürün Adı</h2>
+                        <h2 id="modal-title" class="stagger-item" data-i18n="care.productName">Ürün Adı</h2>
                         <p id="modal-scientific" class="scientific-name stagger-item">Scientific Name</p>
                     </div>
 
@@ -126,41 +138,41 @@
                         <div class="stat-card">
                             <div class="stat-icon"><i class="ph ph-drop"></i></div>
                             <div class="stat-info">
-                                <span>Sulama</span>
+                                <span data-i18n="care.watering">Sulama</span>
                                 <strong id="stat-water">-</strong>
                             </div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-icon"><i class="ph ph-sun"></i></div>
                             <div class="stat-info">
-                                <span>Işık</span>
+                                <span data-i18n="care.light">Işık</span>
                                 <strong id="stat-light">-</strong>
                             </div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-icon"><i class="ph ph-cloud-rain"></i></div>
                             <div class="stat-info">
-                                <span>Nem</span>
+                                <span data-i18n="care.humidity">Nem</span>
                                 <strong id="stat-humidity">-</strong>
                             </div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-icon"><i class="ph ph-thermometer"></i></div>
                             <div class="stat-info">
-                                <span>Sıcaklık</span>
+                                <span data-i18n="care.temperature">Sıcaklık</span>
                                 <strong id="stat-temp">-</strong>
                             </div>
                         </div>
                     </div>
 
                     <div class="modal-desc-wrapper stagger-item">
-                        <h3>Bitki Hakkında</h3>
-                        <p id="modal-desc" class="modal-desc">Ürün açıklaması burada yer alacak.</p>
+                        <h3 data-i18n="care.aboutPlant">Bitki Hakkında</h3>
+                        <p id="modal-desc" class="modal-desc" data-i18n="care.productDesc">Ürün açıklaması burada yer alacak.</p>
                     </div>
 
                     <div class="modal-footer stagger-item">
 
-                        <a href="/contact" class="btn btn-primary btn-block">
+                        <a href="/contact" class="btn btn-primary btn-block" data-i18n="care.orderContact">
                             Sipariş için İletişime Geç <i class="ph ph-whatsapp-logo"></i>
                         </a>
                         <!-- Dynamic helper text placeholder -->
@@ -181,7 +193,7 @@
             <div class="footer-content">
                 <div class="footer-brand">
                     <a href="#" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
-                    <p>© 2026 Tüm hakları saklıdır.</p>
+                    <p data-i18n="footer.rights">© 2026 Tüm hakları saklıdır.</p>
                 </div>
                 <div class="social-links">
                     <a href="https://www.instagram.com/yakaplant" target="_blank" aria-label="Instagram"><i
@@ -197,6 +209,8 @@
     <script src="js/supabase.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/lang.js"></script>
     <script src="plant_data.js"></script>
     <script src="script.js"></script>
 </body>

@@ -33,16 +33,28 @@
         <div class="container nav-container">
             <a href="/" class="logo"><img src="/assets/logo.jpeg" alt="Yakaplant Logo" class="logo-img"><span class="logo-text">Yaka<span class="highlight">plant</span><span class="dot">.</span></span></a>
             <ul class="nav-links" id="nav-links">
-                <li><a href="/" class="nav-link">Ana Sayfa</a></li>
-                <li><a href="/shop" class="nav-link">Koleksiyon</a></li>
-                <li><a href="/care" class="nav-link">Bakım Rehberi</a></li>
+                <li><a href="/" class="nav-link" data-i18n="nav.home">Ana Sayfa</a></li>
+                <li><a href="/shop" class="nav-link" data-i18n="nav.shop">Koleksiyon</a></li>
+                <li><a href="/care" class="nav-link" data-i18n="nav.care">Bakım Rehberi</a></li>
             </ul>
 
             <div class="nav-actions">
-                <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod">
+                <div class="lang-selector">
+                    <button class="lang-toggle" id="lang-toggle">
+                        <i class="ph ph-globe"></i>
+                        <span id="current-lang">TR</span>
+                    </button>
+                    <div class="lang-dropdown" id="lang-dropdown">
+                        <button class="lang-option" data-lang="tr">TR Türkçe</button>
+                        <button class="lang-option" data-lang="en">EN English</button>
+                        <button class="lang-option" data-lang="de">DE Deutsch</button>
+                        <button class="lang-option" data-lang="nl">NL Nederlands</button>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod" data-i18n-aria="nav.darkMode">
                     <i class="ph ph-moon"></i>
                 </button>
-                <button class="mobile-toggle" aria-label="Menüyü Aç" id="mobile-toggle">
+                <button class="mobile-toggle" aria-label="Menüyü Aç" id="mobile-toggle" data-i18n-aria="nav.openMenu">
                     <i class="ph ph-list"></i>
                 </button>
             </div>
@@ -58,34 +70,34 @@
             <div class="auth-form-section">
                 <div class="auth-form-wrapper">
                     <div class="auth-header">
-                        <h1 class="auth-title">Üye Olun</h1>
-                        <p class="auth-subtitle">YakaPlant ailesine katılın</p>
+                        <h1 class="auth-title" data-i18n="register.title">Üye Olun</h1>
+                        <p class="auth-subtitle" data-i18n="register.subtitle">YakaPlant ailesine katılın</p>
                     </div>
 
                     <!-- Step Indicator -->
                     <div class="register-steps">
                         <div class="step active" data-step="1">
                             <span class="step-number">1</span>
-                            <span class="step-label">Hesap Tipi</span>
+                            <span class="step-label" data-i18n="register.step1Label">Hesap Tipi</span>
                         </div>
                         <div class="step-line"></div>
                         <div class="step" data-step="2">
                             <span class="step-number">2</span>
-                            <span class="step-label">Bilgileriniz</span>
+                            <span class="step-label" data-i18n="register.step2Label">Bilgileriniz</span>
                         </div>
                     </div>
 
                     <!-- Step 1: Role Selection -->
                     <div id="step-1" class="register-step active">
-                        <p class="step-intro">Sizi en iyi tanımlayan seçeneği belirleyin:</p>
+                        <p class="step-intro" data-i18n="register.stepIntro">Sizi en iyi tanımlayan seçeneği belirleyin:</p>
 
                         <div class="role-cards">
                             <label class="role-card">
                                 <input type="radio" name="role" value="customer" required>
                                 <div class="role-card-content">
                                     <i class="ph ph-house"></i>
-                                    <h3>Bireysel Müşteri</h3>
-                                    <p>Evim veya bahçem için bitki arıyorum</p>
+                                    <h3 data-i18n="register.roleCustomer">Bireysel Müşteri</h3>
+                                    <p data-i18n="register.roleCustomerDesc">Evim veya bahçem için bitki arıyorum</p>
                                 </div>
                             </label>
 
@@ -93,8 +105,8 @@
                                 <input type="radio" name="role" value="landscape_architect">
                                 <div class="role-card-content">
                                     <i class="ph ph-tree-structure"></i>
-                                    <h3>Peyzaj Mimarı</h3>
-                                    <p>Projelerim için bitki araştırması yapıyorum</p>
+                                    <h3 data-i18n="register.roleLandscape">Peyzaj Mimarı</h3>
+                                    <p data-i18n="register.roleLandscapeDesc">Projelerim için bitki araştırması yapıyorum</p>
                                 </div>
                             </label>
 
@@ -102,13 +114,13 @@
                                 <input type="radio" name="role" value="company">
                                 <div class="role-card-content">
                                     <i class="ph ph-buildings"></i>
-                                    <h3>Firma / Kurumsal</h3>
-                                    <p>Ticari projeler veya toplu alım için ilgileniyorum</p>
+                                    <h3 data-i18n="register.roleCompany">Firma / Kurumsal</h3>
+                                    <p data-i18n="register.roleCompanyDesc">Ticari projeler veya toplu alım için ilgileniyorum</p>
                                 </div>
                             </label>
                         </div>
 
-                        <button type="button" id="next-step" class="btn btn-primary btn-block" disabled>
+                        <button type="button" id="next-step" class="btn btn-primary btn-block" disabled data-i18n="register.continueBtn">
                             Devam Et <i class="ph ph-arrow-right"></i>
                         </button>
                     </div>
@@ -119,54 +131,54 @@
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="name">Ad *</label>
+                                <label for="name" data-i18n="register.firstName">Ad *</label>
                                 <input type="text" id="name" name="name" required minlength="2" maxlength="50">
                             </div>
                             <div class="form-group">
-                                <label for="surname">Soyad *</label>
+                                <label for="surname" data-i18n="register.lastName">Soyad *</label>
                                 <input type="text" id="surname" name="surname" required minlength="2" maxlength="50">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="email">E-posta *</label>
+                            <label for="email" data-i18n="register.email">E-posta *</label>
                             <div class="input-with-icon">
                                 <i class="ph ph-envelope"></i>
-                                <input type="email" id="email" name="email" placeholder="ornek@email.com" required>
+                                <input type="email" id="email" name="email" placeholder="ornek@email.com" required data-i18n-placeholder="register.emailPlaceholder">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="password">Şifre *</label>
+                            <label for="password" data-i18n="register.password">Şifre *</label>
                             <div class="input-with-icon">
                                 <i class="ph ph-lock"></i>
                                 <input type="password" id="password" name="password"
                                     placeholder="En az 8 karakter, 1 büyük harf, 1 rakam" required minlength="8"
-                                    pattern="(?=.*[A-Z])(?=.*[0-9]).{8,}">
-                                <button type="button" class="toggle-password" aria-label="Şifreyi göster">
+                                    pattern="(?=.*[A-Z])(?=.*[0-9]).{8,}" data-i18n-placeholder="register.passwordPlaceholder">
+                                <button type="button" class="toggle-password" aria-label="Şifreyi göster" data-i18n-aria="register.showPassword">
                                     <i class="ph ph-eye"></i>
                                 </button>
                             </div>
-                            <span class="form-hint">En az 8 karakter, bir büyük harf ve bir rakam içermeli</span>
+                            <span class="form-hint" data-i18n="register.passwordHint">En az 8 karakter, bir büyük harf ve bir rakam içermeli</span>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="phone">Telefon</label>
+                                <label for="phone" data-i18n="register.phone">Telefon</label>
                                 <div class="input-with-icon">
                                     <i class="ph ph-phone"></i>
-                                    <input type="tel" id="phone" name="phone" placeholder="0532 123 45 67">
+                                    <input type="tel" id="phone" name="phone" placeholder="0532 123 45 67" data-i18n-placeholder="register.phonePlaceholder">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="city">Şehir</label>
-                                <input type="text" id="city" name="city" placeholder="İstanbul">
+                                <label for="city" data-i18n="register.city">Şehir</label>
+                                <input type="text" id="city" name="city" placeholder="İstanbul" data-i18n-placeholder="register.cityPlaceholder">
                             </div>
                         </div>
 
                         <!-- Company name (shown only for company role) -->
                         <div class="form-group company-field" style="display: none;">
-                            <label for="company_name">Şirket Adı</label>
+                            <label for="company_name" data-i18n="register.companyName">Şirket Adı</label>
                             <div class="input-with-icon">
                                 <i class="ph ph-building-office"></i>
                                 <input type="text" id="company_name" name="company_name">
@@ -176,23 +188,23 @@
                         <label class="checkbox-wrapper terms-checkbox">
                             <input type="checkbox" name="terms" required>
                             <span class="checkmark"></span>
-                            <a href="/terms" target="_blank">Kullanım şartlarını</a> ve <a href="/privacy"
-                                target="_blank">gizlilik
-                                politikasını</a> kabul ediyorum
+                            <a href="/terms" target="_blank" data-i18n="register.termsLink">Kullanım şartlarını</a> <span data-i18n="register.termsAnd">ve</span> <a href="/privacy"
+                                target="_blank" data-i18n="register.privacyLink">gizlilik
+                                politikasını</a> <span data-i18n="register.termsText">kabul ediyorum</span>
                         </label>
 
                         <div class="form-actions">
-                            <button type="button" id="prev-step" class="btn btn-secondary">
+                            <button type="button" id="prev-step" class="btn btn-secondary" data-i18n="register.backBtn">
                                 <i class="ph ph-arrow-left"></i> Geri
                             </button>
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary" data-i18n="register.registerBtn">
                                 <i class="ph ph-user-plus"></i> Kayıt Ol
                             </button>
                         </div>
                     </form>
 
                     <div class="auth-footer">
-                        <p>Zaten hesabınız var mı? <a href="/login">Giriş Yapın</a></p>
+                        <p><span data-i18n="register.hasAccount">Zaten hesabınız var mı?</span> <a href="/login" data-i18n="register.loginLink">Giriş Yapın</a></p>
                     </div>
                 </div>
             </div>
@@ -203,8 +215,8 @@
                     <img src="assets/care_hero_banana.png" alt="YakaPlant Plants" class="auth-visual-img">
                     <div class="auth-visual-overlay"></div>
                     <div class="auth-visual-text">
-                        <h2>Profesyonel Bitki Tedariki</h2>
-                        <p>50+ bitki çeşidi, uzman bakım rehberleri ve proje yönetim araçları.</p>
+                        <h2 data-i18n="register.visualTitle">Profesyonel Bitki Tedariki</h2>
+                        <p data-i18n="register.visualDesc">50+ bitki çeşidi, uzman bakım rehberleri ve proje yönetim araçları.</p>
                     </div>
                 </div>
             </div>
@@ -219,6 +231,8 @@
     <script src="js/supabase.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/lang.js"></script>
     <script src="/script.js"></script>
     <script>
         // Redirect if already logged in

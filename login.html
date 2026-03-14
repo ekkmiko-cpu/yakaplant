@@ -33,22 +33,34 @@
         <div class="container nav-container">
             <a href="/" class="logo"><img src="/assets/logo.jpeg" alt="Yakaplant Logo" class="logo-img"><span class="logo-text">Yaka<span class="highlight">plant</span><span class="dot">.</span></span></a>
             <ul class="nav-links" id="nav-links">
-                <li><a href="/" class="nav-link">Ana Sayfa</a></li>
-                <li><a href="/shop" class="nav-link">Koleksiyon</a></li>
-                <li><a href="/care" class="nav-link">Bakım Rehberi</a></li>
+                <li><a href="/" class="nav-link" data-i18n="nav.home">Ana Sayfa</a></li>
+                <li><a href="/shop" class="nav-link" data-i18n="nav.shop">Koleksiyon</a></li>
+                <li><a href="/care" class="nav-link" data-i18n="nav.care">Bakım Rehberi</a></li>
                 <!-- Auth container (populated by auth.js) -->
                 <li id="nav-auth-container">
-                    <a href="/login" class="nav-link auth-link">
+                    <a href="/login" class="nav-link auth-link" data-i18n="nav.login">
                         <i class="ph ph-sign-in"></i> Giriş Yap
                     </a>
                 </li>
             </ul>
 
             <div class="nav-actions">
-                <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod">
+                <div class="lang-selector">
+                    <button class="lang-toggle" id="lang-toggle">
+                        <i class="ph ph-globe"></i>
+                        <span id="current-lang">TR</span>
+                    </button>
+                    <div class="lang-dropdown" id="lang-dropdown">
+                        <button class="lang-option" data-lang="tr">TR Türkçe</button>
+                        <button class="lang-option" data-lang="en">EN English</button>
+                        <button class="lang-option" data-lang="de">DE Deutsch</button>
+                        <button class="lang-option" data-lang="nl">NL Nederlands</button>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod" data-i18n-aria="nav.darkMode">
                     <i class="ph ph-moon"></i>
                 </button>
-                <button class="mobile-toggle" aria-label="Menüyü Aç" id="mobile-toggle">
+                <button class="mobile-toggle" aria-label="Menüyü Aç" id="mobile-toggle" data-i18n-aria="nav.openMenu">
                     <i class="ph ph-list"></i>
                 </button>
             </div>
@@ -64,26 +76,26 @@
             <div class="auth-form-section">
                 <div class="auth-form-wrapper">
                     <div class="auth-header">
-                        <h1 class="auth-title">Hoş Geldiniz</h1>
-                        <p class="auth-subtitle">Hesabınıza giriş yapın</p>
+                        <h1 class="auth-title" data-i18n="login.welcome">Hoş Geldiniz</h1>
+                        <p class="auth-subtitle" data-i18n="login.subtitle">Hesabınıza giriş yapın</p>
                     </div>
 
                     <form id="login-form" class="auth-form">
                         <div class="form-group">
-                            <label for="email">E-posta</label>
+                            <label for="email" data-i18n="login.email">E-posta</label>
                             <div class="input-with-icon">
                                 <i class="ph ph-envelope"></i>
-                                <input type="email" id="email" name="email" placeholder="ornek@email.com" required>
+                                <input type="email" id="email" name="email" placeholder="ornek@email.com" required data-i18n-placeholder="login.emailPlaceholder">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="password">Şifre</label>
+                            <label for="password" data-i18n="login.password">Şifre</label>
                             <div class="input-with-icon">
                                 <i class="ph ph-lock"></i>
                                 <input type="password" id="password" name="password" placeholder="••••••••" required
                                     minlength="8">
-                                <button type="button" class="toggle-password" aria-label="Şifreyi göster">
+                                <button type="button" class="toggle-password" aria-label="Şifreyi göster" data-i18n-aria="login.showPassword">
                                     <i class="ph ph-eye"></i>
                                 </button>
                             </div>
@@ -93,19 +105,19 @@
                             <label class="checkbox-wrapper">
                                 <input type="checkbox" name="remember">
                                 <span class="checkmark"></span>
-                                Beni hatırla
+                                <span data-i18n="login.rememberMe">Beni hatırla</span>
                             </label>
-                            <a href="/forgot-password" class="forgot-link">Şifremi unuttum</a>
+                            <a href="/forgot-password" class="forgot-link" data-i18n="login.forgotPassword">Şifremi unuttum</a>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-block">
+                        <button type="submit" class="btn btn-primary btn-block" data-i18n="login.loginBtn">
                             <i class="ph ph-sign-in"></i>
                             Giriş Yap
                         </button>
                     </form>
 
                     <div class="auth-footer">
-                        <p>Hesabınız yok mu? <a href="/register">Üye Olun</a></p>
+                        <p><span data-i18n="login.noAccount">Hesabınız yok mu?</span> <a href="/register" data-i18n="login.register">Üye Olun</a></p>
                     </div>
                 </div>
             </div>
@@ -116,8 +128,8 @@
                     <img src="assets/realistic_outdoor_plants.png" alt="YakaPlant Garden" class="auth-visual-img">
                     <div class="auth-visual-overlay"></div>
                     <div class="auth-visual-text">
-                        <h2>Yeşilin Gücünü Keşfedin</h2>
-                        <p>Binlerce bitki arasından seçim yapın, uzman bakım rehberlerimizle yetiştirin.</p>
+                        <h2 data-i18n="login.visualTitle">Yeşilin Gücünü Keşfedin</h2>
+                        <p data-i18n="login.visualDesc">Binlerce bitki arasından seçim yapın, uzman bakım rehberlerimizle yetiştirin.</p>
                     </div>
                 </div>
             </div>
@@ -132,6 +144,8 @@
     <script src="js/supabase.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/lang.js"></script>
     <script src="script.js"></script>
     <script>
         // Redirect if already logged in

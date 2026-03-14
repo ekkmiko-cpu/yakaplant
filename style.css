@@ -275,6 +275,106 @@ h4 {
     transform: rotate(15deg);
 }
 
+/* Language Selector */
+.lang-selector {
+    position: relative;
+}
+
+.lang-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: var(--primary-dark);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+    font-family: inherit;
+    font-weight: 600;
+}
+
+.lang-toggle:hover {
+    background: var(--accent);
+}
+
+.lang-toggle i {
+    font-size: 1.3rem;
+}
+
+#current-lang {
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.lang-dropdown {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    background: var(--bg-white);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-md);
+    min-width: 160px;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    z-index: 1001;
+    border: 1px solid rgba(0,0,0,0.06);
+}
+
+.lang-dropdown.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.lang-option {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.65rem 1rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    transition: background 0.15s ease;
+    text-align: left;
+}
+
+.lang-option:hover {
+    background: var(--accent);
+}
+
+.lang-option.active {
+    background: var(--accent);
+    font-weight: 600;
+    color: var(--primary-dark);
+}
+
+body.dark-mode .lang-toggle {
+    color: var(--text-main);
+}
+
+body.dark-mode .lang-toggle:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+body.dark-mode .lang-dropdown {
+    border-color: rgba(255,255,255,0.1);
+}
+
+body.dark-mode .lang-option:hover,
+body.dark-mode .lang-option.active {
+    background: rgba(255,255,255,0.1);
+}
+
 /* Scientific Name */
 .scientific-name {
     font-size: 0.85rem;
@@ -5817,6 +5917,24 @@ body.dark-mode .legal-footer {
 
     .theme-toggle {
         font-size: 1.35rem;
+    }
+
+    .lang-toggle {
+        padding: 0.2rem 0.35rem;
+        font-size: 1rem;
+    }
+
+    .lang-toggle i {
+        font-size: 1.15rem;
+    }
+
+    #current-lang {
+        font-size: 0.75rem;
+    }
+
+    .lang-dropdown {
+        right: -1rem;
+        min-width: 145px;
     }
 
     .mobile-toggle {
