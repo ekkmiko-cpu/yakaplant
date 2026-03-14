@@ -265,6 +265,22 @@ const translations = {
     bakim: {
       indexTitle: "Bitki Bakım Rehberleri",
       indexSubtitle: "Bitkiler için sulama, ışık ve genel bakım ipuçları."
+    },
+    dynamic: {
+      sent: "Gönderildi!",
+      thankYou: "Teşekkürler",
+      messageReceived: "Mesajınız alındı. En kısa sürede",
+      willReply: "adresinden dönüş yapacağız.",
+      orderContact: "Sipariş için İletişime Geç",
+      petFriendly: "Hayvan Dostu",
+      toxic: "Toksik Olabilir",
+      cantFind: "Sorununu bulamadın mı?",
+      contactUs: "Bizimle iletişime geç!",
+      citySelect: "Şehir Seç",
+      close: "Kapat",
+      citySearch: "Şehir ara...",
+      cancel: "İptal",
+      select: "Seç"
     }
   },
 
@@ -530,6 +546,22 @@ const translations = {
     bakim: {
       indexTitle: "Plant Care Guides",
       indexSubtitle: "Watering, light, and general care tips for plants."
+    },
+    dynamic: {
+      sent: "Sent!",
+      thankYou: "Thank you",
+      messageReceived: "Your message has been received. We will reply to",
+      willReply: "as soon as possible.",
+      orderContact: "Contact Us to Order",
+      petFriendly: "Pet Friendly",
+      toxic: "May Be Toxic",
+      cantFind: "Can't find your answer?",
+      contactUs: "Contact us!",
+      citySelect: "Select City",
+      close: "Close",
+      citySearch: "Search city...",
+      cancel: "Cancel",
+      select: "Select"
     }
   },
 
@@ -793,8 +825,24 @@ const translations = {
       backToRegister: "Zur\u00fcck zur Registrierung"
     },
     bakim: {
-      indexTitle: "Pflegeratgeber f\u00fcr Pflanzen",
-      indexSubtitle: "Tipps zu Bew\u00e4sserung, Licht und allgemeiner Pflanzenpflege."
+      indexTitle: "Pflegeratgeber für Pflanzen",
+      indexSubtitle: "Tipps zu Bewässerung, Licht und allgemeiner Pflanzenpflege."
+    },
+    dynamic: {
+      sent: "Gesendet!",
+      thankYou: "Vielen Dank",
+      messageReceived: "Ihre Nachricht wurde empfangen. Wir werden an",
+      willReply: "so schnell wie möglich antworten.",
+      orderContact: "Kontaktieren Sie uns zur Bestellung",
+      petFriendly: "Haustierfreundlich",
+      toxic: "Möglicherweise giftig",
+      cantFind: "Antwort nicht gefunden?",
+      contactUs: "Kontaktieren Sie uns!",
+      citySelect: "Stadt auswählen",
+      close: "Schließen",
+      citySearch: "Stadt suchen...",
+      cancel: "Abbrechen",
+      select: "Auswählen"
     }
   },
 
@@ -1060,6 +1108,22 @@ const translations = {
     bakim: {
       indexTitle: "Plantenverzorgingsgidsen",
       indexSubtitle: "Tips over water geven, licht en algemene plantenverzorging."
+    },
+    dynamic: {
+      sent: "Verzonden!",
+      thankYou: "Bedankt",
+      messageReceived: "Uw bericht is ontvangen. We zullen zo snel mogelijk reageren naar",
+      willReply: ".",
+      orderContact: "Neem contact op om te bestellen",
+      petFriendly: "Huisdiervriendelijk",
+      toxic: "Mogelijk giftig",
+      cantFind: "Antwoord niet gevonden?",
+      contactUs: "Neem contact met ons op!",
+      citySelect: "Stad selecteren",
+      close: "Sluiten",
+      citySearch: "Stad zoeken...",
+      cancel: "Annuleren",
+      select: "Selecteren"
     }
   }
 };

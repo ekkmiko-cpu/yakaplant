@@ -1,3 +1,15 @@
+// Translation helper — returns translated string or fallback
+function t(key, fallback) {
+    if (typeof window.YakaLang !== 'undefined' && typeof translations !== 'undefined') {
+        var lang = window.YakaLang.get();
+        var val = key.split('.').reduce(function(obj, k) {
+            return obj && obj[k] !== undefined ? obj[k] : null;
+        }, translations[lang]);
+        if (val !== null) return val;
+    }
+    return fallback || key;
+}
+
 // DOM Elements
 const mobileToggle = document.getElementById('mobile-toggle');
 const themeToggle = document.getElementById('theme-toggle');
@@ -98,22 +110,22 @@ function setupCityPicker() {
             <div class="city-picker-backdrop" data-close="1"></div>
             <div class="city-picker-sheet" role="dialog" aria-modal="true" aria-label="Şehir seç">
                 <div class="city-picker-header">
-                    <div class="city-picker-title">Şehir Seç</div>
-                    <button type="button" class="city-picker-close" aria-label="Kapat" data-close="1">
+                    <div class="city-picker-title">${t('dynamic.citySelect', 'Şehir Seç')}</div>
+                    <button type="button" class="city-picker-close" aria-label="${t('dynamic.close', 'Kapat')}" data-close="1">
                         <i class="ph ph-x"></i>
                     </button>
                 </div>
                 <div class="city-picker-search">
                     <i class="ph ph-magnifying-glass"></i>
-                    <input type="search" id="city-picker-search" placeholder="Şehir ara..." autocomplete="off" />
+                    <input type="search" id="city-picker-search" placeholder="${t('dynamic.citySearch', 'Şehir ara...')}" autocomplete="off" />
                 </div>
                 <div style="position: relative;">
                     <div class="city-wheel" id="city-wheel"></div>
                     <div class="city-wheel-highlight" aria-hidden="true"></div>
                 </div>
                 <div class="city-picker-actions">
-                    <button type="button" class="btn btn-secondary" data-close="1">İptal</button>
-                    <button type="button" class="btn btn-primary" id="city-picker-choose">Seç</button>
+                    <button type="button" class="btn btn-secondary" data-close="1">${t('dynamic.cancel', 'İptal')}</button>
+                    <button type="button" class="btn btn-primary" id="city-picker-choose">${t('dynamic.select', 'Seç')}</button>
                 </div>
             </div>
         `;
@@ -260,10 +272,10 @@ if (contactForm) {
         const btn = contactForm.querySelector('button');
         const originalText = btn.innerHTML;
 
-        btn.innerHTML = '<i class="ph ph-check"></i> Gönderildi!';
+        btn.innerHTML = '<i class="ph ph-check"></i> ' + t('dynamic.sent', 'Gönderildi!');
         btn.style.backgroundColor = '#40916c';
 
-        alert(`Teşekkürler ${name}! Mesajınız alındı. En kısa sürede ${email} adresinden dönüş yapacağız.`);
+        alert(t('dynamic.thankYou', 'Teşekkürler') + ` ${name}! ` + t('dynamic.messageReceived', 'Mesajınız alındı. En kısa sürede') + ` ${email} ` + t('dynamic.willReply', 'adresinden dönüş yapacağız.'));
 
         // Reset form
         contactForm.reset();
@@ -716,7 +728,7 @@ const openModal = (plantKey) => {
     // Reset Footer CTA
     const ctaBtn = modal_local.querySelector('.modal-footer .btn');
     if (ctaBtn) {
-        ctaBtn.innerHTML = `Sipariş için İletişime Geç <i class="ph ph-whatsapp-logo"></i>`;
+        ctaBtn.innerHTML = t('dynamic.orderContact', 'Sipariş için İletişime Geç') + ` <i class="ph ph-whatsapp-logo"></i>`;
         ctaBtn.href = "/contact";
     }
 
@@ -737,38 +749,56 @@ const openModal = (plantKey) => {
 
     // Helper functions to convert values to informative sentences
     const waterToSentence = (water) => {
-        const waterMap = {
-            'Az': 'Toprağı kurudukça sulayın, su biriktirmeyin.',
-            'Çok az': 'Nadiren sulayın, kuraklığa dayanır.',
-            'Orta': 'Haftada 1-2 kez toprak nemini kontrol edin.',
-            'Düzenli': 'Toprağı sürekli nemli tutun ama su birikmesine izin vermeyin.',
-            'Bol': 'Bol su sever, toprağın kurumasına izin vermeyin.'
+        const waterMaps = {
+            tr: { 'Az': 'Toprağı kurudukça sulayın, su biriktirmeyin.', 'Çok az': 'Nadiren sulayın, kuraklığa dayanır.', 'Orta': 'Haftada 1-2 kez toprak nemini kontrol edin.', 'Düzenli': 'Toprağı sürekli nemli tutun ama su birikmesine izin vermeyin.', 'Bol': 'Bol su sever, toprağın kurumasına izin vermeyin.' },
+            en: { 'Az': 'Water when soil dries out, avoid waterlogging.', 'Çok az': 'Water rarely, tolerates drought.', 'Orta': 'Check soil moisture 1-2 times a week.', 'Düzenli': 'Keep soil consistently moist but avoid waterlogging.', 'Bol': 'Loves plenty of water, don\'t let soil dry out.' },
+            de: { 'Az': 'Gießen Sie, wenn die Erde trocken ist.', 'Çok az': 'Selten gießen, verträgt Trockenheit.', 'Orta': 'Bodenfeuchtigkeit 1-2 Mal pro Woche prüfen.', 'Düzenli': 'Erde gleichmäßig feucht halten, Staunässe vermeiden.', 'Bol': 'Liebt viel Wasser, Erde nicht austrocknen lassen.' },
+            nl: { 'Az': 'Water geven als de grond droog is.', 'Çok az': 'Zelden water geven, verdraagt droogte.', 'Orta': 'Controleer bodemvocht 1-2 keer per week.', 'Düzenli': 'Houd de grond constant vochtig, vermijd wateroverlast.', 'Bol': 'Houdt van veel water, laat de grond niet uitdrogen.' }
         };
-        return waterMap[water] || water;
+        const lang = typeof window.YakaLang !== 'undefined' ? window.YakaLang.get() : 'tr';
+        return (waterMaps[lang] && waterMaps[lang][water]) || (waterMaps['tr'][water]) || water;
     };
 
     const lightToSentence = (env) => {
-        if (!env) return 'Işık ihtiyacı belirtilmemiş.';
-        if (env.includes('Tam güneş')) return 'Doğrudan güneş ışığı alan bir yer tercih edin.';
-        if (env.includes('Yarı gölge') || env.includes('yarı gölge')) return 'Dolaylı ışık veya yarı gölge alanlarda mutlu olur.';
-        if (env.includes('Gölge') || env.includes('gölge')) return 'Gölgeli veya düşük ışıklı alanları tercih eder.';
-        if (env.includes('Güneş')) return 'Bol ışık alan bir konumda yetiştirin.';
-        if (env.includes('Aydınlık')) return 'Parlak, dolaylı ışık alan ortamlarda en iyi gelişir.';
+        const lang = typeof window.YakaLang !== 'undefined' ? window.YakaLang.get() : 'tr';
+        const msgs = {
+            tr: { full: 'Doğrudan güneş ışığı alan bir yer tercih edin.', partial: 'Dolaylı ışık veya yarı gölge alanlarda mutlu olur.', shade: 'Gölgeli veya düşük ışıklı alanları tercih eder.', sun: 'Bol ışık alan bir konumda yetiştirin.', bright: 'Parlak, dolaylı ışık alan ortamlarda en iyi gelişir.', none: 'Işık ihtiyacı belirtilmemiş.' },
+            en: { full: 'Prefers a spot with direct sunlight.', partial: 'Thrives in indirect light or partial shade.', shade: 'Prefers shaded or low-light areas.', sun: 'Grow in a well-lit location.', bright: 'Grows best in bright, indirect light.', none: 'Light requirements not specified.' },
+            de: { full: 'Bevorzugt einen Platz mit direktem Sonnenlicht.', partial: 'Gedeiht bei indirektem Licht oder Halbschatten.', shade: 'Bevorzugt schattige oder lichtarme Bereiche.', sun: 'An einem hellen Standort kultivieren.', bright: 'Wächst am besten bei hellem, indirektem Licht.', none: 'Lichtbedarf nicht angegeben.' },
+            nl: { full: 'Geeft de voorkeur aan direct zonlicht.', partial: 'Gedijt in indirect licht of halfschaduw.', shade: 'Geeft de voorkeur aan schaduw of weinig licht.', sun: 'Kweek op een goed verlichte plek.', bright: 'Groeit het best in helder, indirect licht.', none: 'Lichtbehoefte niet gespecificeerd.' }
+        };
+        const m = msgs[lang] || msgs['tr'];
+        if (!env) return m.none;
+        if (env.includes('Tam güneş')) return m.full;
+        if (env.includes('Yarı gölge') || env.includes('yarı gölge')) return m.partial;
+        if (env.includes('Gölge') || env.includes('gölge')) return m.shade;
+        if (env.includes('Güneş')) return m.sun;
+        if (env.includes('Aydınlık')) return m.bright;
         return env;
     };
 
     const humidityToSentence = (humidity) => {
-        const humidityMap = {
-            'Normal': 'Standart ev ortamı nemi yeterlidir.',
-            'Düşük': 'Kuru ortamlara toleranslıdır, ekstra nem gerekmez.',
-            'Yüksek': 'Nemli ortamları sever, yaprakları düzenli nemlendirin.'
+        const humidityMaps = {
+            tr: { 'Normal': 'Standart ev ortamı nemi yeterlidir.', 'Düşük': 'Kuru ortamlara toleranslıdır, ekstra nem gerekmez.', 'Yüksek': 'Nemli ortamları sever, yaprakları düzenli nemlendirin.' },
+            en: { 'Normal': 'Standard household humidity is sufficient.', 'Düşük': 'Tolerates dry environments, no extra humidity needed.', 'Yüksek': 'Loves humid environments, mist leaves regularly.' },
+            de: { 'Normal': 'Normale Raumluftfeuchtigkeit ist ausreichend.', 'Düşük': 'Verträgt trockene Umgebungen, keine zusätzliche Feuchtigkeit nötig.', 'Yüksek': 'Liebt feuchte Umgebungen, Blätter regelmäßig besprühen.' },
+            nl: { 'Normal': 'Standaard luchtvochtigheid is voldoende.', 'Düşük': 'Verdraagt droge omgevingen, geen extra vocht nodig.', 'Yüksek': 'Houdt van vochtige omgevingen, besproei bladeren regelmatig.' }
         };
-        return humidityMap[humidity] || humidity;
+        const lang = typeof window.YakaLang !== 'undefined' ? window.YakaLang.get() : 'tr';
+        return (humidityMaps[lang] && humidityMaps[lang][humidity]) || (humidityMaps['tr'][humidity]) || humidity;
     };
 
     const tempToSentence = (temp) => {
-        if (!temp) return 'Sıcaklık bilgisi belirtilmemiş.';
-        return `İdeal sıcaklık aralığı ${temp} arasındadır.`;
+        const lang = typeof window.YakaLang !== 'undefined' ? window.YakaLang.get() : 'tr';
+        const msgs = {
+            tr: { none: 'Sıcaklık bilgisi belirtilmemiş.', range: `İdeal sıcaklık aralığı ${temp} arasındadır.` },
+            en: { none: 'Temperature info not specified.', range: `Ideal temperature range is ${temp}.` },
+            de: { none: 'Temperaturinformationen nicht angegeben.', range: `Idealer Temperaturbereich ist ${temp}.` },
+            nl: { none: 'Temperatuurinformatie niet gespecificeerd.', range: `Ideaal temperatuurbereik is ${temp}.` }
+        };
+        const m = msgs[lang] || msgs['tr'];
+        if (!temp) return m.none;
+        return m.range;
     };
 
     // Update Stats with informative sentences
@@ -793,11 +823,11 @@ const openModal = (plantKey) => {
     // Update Pet Friendly Badge
     if (pet_badge) {
         if (data.petFriendly) {
-            pet_badge.innerHTML = '<i class="ph ph-paw-print"></i> Hayvan Dostu';
+            pet_badge.innerHTML = '<i class="ph ph-paw-print"></i> ' + t('dynamic.petFriendly', 'Hayvan Dostu');
             pet_badge.classList.remove('danger');
             pet_badge.classList.add('success');
         } else {
-            pet_badge.innerHTML = '<i class="ph ph-warning"></i> Toksik Olabilir';
+            pet_badge.innerHTML = '<i class="ph ph-warning"></i> ' + t('dynamic.toxic', 'Toksik Olabilir');
             pet_badge.classList.remove('success');
             pet_badge.classList.add('danger');
         }
@@ -997,7 +1027,7 @@ const openCareModal = (key) => {
     openModal(key);
     // Override the footer text for Care Guide context
     if (modalCtaText) {
-        modalCtaText.innerHTML = 'Sorununu bulamadın mı? <a href="/contact">Bizimle iletişime geç!</a>';
+        modalCtaText.innerHTML = t('dynamic.cantFind', 'Sorununu bulamadın mı?') + ' <a href="/contact">' + t('dynamic.contactUs', 'Bizimle iletişime geç!') + '</a>';
     }
 };
 
