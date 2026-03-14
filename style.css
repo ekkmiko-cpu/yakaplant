@@ -2127,7 +2127,6 @@ body.dark-mode .explore-card:hover {
     color: white;
     text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     margin-bottom: 1.5rem;
-    text-transform: uppercase;
     letter-spacing: 1px;
 }
 
