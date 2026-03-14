@@ -396,7 +396,7 @@ const plantCatalog = [
         env: 'Yarı gölge',
         water: 'Bol',
         price: 'Bize Ulaşın',
-        image: 'assets/products/ortanca-1.png',
+        image: 'assets/products/ortanca-2.png',
         difficulty: 'Orta',
         humidity: 'Yüksek',
         petFriendly: false,
