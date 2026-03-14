@@ -186,6 +186,20 @@ h4 {
     font-weight: 700;
     color: var(--primary-dark);
     letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo-img {
+    height: 40px;
+    width: 40px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.logo-text {
+    display: inline;
 }
 
 .nav-links {
@@ -850,6 +864,20 @@ body.dark-mode .support-title {
     color: var(--primary-dark);
     text-decoration: none;
     letter-spacing: -1px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo-img {
+    height: 40px;
+    width: 40px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.logo-text {
+    display: inline;
 }
 
 .logo .dot {
@@ -862,6 +890,10 @@ body.dark-mode .support-title {
     /* Yaka text becomes white */
 }
 
+.footer-brand .logo .logo-img {
+    height: 36px;
+}
+
 /* Ensure plant and dot keep their colors in footer */
 .footer-brand .logo .highlight {
     color: var(--primary-light);
@@ -870,8 +902,6 @@ body.dark-mode .support-title {
 .footer-brand .logo .dot {
     /* Keep dot brown in footer */
 }
-
-/* Removed footer logo override */
 
 .footer-brand p {
     color: rgba(255, 255, 255, 0.6);
@@ -5776,6 +5806,10 @@ body.dark-mode .legal-footer {
     .logo {
         font-size: 1.35rem;
         letter-spacing: -0.4px;
+    }
+
+    .logo-img {
+        height: 32px;
     }
 
     .nav-actions {
