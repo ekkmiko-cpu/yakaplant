@@ -236,28 +236,28 @@ async function updateNavbar() {
                 <div class="nav-dropdown-menu">
                     ${isAdmin() ? `
                     <a href="/admin" class="dropdown-item" style="color:var(--primary); font-weight:600;">
-                        <i class="ph ph-squares-four"></i> Yönetim Paneli
+                        <i class="ph ph-squares-four"></i> ${t('auth.adminPanel', 'Yönetim Paneli')}
                     </a>
                     <hr class="dropdown-divider">
                     ` : ''}
                     
                     <a href="/account" class="dropdown-item">
-                        <i class="ph ph-user"></i> Profilim
+                        <i class="ph ph-user"></i> ${t('auth.myProfile', 'Profilim')}
                     </a>
                     <a href="/account/favorites" class="dropdown-item">
-                        <i class="ph ph-heart"></i> Favorilerim
+                        <i class="ph ph-heart"></i> ${t('auth.myFavorites', 'Favorilerim')}
                     </a>
                     <a href="/account/requests" class="dropdown-item">
-                        <i class="ph ph-file-text"></i> Teklif Taleplerim
+                        <i class="ph ph-file-text"></i> ${t('auth.myRequests', 'Teklif Taleplerim')}
                     </a>
                     ${isPro() ? `
                     <a href="/account/projects" class="dropdown-item">
-                        <i class="ph ph-folder"></i> Projelerim
+                        <i class="ph ph-folder"></i> ${t('auth.myProjects', 'Projelerim')}
                     </a>
                     ` : ''}
                     <hr class="dropdown-divider">
                     <button onclick="YakaAuth.logout()" class="dropdown-item logout-btn">
-                        <i class="ph ph-sign-out"></i> Çıkış Yap
+                        <i class="ph ph-sign-out"></i> ${t('auth.logout', 'Çıkış Yap')}
                     </button>
                 </div>
             </div>
@@ -279,8 +279,8 @@ async function updateNavbar() {
 
     } else {
         authContainer.innerHTML = `
-            <a href="/login" class="nav-link auth-link">
-                <i class="ph ph-sign-in"></i> Giriş Yap
+            <a href="/login" class="nav-link auth-link" data-i18n="nav.login">
+                <i class="ph ph-sign-in"></i> ${t('nav.login', 'Giriş Yap')}
             </a>
         `;
     }
