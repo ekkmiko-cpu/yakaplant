@@ -107,37 +107,41 @@
             <a href="/" class="logo"><img src="/assets/logo.jpeg" alt="Yakaplant Logo" class="logo-img"><span class="logo-text">Yaka<span class="highlight">plant</span><span class="dot">.</span></span></a>
 
             <ul class="nav-links" id="nav-links">
-                <li><a href="/" class="nav-link">Ana Sayfa</a></li>
-                <li><a href="/about" class="nav-link">Hakkımızda</a></li>
-                <li><a href="/care" class="nav-link">Bakım Rehberi</a></li>
-                <li><a href="/shop" class="nav-link">Koleksiyon</a></li>
-                <li><a href="/contact" class="nav-link button-primary">İletişim</a></li>
+                <li><a href="/" class="nav-link" data-i18n="nav.home">Ana Sayfa</a></li>
+                <li><a href="/about" class="nav-link" data-i18n="nav.about">Hakkımızda</a></li>
+                <li><a href="/care" class="nav-link" data-i18n="nav.care">Bakım Rehberi</a></li>
+                <li><a href="/shop" class="nav-link" data-i18n="nav.shop">Koleksiyon</a></li>
+                <li><a href="/contact" class="nav-link button-primary" data-i18n="nav.contact">İletişim</a></li>
                 <!-- Auth container (populated by auth.js) -->
                 <li id="nav-auth-container">
-                    <a href="/login" class="nav-link auth-link">
+                    <a href="/login" class="nav-link auth-link" data-i18n="nav.login">
                         <i class="ph ph-sign-in"></i> Giriş Yap
                     </a>
                 </li>
             </ul>
 
             <div class="nav-actions">
-                <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod">
+                <div class="lang-selector">
+                    <button class="lang-toggle" id="lang-toggle">
+                        <i class="ph ph-globe"></i>
+                        <span id="current-lang">TR</span>
+                    </button>
+                    <div class="lang-dropdown" id="lang-dropdown">
+                        <button class="lang-option" data-lang="tr">TR Türkçe</button>
+                        <button class="lang-option" data-lang="en">EN English</button>
+                        <button class="lang-option" data-lang="de">DE Deutsch</button>
+                        <button class="lang-option" data-lang="nl">NL Nederlands</button>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod" data-i18n-aria="nav.darkMode">
                     <i class="ph ph-moon"></i>
                 </button>
-                <button class="mobile-toggle" aria-label="Menüyü Aç" id="mobile-toggle">
+                <button class="mobile-toggle" aria-label="Menüyü Aç" id="mobile-toggle" data-i18n-aria="nav.openMenu">
                     <i class="ph ph-list"></i>
                 </button>
             </div>
         </div>
     </nav>
-    <!-- ... (rest of file) ... -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="plant_data.js"></script>
-    <script src="script.js"></script>
-</body>
 
 <!-- Hero Section -->
 <!-- 1. Modern Hero with Slider -->
@@ -145,10 +149,10 @@
     <div class="hero-bg"></div>
 
     <!-- Slider Arrows (on hero edges) -->
-    <button class="hero-arrow hero-arrow-left" aria-label="Önceki slayt">
+    <button class="hero-arrow hero-arrow-left" aria-label="Önceki slayt" data-i18n-aria="index.prevSlide">
         <i class="ph ph-caret-left"></i>
     </button>
-    <button class="hero-arrow hero-arrow-right" aria-label="Sonraki slayt">
+    <button class="hero-arrow hero-arrow-right" aria-label="Sonraki slayt" data-i18n-aria="index.nextSlide">
         <i class="ph ph-caret-right"></i>
     </button>
 
@@ -157,13 +161,13 @@
             <!-- Slide 1: Mevcut içerik -->
             <div class="hero-slide active">
                 <h1 class="modern-hero-title">
-                    DOĞAYI <span class="highlight">TASARLA</span>
+                    <span data-i18n="index.heroTitle1">DOĞAYI</span> <span class="highlight" data-i18n="index.heroTitleHighlight">TASARLA</span>
                 </h1>
                 <div class="hero-btn-group">
-                    <a href="/shop" class="modern-hero-btn">
+                    <a href="/shop" class="modern-hero-btn" data-i18n="index.exploreCollection">
                         Koleksiyonu Keşfet <i class="ph ph-arrow-right"></i>
                     </a>
-                    <a href="/contact" class="modern-hero-btn">
+                    <a href="/contact" class="modern-hero-btn" data-i18n="index.getInTouch">
                         İletişime Geç <i class="ph ph-chat-circle-dots"></i>
                     </a>
                     <div class="hero-social-row">
@@ -180,7 +184,7 @@
             <!-- Slide 2: Instagram -->
             <div class="hero-slide">
                 <img src="assets/instagram-qr.png" alt="Yakaplant Instagram" class="hero-instagram-img">
-                <p class="hero-slide-label">Bizi Instagram'da Takip Edin</p>
+                <p class="hero-slide-label" data-i18n="index.followInstagram">BİZİ İNSTAGRAM'DA TAKİP EDİN</p>
                 <a href="https://www.instagram.com/yakaplant" target="_blank" class="modern-hero-btn">
                     Yakaplant <i class="ph ph-instagram-logo"></i>
                 </a>
@@ -189,7 +193,7 @@
             <!-- Slide 3: WhatsApp -->
             <div class="hero-slide">
                 <i class="ph ph-whatsapp-logo hero-whatsapp-icon"></i>
-                <a href="https://wa.me/905318433309" target="_blank" class="modern-hero-btn hero-whatsapp-btn">
+                <a href="https://wa.me/905318433309" target="_blank" class="modern-hero-btn hero-whatsapp-btn" data-i18n="index.getInTouch">
                     İletişime Geç <i class="ph ph-arrow-right"></i>
                 </a>
             </div>
@@ -198,9 +202,9 @@
     </div>
     <!-- Slider Dots — sabit hero altı konumu -->
     <div class="hero-dots">
-        <button class="hero-dot active" aria-label="Slayt 1"></button>
-        <button class="hero-dot" aria-label="Slayt 2"></button>
-        <button class="hero-dot" aria-label="Slayt 3"></button>
+        <button class="hero-dot active" aria-label="Slayt 1" data-i18n-aria="index.slide1"></button>
+        <button class="hero-dot" aria-label="Slayt 2" data-i18n-aria="index.slide2"></button>
+        <button class="hero-dot" aria-label="Slayt 3" data-i18n-aria="index.slide3"></button>
     </div>
 </header>
 
@@ -256,19 +260,19 @@
     <div class="marquee-content">
         <span>Yakaplant</span>
         <span>•</span>
-        <span>Sürdürülebilir</span>
+        <span data-i18n="index.marquee1">Sürdürülebilir</span>
         <span>•</span>
-        <span>Modern</span>
+        <span data-i18n="index.marquee2">Modern</span>
         <span>•</span>
-        <span>Doğal</span>
+        <span data-i18n="index.marquee3">Doğal</span>
         <span>•</span>
         <span>Yakaplant</span>
         <span>•</span>
-        <span>Sürdürülebilir</span>
+        <span data-i18n="index.marquee1">Sürdürülebilir</span>
         <span>•</span>
-        <span>Modern</span>
+        <span data-i18n="index.marquee2">Modern</span>
         <span>•</span>
-        <span>Doğal</span>
+        <span data-i18n="index.marquee3">Doğal</span>
         <span>•</span>
     </div>
 </div>
@@ -291,8 +295,8 @@
 <section class="bento-section">
     <div class="container">
         <div class="bento-header reveal">
-            <h2 class="section-title">Yakaplant Dünyası</h2>
-            <p>Doğanın en estetik halini yaşam alanlarınıza taşıyoruz.</p>
+            <h2 class="section-title" data-i18n="index.bentoHeader">Yakaplant Dünyası</h2>
+            <p data-i18n="index.bentoSubtitle">Doğanın en estetik halini yaşam alanlarınıza taşıyoruz.</p>
         </div>
 
         <div class="bento-grid">
@@ -301,8 +305,8 @@
                 <img src="assets/collection_bg.png" alt="Koleksiyon">
                 <!-- Using hero image as placeholder for collection focus -->
                 <div class="bento-overlay">
-                    <h3>Koleksiyon</h3>
-                    <p>Bahçeniz ve yaşam alanlarınız için en özel bitkiler.</p>
+                    <h3 data-i18n="index.bentoCollection">Koleksiyon</h3>
+                    <p data-i18n="index.bentoCollectionDesc">Bahçeniz ve yaşam alanlarınız için en özel bitkiler.</p>
                 </div>
             </a>
 
@@ -311,8 +315,8 @@
                 <!-- We need a distinct image ideally, creating a colored placeholder block via style if no image available, or reusing asset -->
                 <img src="assets/care_bg.png" alt="Bakım Rehberi" style="filter: grayscale(20%);">
                 <div class="bento-overlay">
-                    <h3>Bakım Rehberi</h3>
-                    <p>Uzman ipuçları ile bitkileriniz hep canlı.</p>
+                    <h3 data-i18n="index.bentoCare">Bakım Rehberi</h3>
+                    <p data-i18n="index.bentoCareDesc">Uzman ipuçları ile bitkileriniz hep canlı.</p>
                 </div>
             </a>
 
@@ -320,8 +324,8 @@
             <a href="/about" class="bento-item bento-wide reveal">
                 <img src="assets/about_bg.png" alt="Hakkımızda">
                 <div class="bento-overlay">
-                    <h3>Hakkımızda</h3>
-                    <p>Doğayı tasarlama hikayemizi okuyun.</p>
+                    <h3 data-i18n="index.bentoAbout">Hakkımızda</h3>
+                    <p data-i18n="index.bentoAboutDesc">Doğayı tasarlama hikayemizi okuyun.</p>
                 </div>
             </a>
         </div>
@@ -336,7 +340,7 @@
         <div class="footer-content">
             <div class="footer-brand">
                 <a href="/" class="logo"><img src="/assets/logo.jpeg" alt="Yakaplant Logo" class="logo-img"><span class="logo-text">Yaka<span class="highlight">plant</span><span class="dot">.</span></span></a>
-                <p>© 2026 Tüm hakları saklıdır.</p>
+                <p data-i18n="footer.rights">© 2026 Tüm hakları saklıdır.</p>
             </div>
             <div class="social-links">
                 <a href="https://www.instagram.com/yakaplant" target="_blank" aria-label="Instagram"><i
@@ -348,7 +352,14 @@
     </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/translations.js"></script>
+<script src="js/lang.js"></script>
 <script src="plant_data.js"></script>
+<script src="js/plant_translations.js"></script>
 <script src="script.js"></script>
 </body>
 
