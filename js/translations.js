@@ -288,7 +288,14 @@ const translations = {
       close: "Kapat",
       citySearch: "Şehir ara...",
       cancel: "İptal",
-      select: "Seç"
+      select: "Seç",
+      requestQuote: "Teklif İste",
+      noResults: "Sonuç bulunamadı",
+      tryDifferent: "Farklı bir arama veya kategori deneyin.",
+      clearSearch: "Aramayı Temizle",
+      loginForFavorites: "Favorilere eklemek için giriş yapmalısınız",
+      noPlantsCategory: "Bu kategoride henüz bitki bulunamadı.",
+      examine: "İncele"
     }
   },
 
@@ -577,7 +584,14 @@ const translations = {
       close: "Close",
       citySearch: "Search city...",
       cancel: "Cancel",
-      select: "Select"
+      select: "Select",
+      requestQuote: "Request Quote",
+      noResults: "No results found",
+      tryDifferent: "Try a different search or category.",
+      clearSearch: "Clear Search",
+      loginForFavorites: "Please sign in to add favorites",
+      noPlantsCategory: "No plants found in this category yet.",
+      examine: "View"
     }
   },
 
@@ -866,7 +880,14 @@ const translations = {
       close: "Schließen",
       citySearch: "Stadt suchen...",
       cancel: "Abbrechen",
-      select: "Auswählen"
+      select: "Auswählen",
+      requestQuote: "Angebot anfordern",
+      noResults: "Keine Ergebnisse",
+      tryDifferent: "Versuchen Sie eine andere Suche.",
+      clearSearch: "Suche löschen",
+      loginForFavorites: "Bitte anmelden um Favoriten hinzuzufügen",
+      noPlantsCategory: "In dieser Kategorie wurden noch keine Pflanzen gefunden.",
+      examine: "Ansehen"
     }
   },
 
@@ -1155,7 +1176,14 @@ const translations = {
       close: "Sluiten",
       citySearch: "Stad zoeken...",
       cancel: "Annuleren",
-      select: "Selecteren"
+      select: "Selecteren",
+      requestQuote: "Offerte aanvragen",
+      noResults: "Geen resultaten",
+      tryDifferent: "Probeer een andere zoekopdracht.",
+      clearSearch: "Zoekopdracht wissen",
+      loginForFavorites: "Log in om favorieten toe te voegen",
+      noPlantsCategory: "Er zijn nog geen planten in deze categorie gevonden.",
+      examine: "Bekijken"
     }
   }
 };

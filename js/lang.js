@@ -112,6 +112,14 @@
     if (typeof YakaAuth !== 'undefined' && typeof YakaAuth.updateNavbar === 'function') {
       YakaAuth.updateNavbar();
     }
+    // Re-render plant cards with new language
+    if (typeof renderShop === 'function') {
+      var grid = document.getElementById('product-grid');
+      if (grid) {
+        var state = typeof lastShopRenderState !== 'undefined' ? lastShopRenderState : { filter: 'all', query: '' };
+        renderShop(state.filter, { query: state.query });
+      }
+    }
   }
 
   /** Initialize dropdown behaviour */

@@ -10,6 +10,15 @@ function t(key, fallback) {
     return fallback || key;
 }
 
+function getPlantTitle(plant) {
+    var lang = typeof window.YakaLang !== 'undefined' ? window.YakaLang.get() : 'tr';
+    if (lang === 'tr') return plant.title;
+    if (typeof plantTranslations !== 'undefined' && plantTranslations[lang] && plantTranslations[lang][plant.id]) {
+        return plantTranslations[lang][plant.id];
+    }
+    return plant.title;
+}
+
 // DOM Elements
 const mobileToggle = document.getElementById('mobile-toggle');
 const themeToggle = document.getElementById('theme-toggle');
@@ -379,6 +388,7 @@ const renderShop = async (filter = 'all', options = {}) => {
         filtered = filtered.filter(p => {
             const hay = normalizeStringSimple([
                 p.title,
+                getPlantTitle(p),
                 p.scientific,
                 p.category,
                 p.env,
@@ -402,9 +412,9 @@ const renderShop = async (filter = 'all', options = {}) => {
         empty.style.gridColumn = '1 / -1';
         empty.innerHTML = `
             <div class="product-info" style="text-align:center; padding: 2.25rem 1.5rem;">
-                <h3 style="margin-bottom: 0.35rem;">Sonuç bulunamadı</h3>
-                <p class="scientific-name" style="margin-bottom: 1.1rem;">Farklı bir arama veya kategori deneyin.</p>
-                <a href="/shop" class="btn btn-outline">Aramayı Temizle</a>
+                <h3 style="margin-bottom: 0.35rem;">${t('dynamic.noResults', 'Sonuç bulunamadı')}</h3>
+                <p class="scientific-name" style="margin-bottom: 1.1rem;">${t('dynamic.tryDifferent', 'Farklı bir arama veya kategori deneyin.')}</p>
+                <a href="/shop" class="btn btn-outline">${t('dynamic.clearSearch', 'Aramayı Temizle')}</a>
             </div>
         `;
         nextCardsFragment.appendChild(empty);
@@ -414,7 +424,8 @@ const renderShop = async (filter = 'all', options = {}) => {
 
     filtered.forEach((plant, index) => {
         const isFav = favorites.has(plant.id);
-        const quoteMessage = `Merhaba, ${plant.title} (${plant.scientific}) bitkisi hakkında fiyat bilgisi almak istiyorum.`;
+        const displayTitle = getPlantTitle(plant);
+        const quoteMessage = `Merhaba, ${displayTitle} (${plant.scientific}) bitkisi hakkında fiyat bilgisi almak istiyorum.`;
         const quoteUrl = `https://wa.me/905318433309?text=${encodeURIComponent(quoteMessage)}`;
         const card = document.createElement('div');
         card.className = 'product-card';
@@ -424,7 +435,7 @@ const renderShop = async (filter = 'all', options = {}) => {
         }
         card.innerHTML = `
             <div class="product-image">
-                <img src="${plant.image}" alt="${plant.title}" loading="${index < 4 ? 'eager' : 'lazy'}" decoding="async" fetchpriority="${index < 2 ? 'high' : 'auto'}">
+                <img src="${plant.image}" alt="${displayTitle}" loading="${index < 4 ? 'eager' : 'lazy'}" decoding="async" fetchpriority="${index < 2 ? 'high' : 'auto'}">
                 <button class="fav-btn ${isFav ? 'active' : ''}" data-id="${plant.id}" onclick="toggleFavorite(event, '${plant.id}')">
                     <i class="${isFav ? 'ph-fill ph-heart' : 'ph ph-heart'}" style="${isFav ? 'color: #2d6a4f;' : ''}"></i>
                 </button>
@@ -433,10 +444,10 @@ const renderShop = async (filter = 'all', options = {}) => {
                 </div>
             </div>
             <div class="product-info">
-                <h3>${plant.title}</h3>
+                <h3>${displayTitle}</h3>
                 <p class="scientific-name">${plant.scientific}</p>
-                <a href="/contact" class="btn-order">Sipariş İçin İletişime Geç <i class="ph ph-whatsapp-logo"></i></a>
-                <a href="${quoteUrl}" class="btn-quote" target="_blank" rel="noopener">Teklif İste <i class="ph ph-whatsapp-logo"></i></a>
+                <a href="/contact" class="btn-order">${t('dynamic.orderContact', 'Sipariş İçin İletişime Geç')} <i class="ph ph-whatsapp-logo"></i></a>
+                <a href="${quoteUrl}" class="btn-quote" target="_blank" rel="noopener">${t('dynamic.requestQuote', 'Teklif İste')} <i class="ph ph-whatsapp-logo"></i></a>
             </div>
         `;
 
@@ -473,9 +484,9 @@ window.toggleFavorite = async (event, productId) => {
     // Check auth
     if (typeof YakaAuth === 'undefined' || !YakaAuth.isLoggedIn()) {
         if (typeof YakaUI !== 'undefined') {
-            YakaUI.toast.info('Favorilere eklemek için giriş yapmalısınız');
+            YakaUI.toast.info(t('dynamic.loginForFavorites', 'Favorilere eklemek için giriş yapmalısınız'));
         } else {
-            alert('Favorilere eklemek için giriş yapmalısınız');
+            alert(t('dynamic.loginForFavorites', 'Favorilere eklemek için giriş yapmalısınız'));
         }
         return;
     }
@@ -733,18 +744,19 @@ const openModal = (plantKey) => {
     }
 
     // Populate Data
+    var modalDisplayTitle = getPlantTitle(data);
     if (title_el) {
         const a = document.createElement('a');
         a.className = 'modal-care-link';
         a.href = `/bakim/${plantKey}`;
-        a.textContent = data.title;
+        a.textContent = modalDisplayTitle;
         title_el.replaceChildren(a);
     }
     if (scientific_el) scientific_el.textContent = data.scientific;
     if (desc_el) desc_el.innerHTML = data.desc;
     if (img_el) {
         img_el.src = data.image;
-        img_el.alt = data.title;
+        img_el.alt = modalDisplayTitle;
     }
 
     // Helper functions to convert values to informative sentences
@@ -809,7 +821,17 @@ const openModal = (plantKey) => {
 
     // Update Difficulty Badge
     if (dif_badge) {
-        dif_badge.textContent = data.difficulty;
+        const difficultyTranslations = {
+            en: {'Kolay': 'Easy', 'Çok Kolay': 'Very Easy', 'Orta': 'Medium', 'Zor': 'Hard'},
+            de: {'Kolay': 'Einfach', 'Çok Kolay': 'Sehr Einfach', 'Orta': 'Mittel', 'Zor': 'Schwer'},
+            nl: {'Kolay': 'Makkelijk', 'Çok Kolay': 'Zeer Makkelijk', 'Orta': 'Gemiddeld', 'Zor': 'Moeilijk'}
+        };
+        var diffLang = typeof window.YakaLang !== 'undefined' ? window.YakaLang.get() : 'tr';
+        var diffText = data.difficulty;
+        if (diffLang !== 'tr' && difficultyTranslations[diffLang] && difficultyTranslations[diffLang][data.difficulty]) {
+            diffText = difficultyTranslations[diffLang][data.difficulty];
+        }
+        dif_badge.textContent = diffText;
         dif_badge.className = 'modal-badge badge-difficulty';
         if (data.difficulty === 'Kolay' || data.difficulty === 'Çok Kolay') {
             dif_badge.classList.add('easy');
@@ -925,13 +947,15 @@ const searchPlants = (query) => {
         const plant = plantData[key];
 
         // Create a large searchable string from all relevant properties
+        const translatedTitle = getPlantTitle(plant);
         const searchableContent = `
-            ${plant.title} 
-            ${plant.scientific} 
-            ${plant.desc} 
-            ${plant.category} 
-            ${plant.difficulty} 
-            ${plant.env} 
+            ${plant.title}
+            ${translatedTitle}
+            ${plant.scientific}
+            ${plant.desc}
+            ${plant.category}
+            ${plant.difficulty}
+            ${plant.env}
             ${plant.water}
         `;
 
@@ -949,10 +973,11 @@ const renderDropdown = (results) => {
             const plant = plantData[key];
             const item = document.createElement('div');
             item.className = 'search-result-item';
+            var careDropdownTitle = getPlantTitle(plant);
             item.innerHTML = `
-                <img src="${plant.image}" alt="${plant.title}" loading="lazy" decoding="async">
+                <img src="${plant.image}" alt="${careDropdownTitle}" loading="lazy" decoding="async">
                 <div>
-                    <div style="font-weight: 500; color: var(--primary-dark);">${plant.title}</div>
+                    <div style="font-weight: 500; color: var(--primary-dark);">${careDropdownTitle}</div>
                     <div style="font-size: 0.8rem; color: var(--text-muted); font-style: italic;">${plant.scientific}</div>
                 </div>
             `;
@@ -969,17 +994,18 @@ const renderDropdown = (results) => {
 // Select Plant
 const selectPlant = (key) => {
     const plant = plantData[key];
-    plantSearchInput.value = plant.title;
+    var selectTitle = getPlantTitle(plant);
+    plantSearchInput.value = selectTitle;
     searchDropdown.classList.remove('active');
 
     // Render Result Card dynamically
     searchResultContainer.innerHTML = `
         <div class="product-card" id="search-result-card" style="cursor: pointer;">
             <div class="product-image">
-                <img src="${plant.image}" alt="${plant.title}" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: contain; padding: 1rem; background: #f8f9fa;">
+                <img src="${plant.image}" alt="${selectTitle}" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: contain; padding: 1rem; background: #f8f9fa;">
             </div>
             <div class="product-info">
-                <h3>${plant.title}</h3>
+                <h3>${selectTitle}</h3>
                 <p class="scientific-name">${plant.scientific}</p>
             </div>
         </div>
@@ -1116,7 +1142,7 @@ const filterCareResults = (criteria) => {
         searchResultContainer.innerHTML = `
             <div class="no-results" style="text-align:center; padding: 2rem;">
                 <i class="ph ph-plant" style="font-size: 3rem; color: #ccc;"></i>
-                <p>Bu kategoride henüz bitki bulunamadı.</p>
+                <p>${t('dynamic.noPlantsCategory', 'Bu kategoride henüz bitki bulunamadı.')}</p>
             </div>`;
     }
 
@@ -1138,6 +1164,7 @@ const renderSearchResults = (plants) => {
     container.style.gap = '2rem';
 
     plants.forEach(plant => {
+        var renderTitle = getPlantTitle(plant);
         const card = document.createElement('div');
         card.className = 'product-card reveal'; // Reuse product card style
         card.style.animation = 'fadeInUp 0.5s ease backwards';
@@ -1145,15 +1172,15 @@ const renderSearchResults = (plants) => {
         // Assuming openModal is globally available or defined earlier
         card.innerHTML = `
             <div class="product-image">
-                 <img src="${plant.image}" alt="${plant.title}" loading="lazy" decoding="async">
+                 <img src="${plant.image}" alt="${renderTitle}" loading="lazy" decoding="async">
                  <div class="product-overlay">
                     <button class="add-btn" onclick="openModal('${plant.id}')">
-                        <i class="ph ph-eye"></i> İncele
+                        <i class="ph ph-eye"></i> ${t('dynamic.examine', 'İncele')}
                     </button>
                  </div>
             </div>
             <div class="product-info">
-                <h3>${plant.title}</h3>
+                <h3>${renderTitle}</h3>
                 <p class="scientific">${plant.scientific}</p>
                 <div class="product-meta">
                     <span><i class="ph ph-drop"></i> ${plant.water}</span>
