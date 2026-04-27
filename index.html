@@ -341,6 +341,28 @@
         padding-bottom: 6rem;
     }
 
+    /* Dark mode */
+    body.dark-mode .farm-showcase {
+        background: linear-gradient(180deg, #0e0e0e 0%, #161616 100%);
+    }
+    body.dark-mode .farm-gallery-title {
+        color: #f1f5ee;
+    }
+    body.dark-mode .farm-gallery-sub {
+        color: #9aa39c;
+    }
+    body.dark-mode .farm-photo {
+        background: #232323;
+        box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
+    }
+    body.dark-mode .farm-photo:hover {
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.65);
+    }
+    body.dark-mode .farm-eyebrow {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.15);
+    }
+
     /* Cinematic Video Hero */
     .farm-video-wrapper {
         position: relative;
@@ -558,6 +580,327 @@
     }
 </style>
 
+<!-- 2.7 Product Showcase: Auto-scrolling product ribbon -->
+<section class="product-showcase">
+    <div class="product-showcase-bg">
+        <div class="bg-blob blob-1"></div>
+        <div class="bg-blob blob-2"></div>
+        <div class="bg-blob blob-3"></div>
+    </div>
+
+    <div class="container">
+        <div class="product-showcase-header reveal">
+            <span class="product-eyebrow" data-i18n="index.productEyebrow">KOLEKSİYONUMUZ</span>
+            <h2 class="product-title" data-i18n="index.productTitle">Yüzlerce tür, sonsuz olasılık</h2>
+            <p class="product-subtitle" data-i18n="index.productSubtitle">Ağaçlardan çiçeklere, çalılardan tırmanıcılara — bahçenize hayat verecek tüm bitkiler tek bir yerde.</p>
+            <a href="/shop" class="product-cta" data-i18n="index.productCta">
+                <span>Tüm Koleksiyonu Gör</span>
+                <i class="ph ph-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Top row: scrolls left -->
+    <div class="product-track-wrapper">
+        <div class="product-track product-track-left">
+            <a href="/shop?p=zeytin" class="product-card"><img src="assets/products/zeytin-1.png" alt="Zeytin" loading="lazy"><span class="product-card-name">Zeytin</span></a>
+            <a href="/shop?p=manolya" class="product-card"><img src="assets/products/manolya-1.png" alt="Manolya" loading="lazy"><span class="product-card-name">Manolya</span></a>
+            <a href="/shop?p=erguvan" class="product-card"><img src="assets/products/erguvan-1.png" alt="Erguvan" loading="lazy"><span class="product-card-name">Erguvan</span></a>
+            <a href="/shop?p=cinar" class="product-card"><img src="assets/products/cinar-1.png" alt="Çınar" loading="lazy"><span class="product-card-name">Çınar</span></a>
+            <a href="/shop?p=akcaagac" class="product-card"><img src="assets/products/akcaagac-1.png" alt="Akçaağaç" loading="lazy"><span class="product-card-name">Akçaağaç</span></a>
+            <a href="/shop?p=mimoza" class="product-card"><img src="assets/products/mimoza-1.png" alt="Mimoza" loading="lazy"><span class="product-card-name">Mimoza</span></a>
+            <a href="/shop?p=ihlamur" class="product-card"><img src="assets/products/ihlamur-1.png" alt="Ihlamur" loading="lazy"><span class="product-card-name">Ihlamur</span></a>
+            <a href="/shop?p=oya" class="product-card"><img src="assets/products/oya-1.png" alt="Oya" loading="lazy"><span class="product-card-name">Oya</span></a>
+            <!-- Duplicate for seamless loop -->
+            <a href="/shop?p=zeytin" class="product-card" aria-hidden="true"><img src="assets/products/zeytin-1.png" alt="" loading="lazy"><span class="product-card-name">Zeytin</span></a>
+            <a href="/shop?p=manolya" class="product-card" aria-hidden="true"><img src="assets/products/manolya-1.png" alt="" loading="lazy"><span class="product-card-name">Manolya</span></a>
+            <a href="/shop?p=erguvan" class="product-card" aria-hidden="true"><img src="assets/products/erguvan-1.png" alt="" loading="lazy"><span class="product-card-name">Erguvan</span></a>
+            <a href="/shop?p=cinar" class="product-card" aria-hidden="true"><img src="assets/products/cinar-1.png" alt="" loading="lazy"><span class="product-card-name">Çınar</span></a>
+            <a href="/shop?p=akcaagac" class="product-card" aria-hidden="true"><img src="assets/products/akcaagac-1.png" alt="" loading="lazy"><span class="product-card-name">Akçaağaç</span></a>
+            <a href="/shop?p=mimoza" class="product-card" aria-hidden="true"><img src="assets/products/mimoza-1.png" alt="" loading="lazy"><span class="product-card-name">Mimoza</span></a>
+            <a href="/shop?p=ihlamur" class="product-card" aria-hidden="true"><img src="assets/products/ihlamur-1.png" alt="" loading="lazy"><span class="product-card-name">Ihlamur</span></a>
+            <a href="/shop?p=oya" class="product-card" aria-hidden="true"><img src="assets/products/oya-1.png" alt="" loading="lazy"><span class="product-card-name">Oya</span></a>
+        </div>
+    </div>
+
+    <!-- Bottom row: scrolls right (opposite direction) -->
+    <div class="product-track-wrapper">
+        <div class="product-track product-track-right">
+            <a href="/shop?p=begonvil" class="product-card"><img src="assets/products/begonvil-1.png" alt="Begonvil" loading="lazy"><span class="product-card-name">Begonvil</span></a>
+            <a href="/shop?p=abelya" class="product-card"><img src="assets/products/abelya-1.png" alt="Abelya" loading="lazy"><span class="product-card-name">Abelya</span></a>
+            <a href="/shop?p=biberiye" class="product-card"><img src="assets/products/biberiye-1.png" alt="Biberiye" loading="lazy"><span class="product-card-name">Biberiye</span></a>
+            <a href="/shop?p=defne" class="product-card"><img src="assets/products/defne-1.png" alt="Defne" loading="lazy"><span class="product-card-name">Defne</span></a>
+            <a href="/shop?p=ardic" class="product-card"><img src="assets/products/ardic-1.png" alt="Ardıç" loading="lazy"><span class="product-card-name">Ardıç</span></a>
+            <a href="/shop?p=mavi-ladin" class="product-card"><img src="assets/products/mavi-ladin-1.png" alt="Mavi Ladin" loading="lazy"><span class="product-card-name">Mavi Ladin</span></a>
+            <a href="/shop?p=agapanthus" class="product-card"><img src="assets/products/agapanthus-1.png" alt="Agapanthus" loading="lazy"><span class="product-card-name">Agapanthus</span></a>
+            <a href="/shop?p=sus-kirazi" class="product-card"><img src="assets/products/sus-kirazi-1.png" alt="Süs Kirazı" loading="lazy"><span class="product-card-name">Süs Kirazı</span></a>
+            <!-- Duplicate -->
+            <a href="/shop?p=begonvil" class="product-card" aria-hidden="true"><img src="assets/products/begonvil-1.png" alt="" loading="lazy"><span class="product-card-name">Begonvil</span></a>
+            <a href="/shop?p=abelya" class="product-card" aria-hidden="true"><img src="assets/products/abelya-1.png" alt="" loading="lazy"><span class="product-card-name">Abelya</span></a>
+            <a href="/shop?p=biberiye" class="product-card" aria-hidden="true"><img src="assets/products/biberiye-1.png" alt="" loading="lazy"><span class="product-card-name">Biberiye</span></a>
+            <a href="/shop?p=defne" class="product-card" aria-hidden="true"><img src="assets/products/defne-1.png" alt="" loading="lazy"><span class="product-card-name">Defne</span></a>
+            <a href="/shop?p=ardic" class="product-card" aria-hidden="true"><img src="assets/products/ardic-1.png" alt="" loading="lazy"><span class="product-card-name">Ardıç</span></a>
+            <a href="/shop?p=mavi-ladin" class="product-card" aria-hidden="true"><img src="assets/products/mavi-ladin-1.png" alt="" loading="lazy"><span class="product-card-name">Mavi Ladin</span></a>
+            <a href="/shop?p=agapanthus" class="product-card" aria-hidden="true"><img src="assets/products/agapanthus-1.png" alt="" loading="lazy"><span class="product-card-name">Agapanthus</span></a>
+            <a href="/shop?p=sus-kirazi" class="product-card" aria-hidden="true"><img src="assets/products/sus-kirazi-1.png" alt="" loading="lazy"><span class="product-card-name">Süs Kirazı</span></a>
+        </div>
+    </div>
+</section>
+
+<style>
+    .product-showcase {
+        position: relative;
+        padding: 6rem 0 5rem;
+        overflow: hidden;
+        background: linear-gradient(135deg, #f4f9f1 0%, #e8f3e2 50%, #f4f9f1 100%);
+        isolation: isolate;
+    }
+
+    .product-showcase-bg {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        overflow: hidden;
+    }
+
+    .bg-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.45;
+        animation: floatBlob 18s ease-in-out infinite;
+    }
+
+    .blob-1 {
+        width: 480px;
+        height: 480px;
+        background: radial-gradient(circle, #9bc995 0%, transparent 70%);
+        top: -100px;
+        left: -120px;
+        animation-delay: 0s;
+    }
+
+    .blob-2 {
+        width: 380px;
+        height: 380px;
+        background: radial-gradient(circle, #c9e0a8 0%, transparent 70%);
+        top: 40%;
+        right: -100px;
+        animation-delay: -6s;
+    }
+
+    .blob-3 {
+        width: 420px;
+        height: 420px;
+        background: radial-gradient(circle, #b3d99a 0%, transparent 70%);
+        bottom: -150px;
+        left: 30%;
+        animation-delay: -12s;
+    }
+
+    @keyframes floatBlob {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(40px, -30px) scale(1.05); }
+        66% { transform: translate(-30px, 30px) scale(0.95); }
+    }
+
+    .product-showcase-header {
+        text-align: center;
+        max-width: 720px;
+        margin: 0 auto 4rem;
+    }
+
+    .product-eyebrow {
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.25em;
+        color: #2d6a4f;
+        background: rgba(45, 106, 79, 0.08);
+        padding: 0.5rem 1.1rem;
+        border-radius: 999px;
+        display: inline-block;
+        margin-bottom: 1.25rem;
+    }
+
+    .product-title {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 700;
+        color: #1a2e1f;
+        margin: 0 0 1rem;
+        line-height: 1.15;
+    }
+
+    .product-subtitle {
+        font-size: 1.1rem;
+        color: #4a5d4f;
+        margin: 0 0 2rem;
+        line-height: 1.6;
+    }
+
+    .product-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.95rem 1.8rem;
+        background: #2d6a4f;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        border-radius: 999px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+        box-shadow: 0 8px 24px rgba(45, 106, 79, 0.25);
+    }
+
+    .product-cta:hover {
+        transform: translateY(-2px);
+        background: #245a42;
+        box-shadow: 0 12px 30px rgba(45, 106, 79, 0.35);
+    }
+
+    .product-cta i {
+        transition: transform 0.3s ease;
+    }
+
+    .product-cta:hover i {
+        transform: translateX(4px);
+    }
+
+    /* Tracks */
+    .product-track-wrapper {
+        overflow: hidden;
+        padding: 1rem 0;
+        mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+        -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+    }
+
+    .product-track {
+        display: flex;
+        gap: 1.5rem;
+        width: max-content;
+    }
+
+    .product-track-left {
+        animation: scrollLeft 50s linear infinite;
+    }
+
+    .product-track-right {
+        animation: scrollRight 55s linear infinite;
+    }
+
+    @keyframes scrollLeft {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+    }
+
+    @keyframes scrollRight {
+        from { transform: translateX(-50%); }
+        to { transform: translateX(0); }
+    }
+
+    .product-track:hover {
+        animation-play-state: paused;
+    }
+
+    .product-card {
+        flex: 0 0 auto;
+        width: 200px;
+        height: 240px;
+        background: #fff;
+        border-radius: 20px;
+        overflow: hidden;
+        position: relative;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: 0 6px 20px rgba(20, 40, 25, 0.08);
+        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-card:hover {
+        transform: translateY(-6px) scale(1.02);
+        box-shadow: 0 14px 36px rgba(20, 40, 25, 0.18);
+    }
+
+    .product-card img {
+        width: 100%;
+        flex: 1;
+        object-fit: cover;
+        background: #f0f5ed;
+        transition: transform 0.5s ease;
+    }
+
+    .product-card:hover img {
+        transform: scale(1.07);
+    }
+
+    .product-card-name {
+        padding: 0.75rem 1rem;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #1a2e1f;
+        text-align: center;
+        background: #fff;
+    }
+
+    /* Dark mode */
+    body.dark-mode .product-showcase {
+        background: linear-gradient(135deg, #0f1410 0%, #131a14 50%, #0f1410 100%);
+    }
+    body.dark-mode .blob-1,
+    body.dark-mode .blob-2,
+    body.dark-mode .blob-3 {
+        opacity: 0.18;
+    }
+    body.dark-mode .product-eyebrow {
+        color: #95d5b2;
+        background: rgba(149, 213, 178, 0.1);
+    }
+    body.dark-mode .product-title {
+        color: #f1f5ee;
+    }
+    body.dark-mode .product-subtitle {
+        color: #b5c0b6;
+    }
+    body.dark-mode .product-card {
+        background: #1c1c1c;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    }
+    body.dark-mode .product-card-name {
+        background: #1c1c1c;
+        color: #e8efe9;
+    }
+    body.dark-mode .product-card img {
+        background: #2a2a2a;
+    }
+
+    @media (max-width: 640px) {
+        .product-showcase {
+            padding: 4rem 0 3rem;
+        }
+        .product-card {
+            width: 150px;
+            height: 190px;
+        }
+        .product-card-name {
+            font-size: 0.85rem;
+            padding: 0.6rem 0.5rem;
+        }
+        .product-track {
+            gap: 1rem;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .product-track-left, .product-track-right {
+            animation: none;
+        }
+        .bg-blob {
+            animation: none;
+        }
+    }
+</style>
+
 <!-- 3. Bento Grid Discovery -->
 <section class="bento-section">
     <div class="container">
@@ -589,7 +932,7 @@
 
             <!-- Wide Item: About -->
             <a href="/about" class="bento-item bento-wide reveal">
-                <img src="assets/about_bg.png" alt="Hakkımızda">
+                <img src="assets/farm-2.jpg" alt="Hakkımızda">
                 <div class="bento-overlay">
                     <h3 data-i18n="index.bentoAbout">Hakkımızda</h3>
                     <p data-i18n="index.bentoAboutDesc">Doğayı tasarlama hikayemizi okuyun.</p>
