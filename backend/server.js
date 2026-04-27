@@ -115,8 +115,7 @@ app.use(cookieParser());
 // =====================================================
 
 if (process.env.NODE_ENV === 'production' && !process.env.SESSION_SECRET) {
-    console.error('FATAL: SESSION_SECRET environment variable is not set in production!');
-    process.exit(1);
+    console.error('WARNING: SESSION_SECRET is not set. Sessions will not be secure. Set this in your Vercel environment variables.');
 }
 
 const sessionConfig = {
