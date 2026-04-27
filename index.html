@@ -291,6 +291,273 @@
     }, 1000); // 1 second fallback - quick!
 </script>
 
+<!-- 2.5 Farm Showcase: Cinematic Video + Photo Gallery -->
+<section class="farm-showcase">
+    <div class="farm-video-wrapper reveal">
+        <video class="farm-video" autoplay muted loop playsinline preload="metadata" poster="assets/farm-1.jpg">
+            <source src="assets/farm-video.mp4" type="video/mp4">
+        </video>
+        <div class="farm-video-overlay"></div>
+        <div class="farm-video-content">
+            <span class="farm-eyebrow" data-i18n="index.farmEyebrow">FİDANLIĞIMIZDAN</span>
+            <h2 class="farm-title" data-i18n="index.farmTitle">Doğanın kalbinde yetiştirilen bitkiler</h2>
+            <p class="farm-subtitle" data-i18n="index.farmSubtitle">Her bir fidan, bizzat bizim ellerimizde özenle büyütülür.</p>
+        </div>
+    </div>
+
+    <div class="farm-gallery container">
+        <div class="farm-gallery-header reveal">
+            <h3 class="farm-gallery-title" data-i18n="index.farmGalleryTitle">Sahadan kareler</h3>
+            <p class="farm-gallery-sub" data-i18n="index.farmGallerySub">Binlerce fidan, tek bir tutku.</p>
+        </div>
+        <div class="farm-gallery-grid">
+            <figure class="farm-photo farm-photo-tall reveal">
+                <img src="assets/farm-1.jpg" alt="Yakaplant servi fidanları" loading="lazy">
+                <figcaption data-i18n="index.farmPhoto1">Servi sıraları</figcaption>
+            </figure>
+            <figure class="farm-photo farm-photo-wide reveal">
+                <img src="assets/farm-2.jpg" alt="Yakaplant fidanlık alanı" loading="lazy">
+                <figcaption data-i18n="index.farmPhoto2">Fidanlık alanı</figcaption>
+            </figure>
+            <figure class="farm-photo reveal">
+                <img src="assets/farm-3.jpg" alt="Yakaplant ağaç fidanları" loading="lazy">
+                <figcaption data-i18n="index.farmPhoto3">Ağaç fidanları</figcaption>
+            </figure>
+            <figure class="farm-photo reveal">
+                <img src="assets/farm-4.jpg" alt="Yakaplant yetiştirme alanı" loading="lazy">
+                <figcaption data-i18n="index.farmPhoto4">Yetiştirme alanı</figcaption>
+            </figure>
+            <figure class="farm-photo farm-photo-tall reveal">
+                <img src="assets/farm-5.jpg" alt="Yakaplant sarmaşık ve süs bitkileri" loading="lazy">
+                <figcaption data-i18n="index.farmPhoto5">Süs bitkileri</figcaption>
+            </figure>
+        </div>
+    </div>
+</section>
+
+<style>
+    .farm-showcase {
+        background: linear-gradient(180deg, #fafaf7 0%, #fff 100%);
+        padding-bottom: 6rem;
+    }
+
+    /* Cinematic Video Hero */
+    .farm-video-wrapper {
+        position: relative;
+        width: 100%;
+        height: 70vh;
+        min-height: 480px;
+        max-height: 720px;
+        overflow: hidden;
+        margin-bottom: 5rem;
+    }
+
+    .farm-video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .farm-video-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%);
+        z-index: 1;
+    }
+
+    .farm-video-content {
+        position: relative;
+        z-index: 2;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-start;
+        padding: 0 6vw 5vh;
+        max-width: 1400px;
+        margin: 0 auto;
+        color: #fff;
+    }
+
+    .farm-eyebrow {
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.25em;
+        opacity: 0.9;
+        margin-bottom: 1rem;
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background: rgba(255,255,255,0.12);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 999px;
+    }
+
+    .farm-title {
+        font-size: clamp(2rem, 4.5vw, 3.5rem);
+        font-weight: 700;
+        line-height: 1.1;
+        margin: 0 0 1rem;
+        max-width: 780px;
+        text-shadow: 0 2px 30px rgba(0,0,0,0.4);
+    }
+
+    .farm-subtitle {
+        font-size: clamp(1rem, 1.4vw, 1.2rem);
+        opacity: 0.95;
+        max-width: 560px;
+        margin: 0;
+        text-shadow: 0 1px 12px rgba(0,0,0,0.4);
+    }
+
+    /* Gallery */
+    .farm-gallery {
+        padding: 0 1.5rem;
+    }
+
+    .farm-gallery-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .farm-gallery-title {
+        font-size: clamp(1.75rem, 3vw, 2.5rem);
+        font-weight: 700;
+        color: #1a2e1f;
+        margin: 0 0 0.5rem;
+    }
+
+    .farm-gallery-sub {
+        color: #6b7c6f;
+        font-size: 1.05rem;
+        margin: 0;
+    }
+
+    .farm-gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: 280px 280px;
+        gap: 1rem;
+        max-width: 1300px;
+        margin: 0 auto;
+    }
+
+    .farm-photo {
+        position: relative;
+        margin: 0;
+        overflow: hidden;
+        border-radius: 18px;
+        background: #eee;
+        box-shadow: 0 6px 30px rgba(20, 40, 25, 0.08);
+        transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease;
+        cursor: pointer;
+    }
+
+    .farm-photo:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 14px 40px rgba(20, 40, 25, 0.18);
+    }
+
+    .farm-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .farm-photo:hover img {
+        transform: scale(1.06);
+    }
+
+    .farm-photo figcaption {
+        position: absolute;
+        left: 1rem;
+        bottom: 1rem;
+        color: #fff;
+        font-size: 0.9rem;
+        font-weight: 500;
+        padding: 0.4rem 0.85rem;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-radius: 999px;
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .farm-photo:hover figcaption {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Asymmetric placement: 1st tall (col 1, span 2 rows), 2nd wide (cols 2-3, row 1), 3rd & 4th (col 2, col 3, row 2), 5th tall (col 4, span 2 rows) */
+    .farm-photo:nth-child(1) { grid-column: 1; grid-row: 1 / span 2; }
+    .farm-photo:nth-child(2) { grid-column: 2 / span 2; grid-row: 1; }
+    .farm-photo:nth-child(3) { grid-column: 2; grid-row: 2; }
+    .farm-photo:nth-child(4) { grid-column: 3; grid-row: 2; }
+    .farm-photo:nth-child(5) { grid-column: 4; grid-row: 1 / span 2; }
+
+    /* Tablet */
+    @media (max-width: 1024px) {
+        .farm-gallery-grid {
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: 240px 240px 240px 240px;
+        }
+        .farm-photo:nth-child(1) { grid-column: 1; grid-row: 1 / span 2; }
+        .farm-photo:nth-child(2) { grid-column: 2; grid-row: 1; }
+        .farm-photo:nth-child(3) { grid-column: 2; grid-row: 2; }
+        .farm-photo:nth-child(4) { grid-column: 1; grid-row: 3; }
+        .farm-photo:nth-child(5) { grid-column: 2; grid-row: 3 / span 2; }
+    }
+
+    /* Mobile */
+    @media (max-width: 640px) {
+        .farm-video-wrapper {
+            height: 60vh;
+            min-height: 380px;
+            margin-bottom: 3.5rem;
+        }
+        .farm-video-content {
+            padding: 0 1.5rem 2.5rem;
+        }
+        .farm-showcase {
+            padding-bottom: 4rem;
+        }
+        .farm-gallery-grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: repeat(5, 220px);
+            gap: 0.75rem;
+        }
+        .farm-photo:nth-child(n) {
+            grid-column: 1;
+            grid-row: auto;
+        }
+        .farm-photo figcaption {
+            opacity: 1;
+            transform: none;
+            font-size: 0.8rem;
+            left: 0.75rem;
+            bottom: 0.75rem;
+        }
+    }
+
+    /* Reduced motion: disable autoplay video by pausing via CSS isn't possible, but reduce hover anim */
+    @media (prefers-reduced-motion: reduce) {
+        .farm-photo, .farm-photo img, .farm-photo figcaption {
+            transition: none;
+        }
+        .farm-video {
+            animation: none;
+        }
+    }
+</style>
+
 <!-- 3. Bento Grid Discovery -->
 <section class="bento-section">
     <div class="container">
