@@ -2156,7 +2156,7 @@ body.dark-mode .explore-card:hover {
 /* Modal Body - 2 Column Layout */
 .modal-content.new-design .modal-body {
     display: grid;
-    grid-template-columns: 35% 65%;
+    grid-template-columns: 44% 56%;
     gap: 0;
     flex: 1;
     min-height: 0;
@@ -2165,14 +2165,26 @@ body.dark-mode .explore-card:hover {
 
 /* Left Column: Image */
 .modal-image-col {
-    background: linear-gradient(145deg, #f0f4f1 0%, #e4ebe6 100%);
+    background:
+        radial-gradient(ellipse 70% 55% at 50% 45%, rgba(255, 255, 255, 0.65) 0%, transparent 65%),
+        linear-gradient(145deg, #eaf3ec 0%, #d7e6da 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1.5rem;
+    padding: 0.5rem;
     position: relative;
     overflow: hidden;
-    min-height: 400px;
+    min-height: 520px;
+}
+
+/* Subtle leafy decoration */
+.modal-image-col::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 15% 80%, rgba(45, 106, 79, 0.06) 0%, transparent 30%),
+                       radial-gradient(circle at 85% 20%, rgba(45, 106, 79, 0.05) 0%, transparent 30%);
+    pointer-events: none;
 }
 
 /* Correct Hero Overlay Fix */
@@ -2340,12 +2352,15 @@ body.dark-mode .explore-card:hover {
     height: 100%;
     object-fit: contain;
     object-position: center;
-    filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.12));
-    transition: transform 0.4s ease;
+    filter: drop-shadow(0 22px 40px rgba(0, 0, 0, 0.18)) drop-shadow(0 6px 14px rgba(45, 106, 79, 0.12));
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: scale(1.05);
+    position: relative;
+    z-index: 1;
 }
 
 .modal-image-col:hover img {
-    transform: scale(1.03);
+    transform: scale(1.10);
 }
 
 /* Right Column: Info */
@@ -2543,14 +2558,15 @@ body.dark-mode .explore-card:hover {
     }
 
     .modal-image-col {
-        padding: 1.5rem;
-        min-height: 200px;
-        max-height: 250px;
+        padding: 1rem;
+        min-height: 280px;
+        max-height: 340px;
     }
 
     .modal-image-col img {
-        max-height: 200px;
+        max-height: 280px;
         width: auto;
+        transform: scale(1.02);
     }
 
     .modal-info-col {

@@ -623,9 +623,26 @@ if (shopFilterButtons.length > 0) {
 }
 
 // Initial Render
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     if (document.getElementById('product-grid')) {
-        renderShop(currentShopFilter || 'all', { query: currentShopQuery });
+        await renderShop(currentShopFilter || 'all', { query: currentShopQuery });
+
+        // If URL has ?p=<plantId>, open that plant's modal
+        try {
+            const params = new URLSearchParams(window.location.search);
+            const plantId = params.get('p');
+            if (plantId && typeof plantData !== 'undefined' && plantData[plantId]) {
+                // Wait one frame to ensure modal DOM is ready
+                requestAnimationFrame(() => {
+                    if (typeof openModal === 'function') openModal(plantId);
+                    // Scroll the matching card into view (so closing modal lands user at it)
+                    const card = document.querySelector(`.product-card .fav-btn[data-id="${plantId}"]`);
+                    if (card) card.closest('.product-card')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            }
+        } catch (err) {
+            console.warn('Plant modal auto-open failed:', err);
+        }
     }
 });
 
