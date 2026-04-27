@@ -230,7 +230,7 @@ async function updateNavbar() {
             <div class="nav-dropdown">
                 <button class="nav-link nav-dropdown-trigger">
                     <i class="ph ph-user-circle"></i>
-                    <span>${currentProfile.name || user.email}</span>
+                    <span>${escapeHTML(currentProfile.name || user.email)}</span>
                     <i class="ph ph-caret-down"></i>
                 </button>
                 <div class="nav-dropdown-menu">

@@ -185,8 +185,8 @@ function pageTemplate(plant) {
           <p>© 2026 Tüm hakları saklıdır.</p>
         </div>
         <div class="social-links">
-          <a href="https://www.instagram.com/yakaplant" target="_blank" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
-          <a href="https://wa.me/905318433309" target="_blank" aria-label="WhatsApp"><i class="ph ph-whatsapp-logo"></i></a>
+          <a href="https://www.instagram.com/yakaplant" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+          <a href="https://wa.me/905318433309" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="ph ph-whatsapp-logo"></i></a>
         </div>
       </div>
     </div>
@@ -285,8 +285,8 @@ function indexTemplate(plants) {
           <p>© 2026 Tüm hakları saklıdır.</p>
         </div>
         <div class="social-links">
-          <a href="https://www.instagram.com/yakaplant" target="_blank" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
-          <a href="https://wa.me/905318433309" target="_blank" aria-label="WhatsApp"><i class="ph ph-whatsapp-logo"></i></a>
+          <a href="https://www.instagram.com/yakaplant" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+          <a href="https://wa.me/905318433309" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="ph ph-whatsapp-logo"></i></a>
         </div>
       </div>
     </div>

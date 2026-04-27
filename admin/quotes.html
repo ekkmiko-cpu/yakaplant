@@ -280,6 +280,11 @@
     </div>
 
     <script>
+        function escapeHTML(str) {
+            if (str === null || str === undefined) return '';
+            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');
+        }
+
         const statusNames = {
             'new': 'Yeni',
             'contacted': 'İletişime Geçildi',
@@ -318,25 +323,26 @@
                     return;
                 }
 
+                const esc = (v) => escapeHTML(v);
                 document.getElementById('content').innerHTML = quotes.map(q => `
-                    <div class="quote-card" data-id="${q.id}">
+                    <div class="quote-card" data-id="${esc(String(q.id))}">
                         <div class="quote-header">
                             <div class="quote-user">
-                                <strong>${q.user_name || 'Bilinmeyen'} ${q.user_surname || ''}</strong>
-                                <small>${q.user_email || '-'}</small>
+                                <strong>${esc(q.user_name || 'Bilinmeyen')} ${esc(q.user_surname || '')}</strong>
+                                <small>${esc(q.user_email || '-')}</small>
                             </div>
                             <div class="quote-date">
                                 ${q.created_at ? new Date(q.created_at * 1000).toLocaleDateString('tr-TR') : '-'}
                             </div>
                         </div>
-                        <div class="quote-text">${q.request_text || 'Detay yok'}</div>
+                        <div class="quote-text">${esc(q.request_text || 'Detay yok')}</div>
                         <div class="quote-actions">
-                            <select class="status-select" onchange="updateStatus(${q.id}, this.value)">
+                            <select class="status-select" onchange="updateStatus(${Number(q.id)}, this.value)">
                                 ${Object.entries(statusNames).map(([val, label]) =>
-                    `<option value="${val}" ${q.status === val ? 'selected' : ''}>${label}</option>`
+                    `<option value="${esc(val)}" ${q.status === val ? 'selected' : ''}>${esc(label)}</option>`
                 ).join('')}
                             </select>
-                            <span class="status-badge ${q.status}">${statusNames[q.status] || q.status}</span>
+                            <span class="status-badge ${esc(q.status)}">${esc(statusNames[q.status] || q.status)}</span>
                         </div>
                     </div>
                 `).join('');
@@ -344,7 +350,7 @@
             } catch (err) {
                 console.error('Error:', err);
                 document.getElementById('content').innerHTML = `
-                    <div class="error-message">${err.message}</div>
+                    <div class="error-message">${escapeHTML(err.message)}</div>
                 `;
             }
         }

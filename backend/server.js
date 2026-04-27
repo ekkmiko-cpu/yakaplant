@@ -72,7 +72,18 @@ app.use(async (req, res, next) => {
 
 // Helmet for security headers
 app.use(helmet({
-    contentSecurityPolicy: false,
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "https://www.googletagmanager.com", "https://unpkg.com", "https://cdn.jsdelivr.net"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+            imgSrc: ["'self'", "data:", "blob:", "https://images.unsplash.com", "https://www.googletagmanager.com"],
+            fontSrc: ["'self'", "https://fonts.gstatic.com"],
+            connectSrc: ["'self'", "https://*.supabase.co", "https://www.google-analytics.com", "https://analytics.google.com", "https://stats.g.doubleclick.net"],
+            frameSrc: ["'self'"],
+            objectSrc: ["'none'"]
+        }
+    },
     crossOriginEmbedderPolicy: false
 }));
 
@@ -95,7 +106,7 @@ app.use(cors({
 }));
 
 // Body parsers
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
@@ -103,9 +114,14 @@ app.use(cookieParser());
 // SESSION CONFIGURATION
 // =====================================================
 
+if (process.env.NODE_ENV === 'production' && !process.env.SESSION_SECRET) {
+    console.error('FATAL: SESSION_SECRET environment variable is not set in production!');
+    process.exit(1);
+}
+
 const sessionConfig = {
     name: 'yakaplant.sid',
-    secret: process.env.SESSION_SECRET || 'yakaplant-secret-key-change-in-production',
+    secret: process.env.SESSION_SECRET || 'yakaplant-dev-secret-do-not-use-in-production',
     resave: false,
     saveUninitialized: false,
     rolling: true,
@@ -125,6 +141,9 @@ app.use(session(sessionConfig));
 // =====================================================
 // API ROUTES
 // =====================================================
+
+// Apply rate limiter before all routes (health check excluded)
+app.use('/api/', rateLimiter);
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -146,9 +165,6 @@ app.get('/api/me', (req, res) => {
 
     res.json({ user });
 });
-
-// Apply rate limiter
-app.use('/api/', rateLimiter);
 
 // Mount routes
 app.use('/api/auth', authRoutes);

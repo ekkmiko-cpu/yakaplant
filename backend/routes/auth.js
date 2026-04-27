@@ -6,6 +6,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const { v4: uuidv4 } = require('uuid');
 const { body, validationResult } = require('express-validator');
 const db = require('../config/db');
@@ -242,21 +243,17 @@ router.post('/forgot-password', [
             });
         }
 
-        // Generate reset token
-        const resetToken = uuidv4();
+        // Generate cryptographically secure reset token
+        const resetToken = crypto.randomBytes(32).toString('hex');
         const expiresAt = Math.floor(Date.now() / 1000) + (60 * 60); // 1 hour
 
-        // Save token
         db.run(`
-            UPDATE users 
+            UPDATE users
             SET reset_token = ?, reset_token_expires = ?
             WHERE id = ?
         `, [resetToken, expiresAt, user.id]);
 
         logAuditEvent('PASSWORD_RESET_REQUEST', email, req.ip, 'Reset token generated');
-
-        // Note: In production, you would send an email here
-        console.log(`Password reset link: /reset-password?token=${resetToken}`);
 
         res.json({
             message: 'Eğer bu e-posta kayıtlıysa, şifre sıfırlama bağlantısı gönderildi'

@@ -4,6 +4,20 @@
  */
 
 // =====================================================
+// SECURITY HELPERS
+// =====================================================
+
+function escapeHTML(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;');
+}
+
+// =====================================================
 // TOAST NOTIFICATIONS
 // =====================================================
 
@@ -14,7 +28,6 @@
  * @param {number} duration - Duration in ms (default: 4000)
  */
 function showToast(message, type = 'info', duration = 4000) {
-    // Create container if doesn't exist
     let container = document.getElementById('toast-container');
     if (!container) {
         container = document.createElement('div');
@@ -22,7 +35,6 @@ function showToast(message, type = 'info', duration = 4000) {
         document.body.appendChild(container);
     }
 
-    // Create toast element
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
 
@@ -33,28 +45,26 @@ function showToast(message, type = 'info', duration = 4000) {
         info: 'ph-info'
     };
 
-    toast.innerHTML = `
-        <i class="ph ${icons[type] || icons.info}"></i>
-        <span class="toast-message">${message}</span>
-        <button class="toast-close"><i class="ph ph-x"></i></button>
-    `;
+    const icon = document.createElement('i');
+    icon.className = `ph ${icons[type] || icons.info}`;
 
-    // Close button handler
-    toast.querySelector('.toast-close').addEventListener('click', () => {
-        removeToast(toast);
-    });
+    const msgSpan = document.createElement('span');
+    msgSpan.className = 'toast-message';
+    msgSpan.textContent = message;
 
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'toast-close';
+    closeBtn.innerHTML = '<i class="ph ph-x"></i>';
+
+    toast.appendChild(icon);
+    toast.appendChild(msgSpan);
+    toast.appendChild(closeBtn);
+
+    closeBtn.addEventListener('click', () => removeToast(toast));
     container.appendChild(toast);
 
-    // Trigger animation
-    requestAnimationFrame(() => {
-        toast.classList.add('show');
-    });
-
-    // Auto remove
-    setTimeout(() => {
-        removeToast(toast);
-    }, duration);
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => removeToast(toast), duration);
 }
 
 function removeToast(toast) {
@@ -87,9 +97,10 @@ function showLoader(message = 'Yükleniyor...') {
         loader.innerHTML = `
             <div class="loader-content">
                 <div class="loader-spinner"></div>
-                <p class="loader-text">${message}</p>
+                <p class="loader-text"></p>
             </div>
         `;
+        loader.querySelector('.loader-text').textContent = message;
         document.body.appendChild(loader);
     } else {
         loader.querySelector('.loader-text').textContent = message;
@@ -133,13 +144,10 @@ function setButtonLoading(button, loading) {
  * @returns {object|null} Form data or null if invalid
  */
 function validateForm(form) {
-    // Clear previous errors
     form.querySelectorAll('.form-error').forEach(el => el.remove());
     form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
 
-    // Check HTML5 validation
     if (!form.checkValidity()) {
-        // Find first invalid field
         const invalid = form.querySelector(':invalid');
         if (invalid) {
             showFieldError(invalid, invalid.validationMessage);
@@ -148,7 +156,6 @@ function validateForm(form) {
         return null;
     }
 
-    // Return FormData as object
     const formData = new FormData(form);
     const data = {};
     formData.forEach((value, key) => {
@@ -198,19 +205,39 @@ function confirm(message, options = {}) {
     return new Promise((resolve) => {
         const modal = document.createElement('div');
         modal.className = 'confirm-modal';
-        modal.innerHTML = `
-            <div class="confirm-backdrop"></div>
-            <div class="confirm-content">
-                <h3 class="confirm-title">${options.title || 'Onay'}</h3>
-                <p class="confirm-message">${message}</p>
-                <div class="confirm-actions">
-                    <button class="btn btn-secondary cancel-btn">${options.cancelText || 'İptal'}</button>
-                    <button class="btn ${options.danger ? 'btn-danger' : 'btn-primary'} confirm-btn">
-                        ${options.confirmText || 'Onayla'}
-                    </button>
-                </div>
-            </div>
-        `;
+
+        const backdrop = document.createElement('div');
+        backdrop.className = 'confirm-backdrop';
+
+        const content = document.createElement('div');
+        content.className = 'confirm-content';
+
+        const title = document.createElement('h3');
+        title.className = 'confirm-title';
+        title.textContent = options.title || 'Onay';
+
+        const msg = document.createElement('p');
+        msg.className = 'confirm-message';
+        msg.textContent = message;
+
+        const actions = document.createElement('div');
+        actions.className = 'confirm-actions';
+
+        const cancelBtn = document.createElement('button');
+        cancelBtn.className = 'btn btn-secondary cancel-btn';
+        cancelBtn.textContent = options.cancelText || 'İptal';
+
+        const confirmBtn = document.createElement('button');
+        confirmBtn.className = `btn ${options.danger ? 'btn-danger' : 'btn-primary'} confirm-btn`;
+        confirmBtn.textContent = options.confirmText || 'Onayla';
+
+        actions.appendChild(cancelBtn);
+        actions.appendChild(confirmBtn);
+        content.appendChild(title);
+        content.appendChild(msg);
+        content.appendChild(actions);
+        modal.appendChild(backdrop);
+        modal.appendChild(content);
 
         document.body.appendChild(modal);
         requestAnimationFrame(() => modal.classList.add('show'));
@@ -221,9 +248,9 @@ function confirm(message, options = {}) {
             resolve(result);
         };
 
-        modal.querySelector('.cancel-btn').addEventListener('click', () => cleanup(false));
-        modal.querySelector('.confirm-btn').addEventListener('click', () => cleanup(true));
-        modal.querySelector('.confirm-backdrop').addEventListener('click', () => cleanup(false));
+        cancelBtn.addEventListener('click', () => cleanup(false));
+        confirmBtn.addEventListener('click', () => cleanup(true));
+        backdrop.addEventListener('click', () => cleanup(false));
     });
 }
 
@@ -293,6 +320,7 @@ function getQuoteStatus(status) {
 
 // Export
 window.YakaUI = {
+    escapeHTML,
     toast,
     showToast,
     showLoader,

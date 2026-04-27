@@ -252,6 +252,11 @@
     </div>
 
     <script>
+        function escapeHTML(str) {
+            if (str === null || str === undefined) return '';
+            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');
+        }
+
         const roleNames = {
             'admin': 'Yönetici',
             'customer': 'Müşteri',
@@ -285,6 +290,7 @@
                     return;
                 }
 
+                const esc = (v) => escapeHTML(v);
                 document.getElementById('content').innerHTML = `
                     <table class="data-table">
                         <thead>
@@ -300,12 +306,12 @@
                             ${users.map(u => `
                                 <tr>
                                     <td>
-                                        <strong>${u.name} ${u.surname}</strong>
-                                        ${u.company_name ? `<br><small style="color: var(--admin-muted)">${u.company_name}</small>` : ''}
+                                        <strong>${esc(u.name)} ${esc(u.surname)}</strong>
+                                        ${u.company_name ? `<br><small style="color: var(--admin-muted)">${esc(u.company_name)}</small>` : ''}
                                     </td>
-                                    <td>${u.email}</td>
-                                    <td><span class="role-badge ${u.role}">${roleNames[u.role] || u.role}</span></td>
-                                    <td>${u.city || '-'}</td>
+                                    <td>${esc(u.email)}</td>
+                                    <td><span class="role-badge ${esc(u.role)}">${esc(roleNames[u.role] || u.role)}</span></td>
+                                    <td>${esc(u.city) || '-'}</td>
                                     <td>${u.created_at ? new Date(u.created_at * 1000).toLocaleDateString('tr-TR') : '-'}</td>
                                 </tr>
                             `).join('')}
@@ -316,7 +322,7 @@
             } catch (err) {
                 console.error('Error:', err);
                 document.getElementById('content').innerHTML = `
-                    <div class="error-message">${err.message}</div>
+                    <div class="error-message">${escapeHTML(err.message)}</div>
                 `;
             }
         }
