@@ -988,6 +988,8 @@ body.dark-mode .support-title {
 .footer-brand .logo {
     color: white;
     /* Yaka text becomes white */
+    gap: 0;
+    /* No image in footer logo — close the flex gap so Yaka/plant/. sit together */
 }
 
 .footer-brand .logo .logo-img {
