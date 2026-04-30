@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9BWZ83ZHPR"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-9BWZ83ZHPR');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | Yakaplant</title>
+    <meta name="description" content="Yakaplant Blog — Bahçenizi yaşatan rehberler, peyzaj fikirleri ve fidanlığımızdan hikâyeler.">
+    <link rel="canonical" href="https://www.yakaplant.com/blog" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Blog | Yakaplant">
+    <meta property="og:description" content="Bahçenizi yaşatan rehberler, peyzaj fikirleri ve fidanlığımızdan hikâyeler.">
+    <meta property="og:image" content="https://www.yakaplant.com/assets/farm-1.jpg">
+    <meta property="og:url" content="https://www.yakaplant.com/blog">
+    <meta property="og:type" content="website">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/assets/css/yakaplant-blog.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body class="yp-blog">
+
+    <!-- Navigation (yakaplant standard) -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="/" class="logo"><img src="/assets/logo.jpeg" alt="Yakaplant Logo" class="logo-img"><span class="logo-text">Yaka<span class="highlight">plant</span><span class="dot">.</span></span></a>
+
+            <ul class="nav-links" id="nav-links">
+                <li><a href="/" class="nav-link" data-i18n="nav.home">Ana Sayfa</a></li>
+                <li><a href="/about" class="nav-link" data-i18n="nav.about">Hakkımızda</a></li>
+                <li><a href="/care" class="nav-link" data-i18n="nav.care">Bakım Rehberi</a></li>
+                <li><a href="/shop" class="nav-link" data-i18n="nav.shop">Koleksiyon</a></li>
+                <li><a href="/blog" class="nav-link active" data-i18n="nav.blog">Blog</a></li>
+                <li><a href="/contact" class="nav-link" data-i18n="nav.contact">İletişim</a></li>
+                <li id="nav-auth-container">
+                    <a href="/login" class="nav-link auth-link" data-i18n="nav.login">
+                        <i class="ph ph-sign-in"></i> Giriş Yap
+                    </a>
+                </li>
+            </ul>
+
+            <div class="nav-actions">
+                <div class="lang-selector">
+                    <button class="lang-toggle" id="lang-toggle">
+                        <i class="ph ph-globe"></i>
+                        <span id="current-lang">TR</span>
+                    </button>
+                    <div class="lang-dropdown" id="lang-dropdown">
+                        <button class="lang-option" data-lang="tr">TR Türkçe</button>
+                        <button class="lang-option" data-lang="en">EN English</button>
+                        <button class="lang-option" data-lang="de">DE Deutsch</button>
+                        <button class="lang-option" data-lang="nl">NL Nederlands</button>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod" data-i18n-aria="nav.darkMode">
+                    <i class="ph ph-moon"></i>
+                </button>
+                <button class="mobile-toggle" aria-label="Menüyü Aç" id="mobile-toggle" data-i18n-aria="nav.openMenu">
+                    <i class="ph ph-list"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="yp-page-header">
+        <div class="yp-page-eyebrow" data-i18n="blog.eyebrow">Yakaplant Blog</div>
+        <h1 class="yp-page-title" data-i18n="blog.title">Doğanın Gündemi</h1>
+        <p class="yp-page-sub" data-i18n="blog.subtitle">Bahçenizi yaşatan rehberler, peyzaj fikirleri ve fidanlığımızdan hikâyeler.</p>
+    </header>
+
+    <div class="yp-container yp-container--wide">
+
+        <!-- Filter chips -->
+        <div class="yp-filter-row">
+            <button class="yp-filter-chip is-active" data-filter="all">Tümü</button>
+            <button class="yp-filter-chip" data-filter="peyzaj">Peyzaj</button>
+            <button class="yp-filter-chip" data-filter="bakim">Bakım</button>
+            <button class="yp-filter-chip" data-filter="tasarim">Tasarım</button>
+            <button class="yp-filter-chip" data-filter="koleksiyon">Koleksiyon</button>
+            <button class="yp-filter-chip" data-filter="surdurulebilirlik">Sürdürülebilirlik</button>
+        </div>
+
+        <!-- Featured -->
+        <a class="yp-featured" href="/blog-post">
+            <div class="yp-featured__img">
+                <img src="/assets/farm-1.jpg" alt="Fidanlığımızdan ağaç fidanları">
+                <div class="yp-featured__badge">Öne Çıkan</div>
+            </div>
+            <div>
+                <div class="yp-featured__tag">Peyzaj &amp; Tasarım</div>
+                <h2 class="yp-featured__title">Bahçende Doğru Ağaç Seçimi: İklim, Zemin ve Estetik</h2>
+                <p class="yp-featured__excerpt">
+                    Bir bahçeye ağaç dikmek onlarca yıla yayılan bir karardır. İklim, toprak yapısı ve
+                    görsel kompozisyon arasında doğru dengeyi nasıl kuracağınıza dair kapsamlı bir rehber.
+                </p>
+                <div class="yp-article-meta" style="margin-bottom: 24px;">
+                    <span>Yakaplant Ekibi</span>
+                    <div class="yp-article-meta__sep"></div>
+                    <span>14 Nisan 2026</span>
+                    <div class="yp-article-meta__sep"></div>
+                    <span>7 dk okuma</span>
+                </div>
+                <span class="yp-read-more">Yazıyı Oku <i class="ph ph-arrow-right"></i></span>
+            </div>
+        </a>
+
+        <div class="yp-section-head">
+            <h2 class="yp-section-title">Tüm Yazılar</h2>
+            <div style="font-size:13px;color:var(--yp-text-muted);">9 yazı</div>
+        </div>
+
+        <div class="yp-posts-grid">
+
+            <a class="yp-post-card" href="/blog-foto" data-cat="peyzaj">
+                <div class="yp-post-card__image"><img src="/assets/farm-2.jpg" alt=""></div>
+                <div class="yp-post-card__body">
+                    <div class="yp-post-card__tag">Foto Hikaye</div>
+                    <h3 class="yp-post-card__title">Bayındır'da Bir Sabah</h3>
+                    <p class="yp-post-card__excerpt">Şafak henüz İzmir tepelerini aşmadan, fidanlığımızda gün başlamış oluyor.</p>
+                </div>
+                <div class="yp-post-card__footer"><span>10 Nisan 2026</span><span>4 dk</span></div>
+            </a>
+
+            <a class="yp-post-card" href="/blog-video" data-cat="bakim">
+                <div class="yp-post-card__image"><img src="/assets/farm-3.jpg" alt=""></div>
+                <div class="yp-post-card__body">
+                    <div class="yp-post-card__tag">Video Rehberi · Bakım</div>
+                    <h3 class="yp-post-card__title">Fidan Dikiminde 5 Temel Adım</h3>
+                    <p class="yp-post-card__excerpt">Toprak hazırlığından ilk sulamaya: yeni dikilen bir fidanın ilk gününde yapılması gerekenler.</p>
+                </div>
+                <div class="yp-post-card__footer"><span>5 Nisan 2026</span><span>6 dk video</span></div>
+            </a>
+
+            <a class="yp-post-card" href="#" data-cat="tasarim">
+                <div class="yp-post-card__image"><img src="/assets/farm-5.jpg" alt=""></div>
+                <div class="yp-post-card__body">
+                    <div class="yp-post-card__tag">Tasarım</div>
+                    <h3 class="yp-post-card__title">Mediteran Bahçe Tasarımında Bitki Paleti</h3>
+                    <p class="yp-post-card__excerpt">Zeytin, defne, biberiye, lavanta — Ege esintisini bahçenize taşıyan kombinasyonlar.</p>
+                </div>
+                <div class="yp-post-card__footer"><span>5 Mart 2026</span><span>4 dk</span></div>
+            </a>
+
+            <a class="yp-post-card" href="#" data-cat="koleksiyon">
+                <div class="yp-post-card__image"><img src="/assets/farm-4.jpg" alt=""></div>
+                <div class="yp-post-card__body">
+                    <div class="yp-post-card__tag">Koleksiyon</div>
+                    <h3 class="yp-post-card__title">2026 İlkbahar Koleksiyonundan Öne Çıkanlar</h3>
+                    <p class="yp-post-card__excerpt">Bu sezon fidanlığımıza yeni eklenen türler ve dikkat çeken formlar.</p>
+                </div>
+                <div class="yp-post-card__footer"><span>22 Mart 2026</span><span>3 dk</span></div>
+            </a>
+
+            <a class="yp-post-card" href="#" data-cat="bakim">
+                <div class="yp-post-card__image"><img src="/assets/products/zeytin-1.png" alt="" style="object-fit: contain; padding: 32px; background: var(--yp-green-pale);"></div>
+                <div class="yp-post-card__body">
+                    <div class="yp-post-card__tag">Tür Rehberi</div>
+                    <h3 class="yp-post-card__title">Zeytin Ağacı Bakımı: Toprak, Sulama, Budama</h3>
+                    <p class="yp-post-card__excerpt">Yüzlerce yıl yaşayan zeytin ağacının ilk yıllarında nelere dikkat etmeli?</p>
+                </div>
+                <div class="yp-post-card__footer"><span>15 Mart 2026</span><span>8 dk</span></div>
+            </a>
+
+            <a class="yp-post-card" href="#" data-cat="surdurulebilirlik">
+                <div class="yp-post-card__image"><img src="/assets/farm-1.jpg" alt=""></div>
+                <div class="yp-post-card__body">
+                    <div class="yp-post-card__tag">Sürdürülebilirlik</div>
+                    <h3 class="yp-post-card__title">Yerli Türlerle Ekolojik Bahçe Tasarımı</h3>
+                    <p class="yp-post-card__excerpt">Az su, az bakım, çok karakter — yerli flora ile sürdürülebilir bir yaklaşım.</p>
+                </div>
+                <div class="yp-post-card__footer"><span>10 Mart 2026</span><span>6 dk</span></div>
+            </a>
+
+            <a class="yp-post-card" href="#" data-cat="bakim">
+                <div class="yp-post-card__image"><img src="/assets/products/manolya-1.png" alt="" style="object-fit: contain; padding: 32px; background: var(--yp-green-pale);"></div>
+                <div class="yp-post-card__body">
+                    <div class="yp-post-card__tag">Tür Rehberi</div>
+                    <h3 class="yp-post-card__title">Manolya: Görkemli Çiçeğin Dikim ve Bakım Notları</h3>
+                    <p class="yp-post-card__excerpt">Bahçenizin en etkileyici aksesuarı manolyalar için ışık, toprak ve mevsim önerileri.</p>
+                </div>
+                <div class="yp-post-card__footer"><span>1 Mart 2026</span><span>5 dk</span></div>
+            </a>
+
+            <a class="yp-post-card" href="#" data-cat="bakim">
+                <div class="yp-post-card__image"><img src="/assets/farm-2.jpg" alt=""></div>
+                <div class="yp-post-card__body">
+                    <div class="yp-post-card__tag">Bakım</div>
+                    <h3 class="yp-post-card__title">Yazın Sulama: Sıklık mı, Miktar mı?</h3>
+                    <p class="yp-post-card__excerpt">Sıcak aylarda yanlış sulama düzeni bitkinin strese girmesine neden olur. Doğru yöntem.</p>
+                </div>
+                <div class="yp-post-card__footer"><span>20 Şubat 2026</span><span>5 dk</span></div>
+            </a>
+
+            <a class="yp-post-card" href="#" data-cat="peyzaj">
+                <div class="yp-post-card__image"><img src="/assets/farm-5.jpg" alt=""></div>
+                <div class="yp-post-card__body">
+                    <div class="yp-post-card__tag">Peyzaj</div>
+                    <h3 class="yp-post-card__title">Küçük Bahçelerde Dikey Yeşil Kullanımı</h3>
+                    <p class="yp-post-card__excerpt">Sınırlı alanda maksimum etki: tırmanıcılar, çitler ve dikey bahçe çözümleri.</p>
+                </div>
+                <div class="yp-post-card__footer"><span>10 Şubat 2026</span><span>4 dk</span></div>
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- Newsletter -->
+    <section class="yp-newsletter">
+        <div class="yp-newsletter__eyebrow">Bültenimize Katılın</div>
+        <h2>Doğadan haberler, doğrudan e-postanıza.</h2>
+        <p>Yeni yazılarımız, mevsimsel bakım ipuçları ve fidanlığımızdan kareler ayda bir.</p>
+        <form class="yp-newsletter__form" id="newsletterForm" onsubmit="event.preventDefault();">
+            <input type="email" placeholder="E-posta adresiniz" required>
+            <button type="submit">Abone Ol</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="/" class="logo">Yaka<span class="highlight">plant</span><span class="dot">.</span></a>
+                    <p data-i18n="footer.rights">© 2026 Tüm hakları saklıdır.</p>
+                </div>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/yakaplant" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+                    <a href="https://wa.me/905318433309" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="ph ph-whatsapp-logo"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/lang.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+        // Filter chip toggling
+        document.querySelectorAll('.yp-filter-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                document.querySelectorAll('.yp-filter-chip').forEach(c => c.classList.remove('is-active'));
+                chip.classList.add('is-active');
+                const f = chip.dataset.filter;
+                document.querySelectorAll('.yp-post-card').forEach(card => {
+                    card.style.display = (f === 'all' || card.dataset.cat === f) ? '' : 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
