@@ -41,8 +41,6 @@ body.dark-mode .yp-blog {
 .yp-blog *, .yp-blog *::before, .yp-blog *::after { box-sizing: border-box; }
 .yp-blog a { color: inherit; text-decoration: none; }
 
-/* Spacing for fixed navbar */
-.yp-blog { padding-top: 80px; }
 .yp-blog .yp-hero { margin-top: 0; }
 
 /* ── CONTAINER ── */
