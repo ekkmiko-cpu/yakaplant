@@ -40,6 +40,7 @@
     <nav class="navbar">
         <div class="container nav-container">
             <a href="/" class="logo"><img src="/assets/logo.jpeg" alt="Yakaplant Logo" class="logo-img"><span class="logo-text">Yaka<span class="highlight">plant</span><span class="dot">.</span></span></a>
+
             <ul class="nav-links" id="nav-links">
                 <li><a href="/" class="nav-link" data-i18n="nav.home">Ana Sayfa</a></li>
                 <li><a href="/about" class="nav-link" data-i18n="nav.about">Hakkımızda</a></li>
@@ -47,13 +48,20 @@
                 <li><a href="/shop" class="nav-link" data-i18n="nav.shop">Koleksiyon</a></li>
                 <li><a href="/blog" class="nav-link active" data-i18n="nav.blog">Blog</a></li>
                 <li><a href="/contact" class="nav-link button-primary" data-i18n="nav.contact">İletişim</a></li>
+                <!-- Auth container (populated by auth.js) -->
                 <li id="nav-auth-container">
-                    <a href="/login" class="nav-link auth-link" data-i18n="nav.login"><i class="ph ph-sign-in"></i> Giriş Yap</a>
+                    <a href="/login" class="nav-link auth-link" data-i18n="nav.login">
+                        <i class="ph ph-sign-in"></i> Giriş Yap
+                    </a>
                 </li>
             </ul>
+
             <div class="nav-actions">
                 <div class="lang-selector">
-                    <button class="lang-toggle" id="lang-toggle"><i class="ph ph-globe"></i><span id="current-lang">TR</span></button>
+                    <button class="lang-toggle" id="lang-toggle">
+                        <i class="ph ph-globe"></i>
+                        <span id="current-lang">TR</span>
+                    </button>
                     <div class="lang-dropdown" id="lang-dropdown">
                         <button class="lang-option" data-lang="tr">TR Türkçe</button>
                         <button class="lang-option" data-lang="en">EN English</button>
@@ -61,8 +69,12 @@
                         <button class="lang-option" data-lang="nl">NL Nederlands</button>
                     </div>
                 </div>
-                <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod"><i class="ph ph-moon"></i></button>
-                <button class="mobile-toggle" aria-label="Menüyü Aç" id="mobile-toggle"><i class="ph ph-list"></i></button>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Karanlık Mod" data-i18n-aria="nav.darkMode">
+                    <i class="ph ph-moon"></i>
+                </button>
+                <button class="mobile-toggle" aria-label="Menüyü Aç" id="mobile-toggle" data-i18n-aria="nav.openMenu">
+                    <i class="ph ph-list"></i>
+                </button>
             </div>
         </div>
     </nav>
