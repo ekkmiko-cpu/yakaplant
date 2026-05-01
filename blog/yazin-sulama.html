@@ -34,13 +34,44 @@
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/assets/css/yakaplant-blog.css">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Yazın Sulama: Sıklık mı, Miktar mı?",
+  "description": "Yaz aylarında doğru sulama düzeni, yöntemleri ve su tasarrufu pratikleri.",
+  "image": "https://www.yakaplant.com/assets/farm-2.jpg",
+  "datePublished": "2026-02-20",
+  "dateModified": "2026-02-20",
+  "author": {
+    "@type": "Organization",
+    "name": "Yakaplant Ekibi",
+    "url": "https://www.yakaplant.com/about"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Yakaplant",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.yakaplant.com/assets/logo.jpeg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.yakaplant.com/blog/yazin-sulama"
+  },
+  "articleSection": "Bakım",
+  "inLanguage": "tr-TR"
+}
+    </script>
 </head>
 
 <body>
 
     <nav class="navbar">
         <div class="container nav-container">
-            <a href="/" class="logo"><img src="/assets/logo.jpeg" alt="Yakaplant Logo" class="logo-img"><span class="logo-text">Yaka<span class="highlight">plant</span><span class="dot">.</span></span></a>
+            <a href="/" class="logo"><img src="/assets/logo.jpeg" alt="Yakaplant Logo" class="logo-img" loading="lazy" decoding="async"><span class="logo-text">Yaka<span class="highlight">plant</span><span class="dot">.</span></span></a>
 
             <ul class="nav-links" id="nav-links">
                 <li><a href="/" class="nav-link" data-i18n="nav.home">Ana Sayfa</a></li>
@@ -59,7 +90,7 @@
 
             <div class="nav-actions">
                 <div class="lang-selector">
-                    <button class="lang-toggle" id="lang-toggle">
+                    <button class="lang-toggle" id="lang-toggle" aria-label="Dil seçici">
                         <i class="ph ph-globe"></i>
                         <span id="current-lang">TR</span>
                     </button>
@@ -92,7 +123,7 @@
     </div>
 
     <div class="yp-hero">
-        <img src="/assets/farm-2.jpg" alt="Yazın Sulama: Sıklık mı, Miktar mı?">
+        <img src="/assets/farm-2.jpg" alt="Yazın Sulama: Sıklık mı, Miktar mı?" fetchpriority="high" decoding="async">
         <div class="yp-hero__overlay"></div>
     </div>
 
@@ -115,7 +146,7 @@
             <article class="yp-article-body" id="article">
                 <h2 id="ilkeler">1. Doğru Sulamanın Temel İlkeleri</h2>
                 <p>Yaz sulaması konusundaki en yaygın hata, sık ama yüzeysel sulamadır. Bu yöntem kökleri yüzeyde tutar ve bitkiyi yaz sıcaklarına karşı daha kırılgan hale getirir.</p>
-                <p>Doğru yaklaşım: az sıklıkla, derinlemesine sulamaktır. Bir sulamada toprağa 25–30 cm derinliğe ulaşacak miktarda su verilmelidir.</p>
+                <p>Doğru yaklaşım: az sıklıkla, derinlemesine sulamaktır. Hedef ıslanma derinliği bitki tipine göre değişir: çiçek ve yer örtücüler için 25–30 cm, çalı için 30–45 cm, ağaçlar için 45–60 cm. Toprak tipine göre infiltrasyon hızı değişir; kumlu topraklarda su hızla iner, killi topraklarda yavaşça.</p>
                 <blockquote><p>"Bitki kökleri suyu nereye ulaşırsa oraya gider. Yüzeysel sulama, yüzeysel kök sistemi demektir."</p></blockquote>
 
                 <h2 id="saat">2. Hangi Saatte Sulamalı?</h2>
@@ -129,7 +160,11 @@
                 <h2 id="yontemler">3. Sulama Yöntemleri</h2>
                 <p>Hangi yöntemi seçeceğiniz bitkinin türüne, bahçenin büyüklüğüne ve su kaynağınıza göre değişir.</p>
                 <h3>Yöntem Karşılaştırması</h3>
-                <ul><li>Damla sulama: en verimli, su tasarrufu %50'ye kadar</li><li>Tava (havuz) sulama: yeni dikilen ağaçlar için ideal</li><li>Hortum: küçük bahçelerde pratik, dikkat gerektirir</li><li>Spreyleme: sebze ve çiçek tarhları için, yapraklara dikkat</li></ul>
+                <ul><li>Damla sulama: en verimli; salma sulamaya kıyasla %30–60 su tasarrufu, yapraktan ıslanmayı engellediği için hastalık baskısını azaltır</li><li>Tava (havuz) sulama: yeni dikilen ağaçlar için ideal — kök topağına yavaş, derin su penetrasyonu sağlar</li><li>Hortum: küçük bahçelerde pratik; tek noktada yığılmadan, alanı tarayarak uygulanmalı</li><li>Spreyleme: sebze ve çiçek tarhları için; öğle sıcağında yapılırsa mantar hastalığı ve buharlaşma riski yüksektir</li></ul>
+                <div class="yp-tip-box">
+                    <div class="yp-tip-box__label">Uzman Notu</div>
+                    <p>Yağmur suyu hasadı, yaz sulaması maliyetini ve şebeke su tüketimini ciddi şekilde azaltır. 100 m² bir çatıdan tipik bir İzmir kışında ~50.000 L su toplanabilir; basit bir sarnıç + damla sistemi yatırımı 2–3 sezonda kendini amorti eder.</p>
+                </div>
 
                 <h2 id="isaretler">4. Bitkinin Sinyallerini Okumak</h2>
                 <p>Bitki sulanmaya ihtiyaç duyduğunda farklı işaretler verir: yapraklarda solgunlaşma, sarkma, kenarlardan içe doğru kıvrılma. Ancak benzer belirtiler aşırı sulamada da görülür — fark, toprağın nem durumudur.</p>
@@ -138,21 +173,21 @@
                 <h3>İlgili Türler</h3>
                 <div class="yp-plant-grid">
                     <a class="yp-plant-card" href="/shop?p=lavanta">
-                        <img src="/assets/products/lavanta-1.png" alt="Lavanta">
+                        <img src="/assets/products/lavanta-1.png" alt="Lavanta" loading="lazy" decoding="async">
                         <div class="yp-plant-card__body">
                             <div class="yp-plant-card__name">Lavanta</div>
                             <div class="yp-plant-card__sub">Az su · Tam güneş</div>
                         </div>
                     </a>
                     <a class="yp-plant-card" href="/shop?p=kekik">
-                        <img src="/assets/products/kekik-1.png" alt="Kekik">
+                        <img src="/assets/products/kekik-1.png" alt="Kekik" loading="lazy" decoding="async">
                         <div class="yp-plant-card__body">
                             <div class="yp-plant-card__name">Kekik</div>
                             <div class="yp-plant-card__sub">Kuraklığa dayanıklı</div>
                         </div>
                     </a>
                     <a class="yp-plant-card" href="/shop?p=ortanca">
-                        <img src="/assets/products/ortanca-2.png" alt="Ortanca">
+                        <img src="/assets/products/ortanca-2.png" alt="Ortanca" loading="lazy" decoding="async">
                         <div class="yp-plant-card__body">
                             <div class="yp-plant-card__name">Ortanca</div>
                             <div class="yp-plant-card__sub">Yüksek su ihtiyacı</div>
@@ -182,21 +217,21 @@
                 <div class="yp-sidebar-section">
                     <div class="yp-sidebar-title">Benzer Yazılar</div>
                     <a class="yp-related-mini" href="/blog/zeytin-bakimi">
-                        <img src="/assets/farm-1.jpg" alt="">
+                        <img src="/assets/farm-1.jpg" alt="" loading="lazy" decoding="async">
                         <div>
                             <div class="yp-related-mini__title">Zeytin Ağacı Bakımı: Toprak, Sulama ve Budama</div>
                             <div class="yp-related-mini__date">15 Mart 2026</div>
                         </div>
                     </a>
                     <a class="yp-related-mini" href="/blog/mediteran-bahce">
-                        <img src="/assets/farm-5.jpg" alt="">
+                        <img src="/assets/farm-5.jpg" alt="" loading="lazy" decoding="async">
                         <div>
                             <div class="yp-related-mini__title">Mediteran Bahçe Tasarımında Bitki Paleti</div>
                             <div class="yp-related-mini__date">5 Mart 2026</div>
                         </div>
                     </a>
                     <a class="yp-related-mini" href="/blog/ilkbahar-2026">
-                        <img src="/assets/farm-4.jpg" alt="">
+                        <img src="/assets/farm-4.jpg" alt="" loading="lazy" decoding="async">
                         <div>
                             <div class="yp-related-mini__title">2026 İlkbahar Koleksiyonundan Öne Çıkanlar</div>
                             <div class="yp-related-mini__date">22 Mart 2026</div>

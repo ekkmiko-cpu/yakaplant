@@ -19,6 +19,7 @@
     <meta property="og:description" content="İklim, zemin ve estetik üçlüsünü dengeleyen kapsamlı rehber.">
     <meta property="og:image" content="https://www.yakaplant.com/assets/farm-1.jpg">
     <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.yakaplant.com/blog-post">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,16 +31,47 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/assets/css/yakaplant-blog.css">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Bahçende Doğru Ağaç Seçimi: İklim, Zemin ve Estetik",
+  "description": "İklim, zemin ve estetik üçlüsünü dengeleyen kapsamlı rehber.",
+  "image": "https://www.yakaplant.com/assets/farm-1.jpg",
+  "datePublished": "2026-04-14",
+  "dateModified": "2026-04-14",
+  "author": {
+    "@type": "Organization",
+    "name": "Yakaplant Ekibi",
+    "url": "https://www.yakaplant.com/about"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Yakaplant",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.yakaplant.com/assets/logo.jpeg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.yakaplant.com/blog-post"
+  },
+  "articleSection": "Peyzaj & Tasarım",
+  "inLanguage": "tr-TR"
+}
+    </script>
 </head>
 
 <body>
 
     <nav class="navbar">
         <div class="container nav-container">
-            <a href="/" class="logo"><img src="/assets/logo.jpeg" alt="Yakaplant Logo" class="logo-img"><span class="logo-text">Yaka<span class="highlight">plant</span><span class="dot">.</span></span></a>
+            <a href="/" class="logo"><img src="/assets/logo.jpeg" alt="Yakaplant Logo" class="logo-img" loading="lazy" decoding="async"><span class="logo-text">Yaka<span class="highlight">plant</span><span class="dot">.</span></span></a>
 
             <ul class="nav-links" id="nav-links">
                 <li><a href="/" class="nav-link" data-i18n="nav.home">Ana Sayfa</a></li>
@@ -58,7 +90,7 @@
 
             <div class="nav-actions">
                 <div class="lang-selector">
-                    <button class="lang-toggle" id="lang-toggle">
+                    <button class="lang-toggle" id="lang-toggle" aria-label="Dil seçici">
                         <i class="ph ph-globe"></i>
                         <span id="current-lang">TR</span>
                     </button>
@@ -93,7 +125,7 @@
 
     <!-- Hero -->
     <div class="yp-hero">
-        <img src="/assets/farm-1.jpg" alt="Yakaplant fidanlığından kareler">
+        <img src="/assets/farm-1.jpg" alt="Yakaplant fidanlığından kareler" fetchpriority="high" decoding="async">
         <div class="yp-hero__overlay"></div>
     </div>
 
@@ -128,6 +160,14 @@
                     Genel kural: kışları sert geçen bölgelerde yaprak döken türlere, ılıman iklimde ise
                     hem yaprak döken hem de herdem yeşil seçeneklere yönelmek doğru bir yaklaşımdır.
                 </p>
+                <p>
+                    Türkiye'nin USDA hardiness zone (sertlik) aralığı yaklaşık <strong>Z6 (Doğu Anadolu)</strong>
+                    ile <strong>Z10 (Güney Akdeniz kıyısı)</strong> arasındadır. İstanbul, Ankara, İzmir
+                    sırasıyla yaklaşık Z8a, Z7a, Z9a değerlerindedir. Satın aldığınız ağacın tolere
+                    ettiği minimum sıcaklık ve zone değeri mutlaka kontrol edilmelidir — örneğin zeytin
+                    (<em>Olea europaea</em>) Z8b'nin altında zorlanır, akçaağaç (<em>Acer palmatum</em>)
+                    Z5'e kadar dayanır.
+                </p>
 
                 <blockquote>
                     <p>"Doğru yerde yanlış bitki, en iyi koşulda bile verimini ortaya koyamaz."</p>
@@ -138,6 +178,7 @@
                     <li>Soğuğa dayanıklılık bilgisi doğrulanmadan satın alma</li>
                     <li>Rüzgâra açık noktalara nazik türler yerleştirme</li>
                     <li>Kıyı bölgelerinde tuz toleransı düşük ağaçlar tercih etme</li>
+                    <li>Yerli/endemik tür alternatiflerini değerlendirmeden egzotik türlere yönelme</li>
                 </ul>
 
                 <h2 id="zemin">2. Zemin Analizi</h2>
@@ -157,7 +198,7 @@
                     </p>
                 </div>
 
-                <img class="yp-article-img" src="/assets/farm-3.jpg" alt="Yakaplant ağaç fidanları">
+                <img class="yp-article-img" src="/assets/farm-3.jpg" alt="Yakaplant ağaç fidanları" loading="lazy" decoding="async">
 
                 <h2 id="estetik">3. Görsel Kompozisyon</h2>
                 <p>
@@ -174,24 +215,24 @@
                 <h3>Önerilen Türler</h3>
                 <div class="yp-plant-grid">
                     <a class="yp-plant-card" href="/shop?p=zeytin">
-                        <img src="/assets/products/zeytin-1.png" alt="Zeytin">
+                        <img src="/assets/products/zeytin-1.png" alt="Zeytin (Olea europaea)" loading="lazy" decoding="async">
                         <div class="yp-plant-card__body">
                             <div class="yp-plant-card__name">Zeytin</div>
-                            <div class="yp-plant-card__sub">Herdem yeşil · Kuraklığa dayanıklı</div>
+                            <div class="yp-plant-card__sub"><em>Olea europaea</em> · Z8b–10 · Akdeniz</div>
                         </div>
                     </a>
                     <a class="yp-plant-card" href="/shop?p=cinar">
-                        <img src="/assets/products/cinar-1.png" alt="Çınar">
+                        <img src="/assets/products/cinar-1.png" alt="Çınar (Platanus orientalis)" loading="lazy" decoding="async">
                         <div class="yp-plant-card__body">
                             <div class="yp-plant-card__name">Çınar</div>
-                            <div class="yp-plant-card__sub">Geniş gölge · Hızlı büyüme</div>
+                            <div class="yp-plant-card__sub"><em>Platanus orientalis</em> · Geniş alan</div>
                         </div>
                     </a>
                     <a class="yp-plant-card" href="/shop?p=akcaagac">
-                        <img src="/assets/products/akcaagac-1.png" alt="Akçaağaç">
+                        <img src="/assets/products/akcaagac-1.png" alt="Akçaağaç (Acer palmatum)" loading="lazy" decoding="async">
                         <div class="yp-plant-card__body">
                             <div class="yp-plant-card__name">Akçaağaç</div>
-                            <div class="yp-plant-card__sub">Sonbahar rengi · Orta boy</div>
+                            <div class="yp-plant-card__sub"><em>Acer palmatum</em> · Z5–8 · Aksent</div>
                         </div>
                     </a>
                 </div>
@@ -201,13 +242,20 @@
                     Fidanlar küçük görünse de olgun boyutları dikkate alınmalıdır. Yapıya, yola ve
                     altyapıya olan mesafe hesaplanmadan yapılan dikimler uzun vadede ciddi sorunlara
                     yol açabilir. Genel ilke: ağacın olası çatı çapının yarısı kadar komşu yapıdan
-                    uzakta dikilmesidir.
+                    uzakta dikilmesidir; ancak <strong>kök yayılımı</strong> tipik olarak çatı çapının
+                    1.5–3 katıdır, dolayısıyla altyapı (kanalizasyon, foseptik, su şebekesi) ile
+                    minimum 8–10 m mesafe önerilir.
                 </p>
                 <ul>
-                    <li>Küçük bahçeler için: maks. 6–8 m boylanacak türler</li>
-                    <li>Orta bahçeler için: 8–15 m arası türler</li>
-                    <li>Geniş alanlar için: kısıtlama yok, silüet öncelikli seçim</li>
+                    <li>Küçük bahçeler (≤200 m²): maks. 6–8 m boylanacak türler</li>
+                    <li>Orta bahçeler (200–800 m²): 8–15 m arası türler</li>
+                    <li>Geniş alanlar (≥800 m²): kısıtlama yok, silüet öncelikli seçim</li>
                 </ul>
+                <p>
+                    Çınar (<em>Platanus</em>) gibi hızlı büyüyen ve geniş kök sistemine sahip türler,
+                    küçük-orta bahçeler için uygun değildir. Bu türler kamu peyzajları ve geniş
+                    konut bahçelerine, yapılardan en az 10 m uzağa konumlandırılmalıdır.
+                </p>
 
                 <div class="yp-article-tags">
                     <span class="yp-tag">Ağaç Seçimi</span>
@@ -232,21 +280,21 @@
                 <div class="yp-sidebar-section">
                     <div class="yp-sidebar-title">Benzer Yazılar</div>
                     <a class="yp-related-mini" href="/blog-video">
-                        <img src="/assets/farm-3.jpg" alt="">
+                        <img src="/assets/farm-3.jpg" alt="" loading="lazy" decoding="async">
                         <div>
                             <div class="yp-related-mini__title">Fidan Dikiminde 5 Temel Adım</div>
                             <div class="yp-related-mini__date">5 Nisan 2026</div>
                         </div>
                     </a>
                     <a class="yp-related-mini" href="/blog/mediteran-bahce">
-                        <img src="/assets/farm-5.jpg" alt="">
+                        <img src="/assets/farm-5.jpg" alt="" loading="lazy" decoding="async">
                         <div>
                             <div class="yp-related-mini__title">Mediteran Bahçe Tasarımında Bitki Paleti</div>
                             <div class="yp-related-mini__date">5 Mart 2026</div>
                         </div>
                     </a>
                     <a class="yp-related-mini" href="/blog/zeytin-bakimi">
-                        <img src="/assets/farm-1.jpg" alt="">
+                        <img src="/assets/farm-1.jpg" alt="" loading="lazy" decoding="async">
                         <div>
                             <div class="yp-related-mini__title">Zeytin Ağacı Bakımı: Toprak, Sulama, Budama</div>
                             <div class="yp-related-mini__date">15 Mart 2026</div>
@@ -282,12 +330,12 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/translations.js"></script>
-    <script src="js/lang.js"></script>
-    <script src="script.js"></script>
+    <script src="/js/supabase.js"></script>
+    <script src="/js/ui.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/translations.js"></script>
+    <script src="/js/lang.js"></script>
+    <script src="/script.js"></script>
 
     <script>
         // TOC scroll-spy
