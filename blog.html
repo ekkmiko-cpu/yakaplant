@@ -131,8 +131,8 @@
         </a>
 
         <div class="yp-section-head">
-            <h2 class="yp-section-title">Tüm Yazılar</h2>
-            <div style="font-size:13px;color:var(--yp-text-muted);">8 yazı</div>
+            <h2 class="yp-section-title" id="yp-section-title">Tüm Yazılar</h2>
+            <div id="yp-section-count" style="font-size:13px;color:var(--yp-text-muted);">8 yazı</div>
         </div>
 
         <div class="yp-posts-grid">
@@ -147,7 +147,7 @@
                 <div class="yp-post-card__footer"><span>5 Nisan 2026</span><span>6 dk video</span></div>
             </a>
 
-            <a class="yp-post-card" href="/blog/mediteran-bahce" data-cat="tasarim">
+            <a class="yp-post-card" href="/blog/mediteran-bahce" data-cat="peyzaj tasarim">
                 <div class="yp-post-card__image"><img src="/assets/farm-5.jpg" alt="" loading="lazy" decoding="async"></div>
                 <div class="yp-post-card__body">
                     <div class="yp-post-card__tag">Peyzaj &amp; Tasarım</div>
@@ -177,7 +177,7 @@
                 <div class="yp-post-card__footer"><span>15 Mart 2026</span><span>8 dk</span></div>
             </a>
 
-            <a class="yp-post-card" href="/blog/yerli-turler" data-cat="surdurulebilirlik">
+            <a class="yp-post-card" href="/blog/yerli-turler" data-cat="surdurulebilirlik peyzaj">
                 <div class="yp-post-card__image"><img src="/assets/farm-1.jpg" alt="" loading="lazy" decoding="async"></div>
                 <div class="yp-post-card__body">
                     <div class="yp-post-card__tag">Sürdürülebilirlik</div>
@@ -249,17 +249,64 @@
     <script src="/script.js"></script>
 
     <script>
-        // Filter chip toggling
-        document.querySelectorAll('.yp-filter-chip').forEach(chip => {
-            chip.addEventListener('click', () => {
-                document.querySelectorAll('.yp-filter-chip').forEach(c => c.classList.remove('is-active'));
-                chip.classList.add('is-active');
-                const f = chip.dataset.filter;
-                document.querySelectorAll('.yp-post-card').forEach(card => {
-                    card.style.display = (f === 'all' || card.dataset.cat === f) ? '' : 'none';
+        (function () {
+            const chips   = document.querySelectorAll('.yp-filter-chip');
+            const cards   = document.querySelectorAll('.yp-post-card');
+            const titleEl = document.getElementById('yp-section-title');
+            const countEl = document.getElementById('yp-section-count');
+            const grid    = document.querySelector('.yp-posts-grid');
+
+            const catLabels = {
+                all              : 'Tüm Yazılar',
+                peyzaj           : 'Peyzaj',
+                bakim            : 'Bakım',
+                tasarim          : 'Tasarım',
+                koleksiyon       : 'Koleksiyon',
+                surdurulebilirlik: 'Sürdürülebilirlik'
+            };
+
+            function applyFilter(f) {
+                let visible = 0;
+                cards.forEach(card => {
+                    const cats = (card.dataset.cat || '').trim().split(/\s+/);
+                    const show = (f === 'all' || cats.includes(f));
+                    card.style.display = show ? '' : 'none';
+                    if (show) visible++;
+                });
+
+                // Update heading
+                if (titleEl) titleEl.textContent = catLabels[f] || 'Tüm Yazılar';
+
+                // Update count with yazı / yazı
+                if (countEl) countEl.textContent = visible + ' yazı';
+
+                // Empty-state message
+                let emptyMsg = grid && grid.querySelector('.yp-filter-empty');
+                if (visible === 0) {
+                    if (!emptyMsg) {
+                        emptyMsg = document.createElement('p');
+                        emptyMsg.className = 'yp-filter-empty';
+                        emptyMsg.style.cssText = 'grid-column:1/-1;text-align:center;padding:48px 0;color:var(--yp-text-muted);';
+                        emptyMsg.textContent = 'Bu kategoride henüz yazı bulunmuyor.';
+                        grid.appendChild(emptyMsg);
+                    }
+                } else if (emptyMsg) {
+                    emptyMsg.remove();
+                }
+            }
+
+            chips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    chips.forEach(c => c.classList.remove('is-active'));
+                    chip.classList.add('is-active');
+                    applyFilter(chip.dataset.filter);
                 });
             });
-        });
+
+            // Initialise with current active chip (default: all)
+            const activeChip = document.querySelector('.yp-filter-chip.is-active');
+            applyFilter(activeChip ? activeChip.dataset.filter : 'all');
+        })();
     </script>
 </body>
 </html>
