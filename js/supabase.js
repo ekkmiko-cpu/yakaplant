@@ -8,8 +8,11 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 // Initialize the Supabase client
 // CDN exports: window.supabase.createClient
-const { createClient } = window.supabase;
-const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// Export for use in other modules
-window.YakaSupabase = supabaseClient;
+// Guard: if CDN failed to load (network error, ad-blocker), skip gracefully
+if (window.supabase && typeof window.supabase.createClient === 'function') {
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    window.YakaSupabase = supabaseClient;
+} else {
+    console.warn('[YakaPlant] Supabase CDN not loaded — auth features disabled.');
+    window.YakaSupabase = null;
+}
