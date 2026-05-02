@@ -323,11 +323,11 @@ body.dark-mode .yp-blog .yp-article-body blockquote p { color: var(--text-main);
 /* Featured */
 .yp-featured {
   display: grid; grid-template-columns: 1.1fr 1fr;
-  gap: 56px; align-items: center;
-  padding: 64px 0; border-bottom: 1px solid var(--yp-border);
+  gap: 40px; align-items: center;
+  padding: 40px 0; border-bottom: 1px solid var(--yp-border);
 }
 .yp-featured__img {
-  aspect-ratio: 4/3;
+  aspect-ratio: 16/9;
   border-radius: var(--yp-radius-lg);
   overflow: hidden; position: relative;
   box-shadow: var(--shadow-md);
@@ -347,7 +347,7 @@ body.dark-mode .yp-blog .yp-article-body blockquote p { color: var(--text-main);
 }
 .yp-featured__title {
   font-family: var(--yp-font-heading);
-  font-size: clamp(32px, 4vw, 44px);
+  font-size: clamp(26px, 3vw, 36px);
   font-weight: 700;
   color: var(--yp-text);
   line-height: 1.15; margin: 0 0 18px;
